@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./infrastructure/git_hooks/post_commit_hook

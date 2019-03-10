@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# Run-D.B.C. autoformat tool-check pre-commit hook
+#
+# This Hook checks that python and clang-format are installed before
+# allowing the user to complete a commit.
+#
+# Note: This hook should be used in conjunction with the Run-D.B.C. post-commit
+# hook which auto formats any committed C code that needs it.
+
+
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
+
+has_python=false
+has_clang_format=false
+if which python > /dev/null; then
+    has_python=true
+else
+    echo -e "${RED}You must have python installed to complete the commit, as required by Run-D.B.C. auto-formatting commit hook${NO_COLOR}"
+fi
+
+if which clang-format > /dev/null; then
+    if clang-format --version | grep '6.0.0' > /dev/null; then
+        has_clang_format=true
+    else
+        echo -e "${RED}The version of clang-format you have is not compatible with Run-D.B.C. auto-formatting commit hook. You must install version 6.0.0 to complete the commit${NO_COLOR}"
+    fi
+else
+    echo -e "${RED}You must have clang-format version 6.0.0 installed to complete the commit, as required Run-D.B.C. auto-formatting commit hook${NO_COLOR}"
+fi
+
+if ($has_python && $has_clang_format); then
+    exit 0
+fi
+
+exit 1

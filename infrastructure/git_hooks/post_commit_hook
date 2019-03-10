@@ -1,0 +1,83 @@
+#!/usr/bin/env python
+"""
+auto clang-format post-commit hook.
+
+This git hook checks the formatting of the C files that were just committed,
+and if any of them do not meet the Run-D.B.C. formatting standard, they
+are reformatted and committed a second time.
+
+Note: This hook should be used in conjunction with the Run-D.B.C. pre-commit hook
+which verifies that python and clang format are installed before commiting.
+"""
+####################################
+#          POST COMMIT HOOK        #
+####################################
+import os
+import subprocess
+import sys
+
+#os.chdir('..')
+
+# Define colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+CYAN='\033[0;36m'
+NO_COLOR='\033[0m'
+
+formatted_commit_message = 'Files re-formatted to comply with clang-format rules'
+
+# Prevent continuous recursive commits
+last_message = subprocess.check_output(['git', 'log', '-1']).decode("utf-8")
+if last_message.find(formatted_commit_message) != -1:
+    sys.exit()
+    
+
+# Get list of of files changed in last commit
+files_changed = subprocess.check_output(['git', 'show', '--pretty=', '--name-only']).decode("utf-8")
+
+extensions = ('.h','.c')
+formatted_files = []
+for index_file in files_changed.split():
+    
+    # Sort list of files to only include specified extensions. Ignore deleted files
+    if index_file.endswith(extensions) and os.path.isfile(index_file):
+        # Run clang-format without editing the file, and store info about any formatting changes needed
+        replacements = subprocess.check_output(
+            ['clang-format', '-style=file', '-output-replacements-xml', index_file]).decode("utf-8")
+        
+        # Check if any changes are needed. If so, re-format the file in place
+        if replacements.find('replacement ') != -1:
+            # Format files with clang-format using Run-D.B.C. config file
+            subprocess.call(['clang-format', '-style=file', '-i', index_file])
+            formatted_files.append(index_file)
+
+# Print names of formatted files
+if len(formatted_files):
+    print("\nThe following files were re-formatted to match Run-D.B.C. C coding standard")
+    print(CYAN + "    " + "\n    ".join(formatted_files) + NO_COLOR)
+    
+# If no files needed formatting, exit the process
+else:
+    print(GREEN + "\nAll C files meet Run-D.B.C. formatting standard\n" + NO_COLOR)
+    sys.exit()
+
+# Stage formatted files
+for index_formatted in formatted_files:
+    subprocess.call(['git', 'add', index_formatted])
+
+# Commit with message
+subprocess.call(
+    ['git', 'commit', '-m', formatted_commit_message])
+
+print("""
+Files have been reformatted and committed in a separate commit.
+
+If you have specific sections of code that should not be changed,
+you may revert them to your commit and add:
+
+// clang-format off
+***your code to skip formatting***
+// clang-format on
+
+"""
+)

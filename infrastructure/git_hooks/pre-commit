@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./infrastructure/git_hooks/pre_commit_hook

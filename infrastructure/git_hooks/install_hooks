@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Define colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
+
+
+# The .git directory is local to the user, and not source controlled. Therefore
+# we must copy hooks from the source directory to the user's local git environment
+if cp ./pre-commit ../../.git/hooks/; then
+    pre_commit_installed=true
+else
+    pre_commit_installed=false
+fi
+if cp ./post-commit ../../.git/hooks/; then
+    post_commit_installed=true
+else
+    post_commit_installed=false
+fi
+#if cp ./pre-push ../../.git/hooks/; then
+#    pre_push_installed=true
+#else
+#    pre_push_installed=false
+#fi
+
+if ($pre_commit_installed && $post_commit_installed); then # && $pre_push_installed); then
+    echo -e "\ngit hooks have been installed in <repo>/.git/hooks\n"
+else
+    echo -e "\n${RED}git hooks failed to install correctly."
+    echo -e "This installation script must be run from <repo>/infrastructure/git_hooks${NO_COLOR}"
+    exit 1
+fi
+
+
+
+# Check if the user has the propper tools installed
+has_python=false
+has_clang_format=false
+if which python > /dev/null; then
+    has_python=true
+else
+    echo -e "${RED}You must have python installed to use the Sibros auto-formatting\ncommit hook. You will not be able to complete a commit until you install it.\n${NO_COLOR}"
+fi
+
+if which clang-format > /dev/null; then
+    if clang-format --version | grep '6.0.0' > /dev/null; then
+        has_clang_format=true
+    else
+        echo -e "${RED}The version of clang-format you have is not compatible with Sibros\nauto-formatting commit hook. You will not be able to complete a commit\nuntil you install version 6.0.0\n${NO_COLOR}"
+    fi
+else
+    echo -e "${RED}You must have clang-format version 6.0.0 installed to use Sibros auto-formatting\ncommit hook. You will not be able to make a commit until you install it.\n${NO_COLOR}"
+fi
+
+if ($has_python && $has_clang_format); then
+    exit 0
+fi
+
+exit 1
