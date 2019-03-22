@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Define colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NO_COLOR='\033[0m'
+
+cd module/bridge
+if !(rake); then
+	echo -e "${RED}ERROR IN BRIDGE TEST(S)${NO_COLOR}"
+	exit 1
+fi
+
+cd ../geo
+if !(rake); then
+	echo -e "${RED}ERROR IN GEO TEST(S)${NO_COLOR}"
+	exit 1
+fi
+
+cd ../master
+if !(rake); then
+	echo -e "${RED}ERROR IN MASTER TEST(S)${NO_COLOR}"
+	exit 1
+fi
+
+cd ../motor
+if !(rake); then
+	echo -e "${RED}ERROR IN MOTOR TEST(S)${NO_COLOR}"
+	exit 1
+fi
+
+cd ../sensors
+if !(rake); then
+	echo -e "${RED}ERROR IN SENSORS TEST(S)${NO_COLOR}"
+	exit 1
+fi
+
