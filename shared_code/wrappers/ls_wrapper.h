@@ -7,7 +7,10 @@
 extern "C" {
 #endif
 
-int ls_get_per(void);
+#include "stdint.h"
+
+uint8_t ls_get_per(void);
+uint16_t ls_get_raw(void);
 
 #ifdef __cplusplus
 }
