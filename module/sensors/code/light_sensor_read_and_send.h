@@ -12,8 +12,8 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 void light_sensor_read_and_send();
 
