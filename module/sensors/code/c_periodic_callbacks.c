@@ -9,12 +9,16 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include "can.h"
+
 
 
 
 bool c_period_init(void)
 {
-
+    CAN_init(can1, 100, 64, 64, ((void*)0), ((void*)0));
+    CAN_bypass_filter_accept_all_msgs();
+    CAN_reset_bus(can1);
     return true;
 }
 
