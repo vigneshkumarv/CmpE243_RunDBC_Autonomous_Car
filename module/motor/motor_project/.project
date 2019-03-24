@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>lpc1758_freertos</name>
+	<name>motor_project</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -28,12 +28,22 @@
 		<link>
 			<name>L5_Application/code</name>
 			<type>2</type>
-			<locationURI>PARENT-1-PROJECT_LOC/code</locationURI>
+			<locationURI>copy_PARENT/code</locationURI>
 		</link>
 		<link>
 			<name>L5_Application/shared_code</name>
 			<type>2</type>
-			<locationURI>PARENT-3-PROJECT_LOC/shared_code</locationURI>
+			<locationURI>copy_PARENT1/shared_code</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>copy_PARENT</name>
+			<value>$%7BPARENT-2-ECLIPSE_HOME%7D/autonomous-car/module/motor</value>
+		</variable>
+		<variable>
+			<name>copy_PARENT1</name>
+			<value>$%7BPARENT-2-copy_PARENT%7D</value>
+		</variable>
+	</variableList>
 </projectDescription>
