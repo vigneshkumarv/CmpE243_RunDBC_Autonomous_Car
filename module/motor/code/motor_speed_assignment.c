@@ -14,6 +14,10 @@
 
 // MOTOR_DATA_t motor_data = { 0 };
 MASTER_SPEED_t rx_masterspeed_msg;
+const uint32_t MASTER_SPEED__MIA_MS = 3000;
+const MASTER_SPEED_t MASTER_SPEED__MIA_MSG = { .MASTER_DATA_cmd = 99 };
+//MASTER_SPEED__MIA_MSG.MASTER_DATA_cmd = 99;
+
 
 bool dbc_app_send_can_msg(uint32_t mid, uint8_t dlc, uint8_t bytes[8]) {
   can_msg_t can_msg = {0};
@@ -55,5 +59,12 @@ void call_at_10Hz(void) {
     // LED_1_off();
     lcd_set_num(val);
   }
+
+  //MASTER_SPEED_t *temp = &MASTER_SPEED__MIA_MSG;
+  //temp->MASTER_DATA_cmd = 99;
+  //dbc_handle_mia_MASTER_SPEED(&rx_masterspeed_msg, 100);
+  //MASTER_SPEED__MIA_MSG.MASTER_DATA_cmd = 99;
+
+  val = rx_masterspeed_msg.MASTER_DATA_cmd;
   lcd_set_num(val);
 }
