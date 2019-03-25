@@ -11,10 +11,9 @@
 #include <stdint.h>
 
 
-
 bool c_period_init(void)
 {
-
+    init_can_bus();
     return true;
 }
 
@@ -31,6 +30,9 @@ void c_period_1Hz(uint32_t count)
 void c_period_10Hz(uint32_t count)
 {
     (void) count;
+
+    call_at_10Hz();
+
 }
 
 void c_period_100Hz(uint32_t count)
