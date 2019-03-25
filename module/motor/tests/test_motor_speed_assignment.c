@@ -1,7 +1,7 @@
-#include "Mockcan.h"
+
 #include "motor_speed_assignment.h"
 #include "unity.h"
-
+#include "Mockcan.h"
 //#include "can.h"
 #include <stdbool.h>
 #include "MockLCD_wrapper.h"
