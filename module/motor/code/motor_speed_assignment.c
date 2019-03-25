@@ -4,12 +4,12 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include "can.h"
-#include "generated-can/generated_can.h"
-#include "LED_wrapper.h" // is this needed?
 #include <stdio.h>
 #include <string.h>  // n
 #include "LCD_wrapper.h"
+#include "LED_wrapper.h"  // is this needed?
+#include "can.h"
+#include "generated-can/generated_can.h"
 #include "ls_wrapper.h"  // n
 
 // MOTOR_DATA_t motor_data = { 0 };
@@ -63,9 +63,8 @@ void call_at_10Hz(void) {
   // temp->MASTER_DATA_cmd = 99;
   // dbc_handle_mia_MASTER_SPEED(&rx_masterspeed_msg, 100);
   // MASTER_SPEED__MIA_MSG.MASTER_DATA_cmd = 99;
-  if (dbc_handle_mia_MASTER_SPEED(&rx_masterspeed_msg, 100))
-  { // an mia has occurred, do something
-      LED_1_on();
+  if (dbc_handle_mia_MASTER_SPEED(&rx_masterspeed_msg, 100)) {  // an mia has occurred, do something
+    LED_1_on();
   }
   val = rx_masterspeed_msg.MASTER_DATA_cmd;
   lcd_set_num(val);
