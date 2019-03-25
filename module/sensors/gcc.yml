@@ -2,6 +2,7 @@ compiler:
   path: x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
+    - './shared_code/wrappers/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -25,6 +26,7 @@ compiler:
       # Source code under test
       - './code/'
       - *unit_tests_path
+      - './shared_code/wrappers/'
   defines:
     prefix: '-D'
     items:
