@@ -8,11 +8,11 @@
 #include "light_sensor_read_and_send.h"
 #include "generated_can/generated_can.h"
 //#include "C:\Users\YUI\CMPE243\autonomous-car\shared_code\wrappers\ls_wrapper.h"
-#include "wrappers\ls_wrapper.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include "can.h"
+#include "wrappers\ls_wrapper.h"
 
 void light_sensor_read_and_send() {
   int light_value = ls_get_per();

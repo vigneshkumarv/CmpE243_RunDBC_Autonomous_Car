@@ -25,9 +25,8 @@ bool c_period_reg_tlm(void) { return true; }
 void c_period_1Hz(uint32_t count) { (void)count; }
 
 void c_period_10Hz(uint32_t count) {
-    (void)count;
-    light_sensor_read_and_send();
-
+  (void)count;
+  light_sensor_read_and_send();
 }
 
 void c_period_100Hz(uint32_t count) { (void)count; }
