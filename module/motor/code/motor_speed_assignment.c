@@ -9,6 +9,8 @@
 //#include "LED_wrapper.h"
 #include <stdio.h>
 #include "LCD_wrapper.h"
+#include <string.h> // n
+#include "ls_wrapper.h" // n
 
 // MOTOR_DATA_t motor_data = { 0 };
 MASTER_SPEED_t rx_masterspeed_msg;
@@ -35,9 +37,10 @@ void call_at_10Hz(void) {
 
   // send LS data to master
   uint8_t light_per = ls_get_per();
-  MOTOR_DATA_t motor_data = {0};
+  MOTOR_DATA_t motor_data = { 0 };
   motor_data.MOTOR_DATA_cmd = light_per;
-  dbc_encode_and_send_MOTOR_HEARTBEAT(&motor_data);
+  //dbc_encode_and_send_MOTOR_HEARTBEAT(&motor_data);
+  dbc_encode_and_send_MOTOR_DATA(&motor_data); // n
 
   // receive speed data from master
   can_msg_t can_msg;
