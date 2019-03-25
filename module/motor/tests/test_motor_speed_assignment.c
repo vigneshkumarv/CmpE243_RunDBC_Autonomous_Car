@@ -1,11 +1,12 @@
-
+#include "unity.h"
 #include "Mockcan.h"
 #include "motor_speed_assignment.h"
-#include "unity.h"
+
 //#include "can.h"
 #include <stdbool.h>
 #include "MockLCD_wrapper.h"
 #include "Mockls_wrapper.h"
+#include "MockLED_wrapper.h"
 #include "generated-can/generated_can.h"
 
 MASTER_SPEED_t rx_masterspeed_msg;
@@ -48,6 +49,13 @@ void test_call_at_10Hz(void) {
 
   CAN_rx_ExpectAndReturn(can1, &can_msg, 0, false);
   CAN_rx_IgnoreArg_msg();
+
+  rx_masterspeed_msg.mia_info.is_mia = true;
+  if (dbc_handle_mia_MASTER_SPEED(&rx_masterspeed_msg, 100))
+  {
+          LED_1_on_Expect();
+  }
+
   lcd_set_num_Expect(50);
   lcd_set_num_IgnoreArg_num();
 
