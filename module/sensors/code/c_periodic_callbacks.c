@@ -9,7 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "can.h"
+#include "Z:\CMPE243\SJSU_Dev\projects\sensor_project\L2_Drivers\can.h"
 #include "light_sensor_read_and_send.h"
 
 bool c_period_init(void) {
