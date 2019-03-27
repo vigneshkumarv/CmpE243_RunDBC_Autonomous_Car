@@ -2,6 +2,13 @@ compiler:
   path: x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
+    - '../../shared_code/wrappers/'
+    - '../../../SJSU_Dev/projects/sensor_project/L2_Drivers/'
+    - 'C:/Users/YUI/CMPE243/autonomous-car/shared_code/wrappers/'
+    - '../../shared_code/'
+    - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/L2_Drivers/'
+    - '../../../SJSU_Dev/projects/sensor_project/'
+    - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/generated_can/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -22,8 +29,15 @@ compiler:
       # Mocks are included next because we want the mocks to be found first
       - './ut_build/mocks/'
       - './code_permanent_mocks/'
+      
       # Source code under test
       - './code/'
+      - '../../shared_code/wrappers/'
+      - 'C:/Users/YUI/CMPE243/autonomous-car/shared_code/wrappers/'
+      - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/L2_Drivers/'
+      - '../../../SJSU_Dev/projects/sensor_project/L2_Drivers/'
+      - '../../../SJSU_Dev/projects/sensor_project/'
+      - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/generated_can/'
       - *unit_tests_path
   defines:
     prefix: '-D'
