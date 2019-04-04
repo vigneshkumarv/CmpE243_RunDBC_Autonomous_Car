@@ -2,6 +2,10 @@ compiler:
   path: x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
+    #- '../../shared_code/test_code/L2_Drivers/'
+    - '../../../SJSU_Dev/projects/master_project/L2_Drivers/'
+    - '../../../SJSU_Dev/projects/master_project/'
+    - '../../shared_code/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -24,6 +28,10 @@ compiler:
       - './code_permanent_mocks/'
       # Source code under test
       - './code/'
+      #- '../../shared_code/test_code/L2_Drivers/'
+      - '../../../SJSU_Dev/projects/master_project/L2_Drivers/'
+      - '../../../SJSU_Dev/projects/master_project/'
+      - '../../shared_code/'
       - *unit_tests_path
   defines:
     prefix: '-D'
