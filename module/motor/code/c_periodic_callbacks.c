@@ -9,20 +9,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "generated_can/generated_can.h"
 
-bool c_period_init(void) {
-  init_can_bus();
-  return true;
-}
+bool c_period_init(void) { return true; }
 
 bool c_period_reg_tlm(void) { return true; }
 
 void c_period_1Hz(uint32_t count) { (void)count; }
-void c_period_10Hz(uint32_t count) {
-  (void)count;
-
-  call_at_10Hz();
-}
+void c_period_10Hz(uint32_t count) { (void)count; }
 
 void c_period_100Hz(uint32_t count) { (void)count; }
 void c_period_1000Hz(uint32_t count) {
