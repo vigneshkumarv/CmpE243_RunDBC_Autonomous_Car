@@ -11,8 +11,8 @@
 extern "C" {
 #endif
 
-#include "stdint.h"
 #include "stdbool.h"
+#include "stdint.h"
 
 bool Set_PWM1_for_Servo(float input);
 bool Set_PWM2_for_DC(float input);
