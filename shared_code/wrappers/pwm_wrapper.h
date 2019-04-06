@@ -16,6 +16,7 @@ extern "C" {
 
 bool Set_PWM1_for_Servo(float input);
 bool Set_PWM2_for_DC(float input);
+void pwm2_init(void);
 
 #ifdef __cplusplus
 }
