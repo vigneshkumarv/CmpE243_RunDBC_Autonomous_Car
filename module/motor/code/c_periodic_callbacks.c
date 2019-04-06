@@ -18,41 +18,36 @@
 static float speed;
 
 bool c_period_init(void) {
-  //init_can_bus();
-    pwm2_init();
-    speed = 15.0;
-    tune_motor_ls(speed);
+  // init_can_bus();
+  pwm2_init();
+  speed = 15.0;
+  tune_motor_ls(speed);
   return true;
 }
 
 bool c_period_reg_tlm(void) { return true; }
 
 void c_period_1Hz(uint32_t count) {
-    (void)count;
+  (void)count;
 
-    //tune_motor_ls();
-
-
+  // tune_motor_ls();
 }
 void c_period_10Hz(uint32_t count) {
   (void)count;
-/*
-  if (1 == count)
-  {
-      speed = 15.0;
-  }
-  else
-  */
+  /*
+    if (1 == count)
+    {
+        speed = 15.0;
+    }
+    else
+    */
   speed = 14.2;
   tune_motor_ls(speed);
-  //call_at_10Hz();
+  // call_at_10Hz();
 }
 
-void c_period_100Hz(uint32_t count) { // 1/100 = 0.01 sec = 10ms
-      (void)count;
-
-
-
+void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
+  (void)count;
 }
 void c_period_1000Hz(uint32_t count) {
   /* NOTE: by default this function is not called.
