@@ -14,6 +14,7 @@
 #include "pwm_wrapper.h"
 //#include "lpc_pwm.hpp"
 #include "tune_motor_ls.h"
+#include "motor_controls_switch.h"
 
 static float speed;
 
@@ -34,16 +35,9 @@ void c_period_1Hz(uint32_t count) {
 }
 void c_period_10Hz(uint32_t count) {
   (void)count;
-  /*
-    if (1 == count)
-    {
-        speed = 15.0;
-    }
-    else
-    */
-  speed = 14.2;
-  tune_motor_ls(speed);
-  // call_at_10Hz();
+
+  control_car_with_switches();
+
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
