@@ -10,9 +10,8 @@ extern "C" {
 #include <stdbool.h>
 
 bool init_switches(void);
-//uint8_t getSwitchValues(void);
+// uint8_t getSwitchValues(void);
 bool getSwitch(int num);
-
 
 #ifdef __cplusplus
 }
