@@ -94,6 +94,5 @@ void control_car_with_switches(void) {
 
     reverse_cnt = 0;
     state = 0;
-
   }
 }

@@ -14,8 +14,8 @@
 //#include "lpc_pwm.hpp"
 #include "motor_controls_switch.h"
 //#include "motor_controls_master.h"
-#include "tune_motor_ls.h"
 #include "heartbeats.h"
+#include "tune_motor_ls.h"
 
 static int motor_speed_RPM = 0;
 extern int encoder_count;
@@ -43,13 +43,12 @@ void c_period_10Hz(uint32_t count) {
   (void)count;
 
   // read encoder
-  motor_speed_RPM = (((encoder_count)/(64.0))/0.1)*60;
+  motor_speed_RPM = (((encoder_count) / (64.0)) / 0.1) * 60;
   printf("encoder_count: %d    motor_speed_RPM = %d \n", encoder_count, motor_speed_RPM);
   encoder_count = 0;
 
-
   control_car_with_switches();
-  //control_car_with_master();
+  // control_car_with_master();
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
