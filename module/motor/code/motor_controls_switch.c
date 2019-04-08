@@ -90,10 +90,10 @@ void control_car_with_switches(void) {
   } else if (target_state == 4)  // medium speed forward
   {
     printf("Trying to go medium speed forward...\n");
-    if (Set_PWM2_for_DC(forward_medium_speed)) printf("\t\tSetting PWM2 to %f%%\n", forward_medium_speed);
+    if (Set_PWM2_for_DC(forward_medium_speed)) printf("Setting PWM2 to %f%%\n", forward_medium_speed);
 
     reverse_cnt = 0;
     state = 0;
-    printf("\n");
+
   }
 }
