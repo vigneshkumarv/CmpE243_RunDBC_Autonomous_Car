@@ -3,6 +3,36 @@
 #include "gpio_wrapper.h"
 #include "gpio.hpp"
 
+
+/*// would each GPIO go out of scope once the function ends?
+  // would the interrupt still work?
+void setAsInput_P2_5(void)
+{
+    GPIO pin25(P2_5);
+    pin25.setAsInput();
+}
+
+void setAsInput_P2_4(void)
+{
+    GPIO pin24(P2_4);
+    pin24.setAsInput();
+}
+*/
+
+bool read_P2_5(void)
+{
+    GPIO pin25(P2_5);
+    pin25.setAsInput();
+    return pin25.read();
+}
+
+bool read_P2_4(void)
+{
+    GPIO pin24(P2_4);
+    pin24.setAsInput();
+    return pin24.read();
+}
+
 bool read_P2_0(void) // dont use an LED to read in parallel
 {                    // but 330ohm pulldown is ok
     GPIO pin20(P2_0);

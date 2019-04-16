@@ -16,7 +16,7 @@
  *          p r e e t . w i k i @ g m a i l . c o m
  */
 
- /**
+/**
  * @file
  * @brief Contains printf library to use inside ISR, or print data on heap.
  */
@@ -25,8 +25,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 
 /**
  * Prints a debug statement.
@@ -54,9 +52,7 @@ void u0_dbg_put(const char *string);
  * @warning   Use this function carefully as it can fragment memory on a system if used excessively.
  * @warning   Pointer obtained from this function must be freed.
  */
-char* mprintf(const char *format, ...);
-
-
+char *mprintf(const char *format, ...);
 
 #ifdef __cplusplus
 }

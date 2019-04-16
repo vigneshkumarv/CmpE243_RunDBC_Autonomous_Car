@@ -28,12 +28,10 @@ extern "C" {
 #include <stdint.h>
 #include "lpc_sys.h"
 
-
-
 /// The type of the interrupt for the port pin.
 typedef enum {
-    eint_rising_edge,  ///< Interrupt on rising edge
-    eint_falling_edge  ///< Interrupt on falling edge
+  eint_rising_edge,  ///< Interrupt on rising edge
+  eint_falling_edge  ///< Interrupt on falling edge
 } eint_intr_t;
 
 /**
@@ -49,8 +47,6 @@ void eint3_enable_port0(uint8_t pin_num, eint_intr_t type, void_func_t func);
 
 /// @copydoc eint3_enable_port0()
 void eint3_enable_port2(uint8_t pin_num, eint_intr_t type, void_func_t func);
-
-
 
 #ifdef __cplusplus
 }

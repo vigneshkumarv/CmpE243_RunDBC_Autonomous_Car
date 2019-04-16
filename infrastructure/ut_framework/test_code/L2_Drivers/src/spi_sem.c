@@ -16,32 +16,25 @@
  *          p r e e t . w i k i @ g m a i l . c o m
  */
 #include "FreeRTOS.h"
-#include "task.h"
 #include "semphr.h"
-
-
+#include "task.h"
 
 static SemaphoreHandle_t mSpi0Lock = 0;
 
+void spi1_lock(void) {
+  if (!mSpi0Lock) {
+    mSpi0Lock = xSemaphoreCreateMutex();
+    // Optional: Provide names of the FreeRTOS objects for the Trace Facility
+    vTraceSetMutexName(mSpi0Lock, "SPI-0 Mutex");
+  }
 
-
-void spi1_lock(void)
-{
-    if(!mSpi0Lock) {
-        mSpi0Lock = xSemaphoreCreateMutex();
-        // Optional: Provide names of the FreeRTOS objects for the Trace Facility
-        vTraceSetMutexName(mSpi0Lock, "SPI-0 Mutex");
-    }
-
-
-    if (taskSCHEDULER_RUNNING == xTaskGetSchedulerState()) {
-        xSemaphoreTake(mSpi0Lock, portMAX_DELAY);
-    }
+  if (taskSCHEDULER_RUNNING == xTaskGetSchedulerState()) {
+    xSemaphoreTake(mSpi0Lock, portMAX_DELAY);
+  }
 }
 
-void spi1_unlock(void)
-{
-    if (taskSCHEDULER_RUNNING == xTaskGetSchedulerState()) {
-        xSemaphoreGive(mSpi0Lock);
-    }
+void spi1_unlock(void) {
+  if (taskSCHEDULER_RUNNING == xTaskGetSchedulerState()) {
+    xSemaphoreGive(mSpi0Lock);
+  }
 }

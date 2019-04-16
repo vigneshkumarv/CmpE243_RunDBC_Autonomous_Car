@@ -27,8 +27,6 @@
 extern "C" {
 #endif
 
-
-
 /**
  * Initializes UART0 of LPC17xx
  * @param baud_rate  The baud rate to set
@@ -52,8 +50,6 @@ char uart0_putchar(char out);
  * @param c_string	The pointer to null terminated string
  */
 void uart0_puts(const char* c_string);
-
-
 
 #ifdef __cplusplus
 }

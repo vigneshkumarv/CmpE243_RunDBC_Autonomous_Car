@@ -30,50 +30,56 @@ extern "C" {
 
 #include <stdint.h>
 
-
-
 /**
  * This struct aligns with the LPC Hardware's consolidated RTC registers.
  * The un-named chars are just for padding according to LPC CTIME registers.
  */
 typedef struct {
-    /*    - Data -----     - Padding --- */
-    uint32_t sec  : 6;      uint32_t : 2;
-    uint32_t min  : 6;      uint32_t : 2;
-    uint32_t hour : 5;      uint32_t : 3;
-    uint32_t dow  : 3;      uint32_t : 5;
+  /*    - Data -----     - Padding --- */
+  uint32_t sec : 6;
+  uint32_t : 2;
+  uint32_t min : 6;
+  uint32_t : 2;
+  uint32_t hour : 5;
+  uint32_t : 3;
+  uint32_t dow : 3;
+  uint32_t : 5;
 
-    uint32_t day  : 5;      uint32_t : 3;
-    uint32_t month: 4;      uint32_t : 4;
-    uint32_t year :12;      uint32_t : 4;
+  uint32_t day : 5;
+  uint32_t : 3;
+  uint32_t month : 4;
+  uint32_t : 4;
+  uint32_t year : 12;
+  uint32_t : 4;
 
-    uint32_t doy  :12;      uint32_t : 20;
-} __attribute__((packed)) rtc_t ;
+  uint32_t doy : 12;
+  uint32_t : 20;
+} __attribute__((packed)) rtc_t;
 
 /**
  * Enumeration of the RTC.dow
  */
 typedef enum {
-    dow_sun = 0,
-    dow_mon,
-    dow_tue,
-    dow_wed,
-    dow_thu,
-    dow_fri,
-    dow_sat,
+  dow_sun = 0,
+  dow_mon,
+  dow_tue,
+  dow_wed,
+  dow_thu,
+  dow_fri,
+  dow_sat,
 } __attribute__((packed)) day_of_week_t;
 
 /// Initialize the RTC
-void rtc_init (void);
+void rtc_init(void);
 
 /// @returns the latest time in RTC structure
-rtc_t rtc_gettime (void);
+rtc_t rtc_gettime(void);
 
 /**
  * Sets the RTC time
  * @param [in] rtcstruct  The rtc time structure pointer
  */
-void rtc_settime (const rtc_t* rtcstruct);
+void rtc_settime(const rtc_t* rtcstruct);
 
 /**
  * Get the RTC time as string in the format: "Wed Feb 13 15:46:11 2013"
@@ -81,8 +87,6 @@ void rtc_settime (const rtc_t* rtcstruct);
  * @warning This method is not thread safe
  */
 const char* rtc_get_date_time_str(void);
-
-
 
 #ifdef __cplusplus
 }

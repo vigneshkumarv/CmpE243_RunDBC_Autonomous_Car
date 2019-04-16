@@ -27,8 +27,6 @@ extern "C" {
 #endif
 #include "LPC17xx.h"
 
-
-
 /**
  * Register a callback function for an interrupt.
  *
@@ -43,7 +41,7 @@ extern "C" {
  *
  * @note This function is implemented at startup.cpp since that contains the interrupt vector.
  */
-void isr_register(IRQn_Type num, void (*isr_func_ptr) (void));
+void isr_register(IRQn_Type num, void (*isr_func_ptr)(void));
 
 /**
  * Interrupt Priorities (pre-configured by low_level_init.cpp)
@@ -62,65 +60,62 @@ void isr_register(IRQn_Type num, void (*isr_func_ptr) (void));
  * These higher priority interrupts (even higher than FreeRTOS kernel) can be used
  * to specify "super" priority above everything else in the system.
  */
-typedef enum
-{
-    /**
-     * @{ FreeRTOS Interrupt Priorities
-     * Be careful changing these because interrupt priorities set below
-     * must fall in between these two priorities.
-     */
-        IP_above_freertos = 1, /* Do not use FreeRTOS API with this priority! */
-        IP_SYSCALL = 2,        /* Do not use FreeRTOS API for ISR priorities below this */
-        IP_KERNEL = 31,        /* Must be the lowest priority in the system */
-    /** @} */
+typedef enum {
+  /**
+   * @{ FreeRTOS Interrupt Priorities
+   * Be careful changing these because interrupt priorities set below
+   * must fall in between these two priorities.
+   */
+  IP_above_freertos = 1, /* Do not use FreeRTOS API with this priority! */
+  IP_SYSCALL = 2,        /* Do not use FreeRTOS API for ISR priorities below this */
+  IP_KERNEL = 31,        /* Must be the lowest priority in the system */
+                         /** @} */
 
-    /**
-     * @{ Interrupt Priorities
-     * These are used at to set default priorities before main() is called.
-     * All interrupts use default priority unless otherwise stated in this enum.
-     *
-     * If you don't want interrupts to nest, set them to the same priority as IP_DEFAULT
-     */
-        /* Name the default, high and low priorities */
-        IP_default = 20,                /**< Default priority of most interrupts, set arbitarily betweeen syscall and kernel */
-        IP_high    = IP_SYSCALL + 1,    /**< Higher than default, but lower than syscall */
-        IP_low     = IP_default + 1,    /**< Lower than default */
+  /**
+   * @{ Interrupt Priorities
+   * These are used at to set default priorities before main() is called.
+   * All interrupts use default priority unless otherwise stated in this enum.
+   *
+   * If you don't want interrupts to nest, set them to the same priority as IP_DEFAULT
+   */
+  /* Name the default, high and low priorities */
+  IP_default = 20,          /**< Default priority of most interrupts, set arbitarily betweeen syscall and kernel */
+  IP_high = IP_SYSCALL + 1, /**< Higher than default, but lower than syscall */
+  IP_low = IP_default + 1,  /**< Lower than default */
 
-        /* Suggested interrupt priorities for commonly used peripherals */
-        IP_eint = IP_default - 9, /**< Port0 and Port2 interrupt */
+  /* Suggested interrupt priorities for commonly used peripherals */
+  IP_eint = IP_default - 9, /**< Port0 and Port2 interrupt */
 
-        IP_ssp  = IP_default - 6, /**< SSP can be super fast, so needs higher priority */
-        IP_can  = IP_default - 5, /**< CAN can be fast, so use higher priority than other communication BUSes */
+  IP_ssp = IP_default - 6, /**< SSP can be super fast, so needs higher priority */
+  IP_can = IP_default - 5, /**< CAN can be fast, so use higher priority than other communication BUSes */
 
-        IP_i2c  = IP_default - 2, /**< I2C set to higher priority than UART */
-        IP_uart = IP_default - 1, /**< UART set to higher priority than default */
+  IP_i2c = IP_default - 2,  /**< I2C set to higher priority than UART */
+  IP_uart = IP_default - 1, /**< UART set to higher priority than default */
 
-        /* Rest of the interrupts probably don't need a fast response so set them
-         * to default priority.  You don't want to overcomplicate a system by
-         * changing too many priorities unless absolutely needed.
-         */
-        IP_watchdog = IP_default,
-        IP_timers = IP_default,
-        IP_pwm1 = IP_default,
-        IP_pll = IP_default,
-        IP_spi = IP_default,
-        IP_rtc = IP_default,
-        IP_adc = IP_default,
-        IP_bod = IP_default,
-        IP_usb = IP_default,
-        IP_dma = IP_default,
-        IP_i2s = IP_default,
-        IP_enet = IP_default,
-        IP_mcpwm = IP_default,
-        IP_qei    = IP_default,
-        IP_RIT    = IP_default,
-        IP_pll1   = IP_default,
-        IP_usbact = IP_default,
-        IP_canact = IP_default,
-    /** @} */
+  /* Rest of the interrupts probably don't need a fast response so set them
+   * to default priority.  You don't want to overcomplicate a system by
+   * changing too many priorities unless absolutely needed.
+   */
+  IP_watchdog = IP_default,
+  IP_timers = IP_default,
+  IP_pwm1 = IP_default,
+  IP_pll = IP_default,
+  IP_spi = IP_default,
+  IP_rtc = IP_default,
+  IP_adc = IP_default,
+  IP_bod = IP_default,
+  IP_usb = IP_default,
+  IP_dma = IP_default,
+  IP_i2s = IP_default,
+  IP_enet = IP_default,
+  IP_mcpwm = IP_default,
+  IP_qei = IP_default,
+  IP_RIT = IP_default,
+  IP_pll1 = IP_default,
+  IP_usbact = IP_default,
+  IP_canact = IP_default,
+  /** @} */
 } intr_priorities_t;
-
-
 
 #ifdef __cplusplus
 }

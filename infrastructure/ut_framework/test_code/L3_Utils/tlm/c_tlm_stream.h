@@ -18,13 +18,11 @@
 
 #ifndef TLM_STREAM_H__
 #define TLM_STREAM_H__
-#include "c_tlm_comp.h"
 #include <stdio.h>
+#include "c_tlm_comp.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
 
 /**
  * @file
@@ -68,12 +66,11 @@ extern "C" {
  * @endcode
  */
 
-
 /**
  * Typedef of the stream callback function
  * @param str  The ASCII string containing partial stream
  */
-typedef void (*stream_callback_type)(const char* str, void *arg);
+typedef void (*stream_callback_type)(const char *str, void *arg);
 
 /**
  * Streams the telemetry for one component and its variables
@@ -111,8 +108,6 @@ void tlm_stream_all_file(FILE *file);
  * @returns true when telemetry decode finds correct stream header.
  */
 bool tlm_stream_decode_file(FILE *file);
-
-
 
 #ifdef __cplusplus
 }

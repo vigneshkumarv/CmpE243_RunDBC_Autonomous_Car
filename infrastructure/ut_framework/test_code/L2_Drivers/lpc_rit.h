@@ -28,9 +28,9 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "lpc_sys.h" // void_func_t
+#include <stdint.h>
+#include "lpc_sys.h"  // void_func_t
 
 /**
  * Setup a repetitive callback function at the given time.
@@ -44,8 +44,6 @@ void rit_disable(void);
 
 /// @returns true if the RIT is running.
 bool rit_is_running(void);
-
-
 
 #ifdef __cplusplus
 }

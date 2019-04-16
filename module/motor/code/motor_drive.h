@@ -7,7 +7,7 @@
 
 #ifndef MOTOR_DRIVE_H_
 #define MOTOR_DRIVE_H_
-#include "C:\Users\lenovo\Desktop\autonomous-car\shared_code\wrappers\pwm_wrapper.h"
+
 
 typedef enum {
   steer_straight,
@@ -19,6 +19,6 @@ bool Forward_LowSpeed();
 bool Forward_MedSpeed();
 bool Forward_HighSpeed();
 bool Reverse_LowSpeed();
-bool Stop();
+//bool Stop();
 
 #endif /* MOTOR_DRIVE_H_ */

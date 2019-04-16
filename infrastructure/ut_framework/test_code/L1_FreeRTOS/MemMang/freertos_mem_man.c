@@ -17,15 +17,15 @@
 #include "FreeRTOSConfig.h"
 
 #if 1 == configMEM_MANG_TYPE
-    #include "heap_1.c.inc"
+#include "heap_1.c.inc"
 #elif 2 == configMEM_MANG_TYPE
-    #include "heap_2.c.inc"
+#include "heap_2.c.inc"
 #elif 3 == configMEM_MANG_TYPE
-    #include "heap_3.c.inc"
+#include "heap_3.c.inc"
 #elif 4 == configMEM_MANG_TYPE
-    #include "heap_4.c.inc"
+#include "heap_4.c.inc"
 #elif 5 == configMEM_MANG_TYPE
-    #include "heap_5.c.inc"
+#include "heap_5.c.inc"
 #else
-    #error "configMEM_MANG_TYPE is not defined correctly"
+#error "configMEM_MANG_TYPE is not defined correctly"
 #endif

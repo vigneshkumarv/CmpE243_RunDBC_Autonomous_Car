@@ -59,15 +59,13 @@
 #ifndef C_LIST_H_
 #define C_LIST_H_
 
-
 /**************/
 /** INCLUDES **/
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 /************/
 /** COMMON **/
@@ -77,7 +75,7 @@ typedef bool (*c_list_callback_t)(void *elm_ptr, void *arg1, void *arg2, void *a
  * Typedef of the c-list pointer type.
  * User shouldn't need to know about the internal structure of the list.
  */
-typedef void* c_list_ptr;
+typedef void *c_list_ptr;
 
 /**
  * Creates a linked list structure
@@ -130,7 +128,7 @@ bool c_list_insert_elm_end(c_list_ptr list, const void *elm_ptr);
  *
  * @returns The element pointer or NULL if out of bound element is accessed
  */
-void* c_list_get_elm_at(c_list_ptr list, uint32_t index, void **hint);
+void *c_list_get_elm_at(c_list_ptr list, uint32_t index, void **hint);
 
 /**
  * Finds an element in the list.
@@ -141,8 +139,7 @@ void* c_list_get_elm_at(c_list_ptr list, uint32_t index, void **hint);
  * @param callback The callback function.
  * @param arg1 arg2 arg3 The arguments to pass to your call-back function.
  */
-void* c_list_find_elm(c_list_ptr list, c_list_callback_t callback,
-                      void *arg1, void *arg2, void *arg3);
+void *c_list_find_elm(c_list_ptr list, c_list_callback_t callback, void *arg1, void *arg2, void *arg3);
 
 /**
  * Deletes an element by the pointer
@@ -180,10 +177,7 @@ bool c_list_delete_elm(c_list_ptr list, const void *elm_ptr);
  *      }
  * @endcode
  */
-bool c_list_for_each_elm(const c_list_ptr list, c_list_callback_t func,
-                           void *arg1, void *arg2, void *arg3);
-
-
+bool c_list_for_each_elm(const c_list_ptr list, c_list_callback_t func, void *arg1, void *arg2, void *arg3);
 
 #ifdef __cplusplus
 }

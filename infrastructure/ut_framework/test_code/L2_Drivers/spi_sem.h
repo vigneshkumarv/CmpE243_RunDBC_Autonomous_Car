@@ -22,8 +22,6 @@
 extern "C" {
 #endif
 
-
-
 /** @{
  * SPI Access should be locked in multi-tasking environment if you are using SPI BUS.
  * @warning Only use this API if you are running FreeRTOS and scheduler has started.
@@ -31,8 +29,6 @@ extern "C" {
 void spi1_lock(void);    ///< Lock SPI access
 void spi1_unlock(void);  ///< Unlock SPI access
 /** @} */
-
-
 
 #ifdef __cplusplus
 }

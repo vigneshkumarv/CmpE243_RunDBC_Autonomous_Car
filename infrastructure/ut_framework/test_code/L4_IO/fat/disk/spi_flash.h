@@ -6,19 +6,17 @@
 #ifndef SPI_FLASH_H_
 #define SPI_FLASH_H_
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include "diskioStructs.h" // Used in flash_ioctl()
-
-
+#include <stdint.h>
+#include "diskioStructs.h"  // Used in flash_ioctl()
 
 /**
  * Initializes the Flash Memory
  */
- DSTATUS flash_initialize();
+DSTATUS flash_initialize();
 
 /**
  * Reads a sector from the Flash Memory
@@ -26,7 +24,7 @@
  * @param sectorNum     The sector number to read with each sector being 512 bytes
  * @param sectorCount   The number of sectors to read
  */
-DRESULT flash_read_sectors(unsigned char* pData, int sectorNum, int sectorCount);
+DRESULT flash_read_sectors(unsigned char *pData, int sectorNum, int sectorCount);
 
 /**
  * Writes a sector to the Flash Memory
@@ -34,7 +32,7 @@ DRESULT flash_read_sectors(unsigned char* pData, int sectorNum, int sectorCount)
  * @param sectorNum     The sector number to write with each sector being 512 bytes
  * @param sectorCount   The number of sectors to write
  */
-DRESULT flash_write_sectors(unsigned char* pData, int sectorNum, int sectorCount);
+DRESULT flash_write_sectors(unsigned char *pData, int sectorNum, int sectorCount);
 
 /**
  * Gets control information from this flash memory drive, such as sector count, sector size
@@ -76,9 +74,7 @@ uint32_t flash_get_page_write_count(uint32_t page_number);
  */
 void flash_chip_erase(void);
 
-
-
 #ifdef __cplusplus
- }
+}
 #endif
 #endif /* SPI_FLASH_H_ */

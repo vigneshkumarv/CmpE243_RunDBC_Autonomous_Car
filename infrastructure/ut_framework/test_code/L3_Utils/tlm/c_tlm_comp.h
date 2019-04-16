@@ -49,8 +49,8 @@ extern "C" {
  * Each component has a name, and a list of variables
  */
 typedef struct {
-    const char *name;    /** Name of the telemetry component */
-    c_list_ptr var_list; /** List of the telemetry variables of this component */
+  const char *name;    /** Name of the telemetry component */
+  c_list_ptr var_list; /** List of the telemetry variables of this component */
 } tlm_component;
 
 /**
@@ -64,13 +64,13 @@ typedef void (*tlm_comp_callback)(tlm_component *comp_ptr, void *arg1, void *arg
  * @returns tlm_component pointer if this component added successfully, but NULL
  *          if another component already exists with this name.
  */
-tlm_component* tlm_component_add(const char *name);
+tlm_component *tlm_component_add(const char *name);
 
 /**
  * Get an existing telemetry component by name
  * @returns NULL pointer if the component by name was not found
  */
-tlm_component* tlm_component_get_by_name(const char *name);
+tlm_component *tlm_component_get_by_name(const char *name);
 
 /**
  * Calls your callback function for each telemetry component added to the
@@ -79,8 +79,6 @@ tlm_component* tlm_component_get_by_name(const char *name);
  *              callback(tlm_component*, arg1, arg2)
  */
 void tlm_component_for_each(tlm_comp_callback callback, void *arg1, void *arg2);
-
-
 
 #ifdef __cplusplus
 }
