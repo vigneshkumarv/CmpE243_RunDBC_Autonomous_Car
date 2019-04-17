@@ -25,20 +25,18 @@ bool c_period_reg_tlm(void) { return true; }
 void c_period_1Hz(uint32_t count) {
   (void)count;
 
-
-  motor_speed_RPM = (((encoder_count)/(64.0))/1)*60;
+  motor_speed_RPM = (((encoder_count) / (64.0)) / 1) * 60;
   printf("encoder_count: %d    motor_speed_RPM = %d \n", encoder_count, motor_speed_RPM);
   encoder_count = 0;
   send_heartbeat_msg(&sensor_module);
-
 }
 
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
-  //read_left_right_ultrasonic_sensors();
-  //delay_ms(40);
-  //read_middle_rear_sensors();
+  // read_left_right_ultrasonic_sensors();
+  // delay_ms(40);
+  // read_middle_rear_sensors();
   read_left_right_bumper_sensors();
   send_can_msg(&sensor_module);
   delay_ms(40);
@@ -58,9 +56,6 @@ void c_period_100Hz(uint32_t count) {
        timer_count = 0;
        send_can_msg(&sensor_module);
    }*/
-
-
-
 }
 
 void c_period_1000Hz(uint32_t count) {
