@@ -9,15 +9,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
 
 #include "pwm_wrapper.h"
 //#include "motor_controls_switch.h"
-#include "motor_controls_master.h"
-#include "heartbeats.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
 #include "encoder.h"
+#include "heartbeats.h"
+#include "motor_controls_master.h"
 
 // LED1=on when CAN1 is off the bus
 // LED2=on when MIA from master heartbeat
@@ -33,7 +32,7 @@
 
 // for encoder
 int motor_speed_RPM = 0;
-//extern int encoder_count;
+// extern int encoder_count;
 
 static float speed;
 
@@ -41,12 +40,12 @@ static float speed;
 // keep global counter for encoder_count
 
 bool c_period_init(void) {
-    init_can1_bus();
-    enable_encoder_interrupts();
-    PWMs_init();
-    speed = 15.0;
+  init_can1_bus();
+  enable_encoder_interrupts();
+  PWMs_init();
+  speed = 15.0;
 
-    return true;
+  return true;
 }
 
 bool c_period_reg_tlm(void) { return true; }
@@ -55,13 +54,12 @@ void c_period_1Hz(uint32_t count) {
   (void)count;
   check_and_handle_canbus_state();
   handle_heartbeats();
-
 }
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
   control_car_with_master();
-  //control_car_with_switches();
+  // control_car_with_switches();
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
