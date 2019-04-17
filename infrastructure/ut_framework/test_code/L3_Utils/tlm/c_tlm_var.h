@@ -36,28 +36,29 @@ extern "C" {
  * decoder to print-out the data in human readable format.
  */
 typedef enum {
-  tlm_undefined = 0,
-  tlm_int = 1,
-  tlm_uint = 2,
-  tlm_char = 3,
-  tlm_float = 4,
-  tlm_double = 5,
-  tlm_string = 6,
-  tlm_binary = 7,
-  tlm_bit_or_bool = 8,
-} tlm_type;
+    tlm_undefined   = 0,
+    tlm_int         = 1,
+    tlm_uint        = 2,
+    tlm_char        = 3,
+    tlm_float       = 4,
+    tlm_double      = 5,
+    tlm_string      = 6,
+    tlm_binary      = 7,
+    tlm_bit_or_bool = 8,
+} tlm_type ;
 
 /**
  * Structure of a single variable registration
  */
 typedef struct {
-  const char *name;     /**< Name of the variable */
-  const void *data_ptr; /**< Data pointer of the variable */
+    const char *name;      /**< Name of the variable */
+    const void *data_ptr;  /**< Data pointer of the variable */
 
-  uint32_t elm_size_bytes; /**< Size of the variable in bytes */
-  uint32_t elm_arr_size;   /**< If an array, the size of the array */
-  tlm_type elm_type;       /**< The type of the element */
+    uint32_t elm_size_bytes; /**< Size of the variable in bytes */
+    uint32_t elm_arr_size;   /**< If an array, the size of the array */
+    tlm_type elm_type;       /**< The type of the element */
 } tlm_reg_var_type;
+
 
 /**
  * Adds a variable to a component.
@@ -72,21 +73,26 @@ typedef struct {
  * @returns true upon success.  If memory allocation fails, or if another variable
  *          is registered by the same name or same memory pointer, false is returned.
  */
-bool tlm_variable_register(tlm_component *comp_ptr, const char *name, const void *data_ptr, const uint16_t data_size,
-                           const uint16_t arr_size, tlm_type type);
+bool tlm_variable_register(tlm_component *comp_ptr,
+                             const char *name,
+                             const void *data_ptr,
+                             const uint16_t data_size,
+                             const uint16_t arr_size,
+                             tlm_type type);
 
 /**
  * Macro to register a variable.
  * If a variable is called "var", then this macro will yield :
  *  tlm_variable_register(comp, "var", &var, sizeof(var), 1);
  */
-#define TLM_REG_VAR(comp, var, type) tlm_variable_register(comp, #var, &var, sizeof(var), 1, type)
+#define TLM_REG_VAR(comp, var, type) \
+    tlm_variable_register(comp, #var, &var, sizeof(var), 1, type)
 
 /**
  * Macro to register an array.
  */
 #define TLM_REG_ARR(comp, var, type) \
-  tlm_variable_register(comp, #var, &var[0], sizeof(var[0]), sizeof(var) / sizeof(var[0]), type)
+    tlm_variable_register(comp, #var, &var[0], sizeof(var[0]), sizeof(var)/sizeof(var[0]), type)
 
 /**
  * Get the data pointer and the size of a previously registered variable.
@@ -94,7 +100,8 @@ bool tlm_variable_register(tlm_component *comp_ptr, const char *name, const void
  * @param comp_ptr   The component pointer that contains the variable
  * @param name       The registered name of the variable
  */
-const tlm_reg_var_type *tlm_variable_get_by_name(tlm_component *comp_ptr, const char *name);
+const tlm_reg_var_type* tlm_variable_get_by_name(tlm_component *comp_ptr,
+                                                 const char *name);
 
 /**
  * Get the data pointer and the size of a previously registered variable.
@@ -102,7 +109,8 @@ const tlm_reg_var_type *tlm_variable_get_by_name(tlm_component *comp_ptr, const 
  * @param comp_name   The component name that contains the variable
  * @param name        The registered name of the variable
  */
-const tlm_reg_var_type *tlm_variable_get_by_comp_and_name(const char *comp_name, const char *name);
+const tlm_reg_var_type* tlm_variable_get_by_comp_and_name(const char *comp_name,
+                                                          const char *name);
 
 /**
  * Sets a value to one of the telemetry variables.  This is sort of a back-door way to force
@@ -131,6 +139,8 @@ bool tlm_variable_get_value(const char *comp_name, const char *name, char *buffe
  * @returns             true upon success
  */
 bool tlm_variable_print_value(const tlm_reg_var_type *reg_var, char *buffer, int len);
+
+
 
 #ifdef __cplusplus
 }

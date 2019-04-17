@@ -4,11 +4,15 @@
 extern "C" {
 #endif
 
+
 #include "disk_defines.h"
 #include "diskioStructs.h"  // DSTATUS
 
 /// Enumeration of the Drive numbers :
-typedef enum { driveNumFlashMem = 0, driveNumSdCard = 1 } DriveNumberType;
+typedef enum {
+    driveNumFlashMem = 0,
+    driveNumSdCard = 1
+} DriveNumberType;
 
 /**
  * Initializes the disk given by @param drv
@@ -28,7 +32,7 @@ DSTATUS disk_status(BYTE drv);
  * @param count  The number of sectors to read
  * @returns      The status of the read operation
  */
-DRESULT disk_read(BYTE drv, BYTE *buff, DWORD sector, BYTE count);
+DRESULT disk_read (BYTE drv, BYTE *buff, DWORD sector, BYTE count);
 
 /**
  * Performs low level disk write
@@ -48,6 +52,8 @@ DRESULT disk_write(BYTE drv, const BYTE *buff, DWORD sector, BYTE count);
  * @returns     The status of the request
  */
 DRESULT disk_ioctl(BYTE drv, BYTE ctrl, void *buff);
+
+
 
 #ifdef __cplusplus
 }

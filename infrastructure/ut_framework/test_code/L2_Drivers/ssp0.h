@@ -27,18 +27,21 @@ extern "C" {
 #endif
 
 #include "LPC17xx.h"
-#include "base/ssp_prv.h"
 #include "sys_config.h"
+#include "base/ssp_prv.h"
+
+
 
 /**
  * Initializes SPI 1
  * Configures CLK, MISO, MOSI pins with a slow SCK speed
  */
-static inline void ssp0_init(unsigned int max_clock_mhz) {
-  // @note Pins are initialized by bio.h
-  lpc_pconp(pconp_ssp0, true);
-  lpc_pclk(pclk_ssp0, clkdiv_1);
-  ssp_init(LPC_SSP0);
+static inline void ssp0_init(unsigned int max_clock_mhz)
+{
+    // @note Pins are initialized by bio.h
+    lpc_pconp(pconp_ssp0, true);
+    lpc_pclk(pclk_ssp0, clkdiv_1);
+    ssp_init(LPC_SSP0);
 }
 
 /**
@@ -47,19 +50,31 @@ static inline void ssp0_init(unsigned int max_clock_mhz) {
  * @param max_clock_mhz   The maximum speed of this SPI in megahertz
  * @note  The speed may be set lower to max_clock_mhz if it cannot be attained.
  */
-static inline void ssp0_set_max_clock(unsigned int max_clock_mhz) { ssp_set_max_clock(LPC_SSP0, max_clock_mhz); }
+static inline void ssp0_set_max_clock(unsigned int max_clock_mhz)
+{
+    ssp_set_max_clock(LPC_SSP0, max_clock_mhz);
+}
+
 
 /**
  * Exchanges a byte over SPI bus
  * @param out   The byte to send out
  * @returns     The byte received over SPI
  */
-static inline char ssp0_exchange_byte(char out) { return ssp_exchange_byte(LPC_SSP0, out); }
+static inline char ssp0_exchange_byte(char out)
+{
+    return ssp_exchange_byte(LPC_SSP0, out);
+}
 
 /**
  * Exchanges multi-byte data over SPI Bus
  */
-static inline void ssp0_exchange_data(void *data, int len) { ssp_exchange_data(LPC_SSP0, data, len); }
+static inline void ssp0_exchange_data(void *data, int len)
+{
+    ssp_exchange_data(LPC_SSP0, data, len);
+}
+
+
 
 #ifdef __cplusplus
 }

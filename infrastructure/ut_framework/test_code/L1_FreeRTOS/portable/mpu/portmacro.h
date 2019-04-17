@@ -63,6 +63,7 @@
     1 tab == 4 spaces!
 */
 
+
 #ifndef PORTMACRO_H
 #define PORTMACRO_H
 
@@ -81,82 +82,84 @@ extern "C" {
  */
 
 /* Type definitions. */
-#define portCHAR char
-#define portFLOAT float
-#define portDOUBLE double
-#define portLONG long
-#define portSHORT short
-#define portSTACK_TYPE uint32_t
-#define portBASE_TYPE long
+#define portCHAR		char
+#define portFLOAT		float
+#define portDOUBLE		double
+#define portLONG		long
+#define portSHORT		short
+#define portSTACK_TYPE	uint32_t
+#define portBASE_TYPE	long
 
 typedef portSTACK_TYPE StackType_t;
 typedef long BaseType_t;
 typedef unsigned long UBaseType_t;
 
-#if (configUSE_16_BIT_TICKS == 1)
-typedef uint16_t TickType_t;
-#define portMAX_DELAY (TickType_t)0xffff
+#if( configUSE_16_BIT_TICKS == 1 )
+	typedef uint16_t TickType_t;
+	#define portMAX_DELAY ( TickType_t ) 0xffff
 #else
-typedef uint32_t TickType_t;
-#define portMAX_DELAY (TickType_t)0xffffffffUL
+	typedef uint32_t TickType_t;
+	#define portMAX_DELAY ( TickType_t ) 0xffffffffUL
 #endif
 /*-----------------------------------------------------------*/
 
 /* MPU specific constants. */
-#define portUSING_MPU_WRAPPERS 1
-#define portPRIVILEGE_BIT (0x80000000UL)
+#define portUSING_MPU_WRAPPERS		1
+#define portPRIVILEGE_BIT			( 0x80000000UL )
 
-#define portMPU_REGION_READ_WRITE (0x03UL << 24UL)
-#define portMPU_REGION_PRIVILEGED_READ_ONLY (0x05UL << 24UL)
-#define portMPU_REGION_READ_ONLY (0x06UL << 24UL)
-#define portMPU_REGION_PRIVILEGED_READ_WRITE (0x01UL << 24UL)
-#define portMPU_REGION_CACHEABLE_BUFFERABLE (0x07UL << 16UL)
-#define portMPU_REGION_EXECUTE_NEVER (0x01UL << 28UL)
+#define portMPU_REGION_READ_WRITE				( 0x03UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_ONLY		( 0x05UL << 24UL )
+#define portMPU_REGION_READ_ONLY				( 0x06UL << 24UL )
+#define portMPU_REGION_PRIVILEGED_READ_WRITE	( 0x01UL << 24UL )
+#define portMPU_REGION_CACHEABLE_BUFFERABLE		( 0x07UL << 16UL )
+#define portMPU_REGION_EXECUTE_NEVER			( 0x01UL << 28UL )
 
-#define portUNPRIVILEGED_FLASH_REGION (0UL)
-#define portPRIVILEGED_FLASH_REGION (1UL)
-#define portPRIVILEGED_RAM_REGION (2UL)
-#define portGENERAL_PERIPHERALS_REGION (3UL)
-#define portSTACK_REGION (4UL)
-#define portFIRST_CONFIGURABLE_REGION (5UL)
-#define portLAST_CONFIGURABLE_REGION (7UL)
-#define portNUM_CONFIGURABLE_REGIONS ((portLAST_CONFIGURABLE_REGION - portFIRST_CONFIGURABLE_REGION) + 1)
-#define portTOTAL_NUM_REGIONS (portNUM_CONFIGURABLE_REGIONS + 1) /* Plus one to make space for the stack region. */
+#define portUNPRIVILEGED_FLASH_REGION		( 0UL )
+#define portPRIVILEGED_FLASH_REGION			( 1UL )
+#define portPRIVILEGED_RAM_REGION			( 2UL )
+#define portGENERAL_PERIPHERALS_REGION		( 3UL )
+#define portSTACK_REGION					( 4UL )
+#define portFIRST_CONFIGURABLE_REGION	    ( 5UL )
+#define portLAST_CONFIGURABLE_REGION		( 7UL )
+#define portNUM_CONFIGURABLE_REGIONS		( ( portLAST_CONFIGURABLE_REGION - portFIRST_CONFIGURABLE_REGION ) + 1 )
+#define portTOTAL_NUM_REGIONS				( portNUM_CONFIGURABLE_REGIONS + 1 ) /* Plus one to make space for the stack region. */
 
-#define portSWITCH_TO_USER_MODE() __asm volatile(" mrs r0, control \n orr r0, #1 \n msr control, r0 " ::: "r0")
+#define portSWITCH_TO_USER_MODE() __asm volatile ( " mrs r0, control \n orr r0, #1 \n msr control, r0 " :::"r0" )
 
-typedef struct MPU_REGION_REGISTERS {
-  uint32_t ulRegionBaseAddress;
-  uint32_t ulRegionAttribute;
+typedef struct MPU_REGION_REGISTERS
+{
+	uint32_t ulRegionBaseAddress;
+	uint32_t ulRegionAttribute;
 } xMPU_REGION_REGISTERS;
 
 /* Plus 1 to create space for the stack region. */
-typedef struct MPU_SETTINGS {
-  xMPU_REGION_REGISTERS xRegion[portTOTAL_NUM_REGIONS];
+typedef struct MPU_SETTINGS
+{
+	xMPU_REGION_REGISTERS xRegion[ portTOTAL_NUM_REGIONS ];
 } xMPU_SETTINGS;
 
 /* Architecture specifics. */
-#define portSTACK_GROWTH (-1)
-#define portTICK_PERIOD_MS ((TickType_t)1000 / configTICK_RATE_HZ)
-#define portBYTE_ALIGNMENT 8
+#define portSTACK_GROWTH			( -1 )
+#define portTICK_PERIOD_MS			( ( TickType_t ) 1000 / configTICK_RATE_HZ )
+#define portBYTE_ALIGNMENT			8
 /*-----------------------------------------------------------*/
 
 /* SVC numbers for various services. */
-#define portSVC_START_SCHEDULER 0
-#define portSVC_YIELD 1
-#define portSVC_RAISE_PRIVILEGE 2
+#define portSVC_START_SCHEDULER				0
+#define portSVC_YIELD						1
+#define portSVC_RAISE_PRIVILEGE				2
 
 /* Scheduler utilities. */
 
-#define portYIELD() __asm volatile("	SVC	%0	\n" ::"i"(portSVC_YIELD))
-#define portYIELD_WITHIN_API() *(portNVIC_INT_CTRL) = portNVIC_PENDSVSET
+#define portYIELD()				__asm volatile ( "	SVC	%0	\n" :: "i" (portSVC_YIELD) )
+#define portYIELD_WITHIN_API()	*(portNVIC_INT_CTRL) = portNVIC_PENDSVSET
 
-#define portNVIC_INT_CTRL ((volatile uint32_t *)0xe000ed04)
-#define portNVIC_PENDSVSET 0x10000000
-#define portEND_SWITCHING_ISR(xSwitchRequired) \
-  if (xSwitchRequired) *(portNVIC_INT_CTRL) = portNVIC_PENDSVSET
-#define portYIELD_FROM_ISR(x) portEND_SWITCHING_ISR(x)
+#define portNVIC_INT_CTRL			( ( volatile uint32_t *) 0xe000ed04 )
+#define portNVIC_PENDSVSET			0x10000000
+#define portEND_SWITCHING_ISR( xSwitchRequired ) if( xSwitchRequired ) *(portNVIC_INT_CTRL) = portNVIC_PENDSVSET
+#define portYIELD_FROM_ISR( x ) portEND_SWITCHING_ISR( x )
 /*-----------------------------------------------------------*/
+
 
 /* Critical section management. */
 
@@ -164,76 +167,77 @@ typedef struct MPU_SETTINGS {
  * Set basepri to portMAX_SYSCALL_INTERRUPT_PRIORITY without effecting other
  * registers.  r0 is clobbered.
  */
-#define portSET_INTERRUPT_MASK()                                                   \
-  __asm volatile(                                                                  \
-      "	mov r0, %0								\n"                                                      \
-      "	msr basepri, r0							\n" ::"i"( \
-          configMAX_SYSCALL_INTERRUPT_PRIORITY)                                    \
-      : "r0")
+#define portSET_INTERRUPT_MASK()						\
+	__asm volatile										\
+	(													\
+		"	mov r0, %0								\n"	\
+		"	msr basepri, r0							\n" \
+		::"i"(configMAX_SYSCALL_INTERRUPT_PRIORITY):"r0"	\
+	)
 
 /*
  * Set basepri back to 0 without effective other registers.
  * r0 is clobbered.  FAQ:  Setting BASEPRI to 0 is not a bug.  Please see
  * http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html before disagreeing.
  */
-#define portCLEAR_INTERRUPT_MASK()                     \
-  __asm volatile(                                      \
-      "	mov r0, #0					\n"                             \
-      "	msr basepri, r0				\n" :: \
-          : "r0")
+#define portCLEAR_INTERRUPT_MASK()			\
+	__asm volatile							\
+	(										\
+		"	mov r0, #0					\n"	\
+		"	msr basepri, r0				\n"	\
+		:::"r0"								\
+	)
 
 /* FAQ:  Setting BASEPRI to 0 is not a bug.  Please see
 http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html before disagreeing. */
-#define portSET_INTERRUPT_MASK_FROM_ISR() \
-  0;                                      \
-  portSET_INTERRUPT_MASK()
-#define portCLEAR_INTERRUPT_MASK_FROM_ISR(x) \
-  portCLEAR_INTERRUPT_MASK();                \
-  (void)x
+#define portSET_INTERRUPT_MASK_FROM_ISR()		0;portSET_INTERRUPT_MASK()
+#define portCLEAR_INTERRUPT_MASK_FROM_ISR(x)	portCLEAR_INTERRUPT_MASK();(void)x
 
-extern void vPortEnterCritical(void);
-extern void vPortExitCritical(void);
 
-#define portDISABLE_INTERRUPTS() portSET_INTERRUPT_MASK()
-#define portENABLE_INTERRUPTS() portCLEAR_INTERRUPT_MASK()
-#define portENTER_CRITICAL() vPortEnterCritical()
-#define portEXIT_CRITICAL() vPortExitCritical()
+extern void vPortEnterCritical( void );
+extern void vPortExitCritical( void );
+
+#define portDISABLE_INTERRUPTS()	portSET_INTERRUPT_MASK()
+#define portENABLE_INTERRUPTS()		portCLEAR_INTERRUPT_MASK()
+#define portENTER_CRITICAL()		vPortEnterCritical()
+#define portEXIT_CRITICAL()			vPortExitCritical()
 /*-----------------------------------------------------------*/
 
 /* Task function macros as described on the FreeRTOS.org WEB site. */
-#define portTASK_FUNCTION_PROTO(vFunction, pvParameters) void vFunction(void *pvParameters)
-#define portTASK_FUNCTION(vFunction, pvParameters) void vFunction(void *pvParameters)
+#define portTASK_FUNCTION_PROTO( vFunction, pvParameters ) void vFunction( void *pvParameters )
+#define portTASK_FUNCTION( vFunction, pvParameters ) void vFunction( void *pvParameters )
 
 #define portNOP()
 
+
 /* Architecture specific optimisations. */
 #ifndef configUSE_PORT_OPTIMISED_TASK_SELECTION
-#define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
+    #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
 #endif
 
 #if configUSE_PORT_OPTIMISED_TASK_SELECTION == 1
 
-/* Generic helper function. */
-__attribute__((always_inline)) static inline uint8_t ucPortCountLeadingZeros(uint32_t ulBitmap) {
-  uint8_t ucReturn;
+    /* Generic helper function. */
+    __attribute__( ( always_inline ) ) static inline uint8_t ucPortCountLeadingZeros( uint32_t ulBitmap )
+    {
+    uint8_t ucReturn;
 
-  __asm volatile("clz %0, %1" : "=r"(ucReturn) : "r"(ulBitmap));
-  return ucReturn;
-}
+        __asm volatile ( "clz %0, %1" : "=r" ( ucReturn ) : "r" ( ulBitmap ) );
+        return ucReturn;
+    }
 
-/* Check the configuration. */
-#if (configMAX_PRIORITIES > 32)
-#error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITIES is less than or equal to 32.  It is very rare that a system requires more than 10 to 15 difference priorities as tasks that share a priority will time slice.
-#endif
+    /* Check the configuration. */
+    #if( configMAX_PRIORITIES > 32 )
+        #error configUSE_PORT_OPTIMISED_TASK_SELECTION can only be set to 1 when configMAX_PRIORITIES is less than or equal to 32.  It is very rare that a system requires more than 10 to 15 difference priorities as tasks that share a priority will time slice.
+    #endif
 
-/* Store/clear the ready priorities in a bit map. */
-#define portRECORD_READY_PRIORITY(uxPriority, uxReadyPriorities) (uxReadyPriorities) |= (1UL << (uxPriority))
-#define portRESET_READY_PRIORITY(uxPriority, uxReadyPriorities) (uxReadyPriorities) &= ~(1UL << (uxPriority))
+    /* Store/clear the ready priorities in a bit map. */
+    #define portRECORD_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) |= ( 1UL << ( uxPriority ) )
+    #define portRESET_READY_PRIORITY( uxPriority, uxReadyPriorities ) ( uxReadyPriorities ) &= ~( 1UL << ( uxPriority ) )
 
-/*-----------------------------------------------------------*/
+    /*-----------------------------------------------------------*/
 
-#define portGET_HIGHEST_PRIORITY(uxTopPriority, uxReadyPriorities) \
-  uxTopPriority = (31 - ucPortCountLeadingZeros((uxReadyPriorities)))
+    #define portGET_HIGHEST_PRIORITY( uxTopPriority, uxReadyPriorities ) uxTopPriority = ( 31 - ucPortCountLeadingZeros( ( uxReadyPriorities ) ) )
 
 #endif /* configUSE_PORT_OPTIMISED_TASK_SELECTION */
 
@@ -242,3 +246,4 @@ __attribute__((always_inline)) static inline uint8_t ucPortCountLeadingZeros(uin
 #endif
 
 #endif /* PORTMACRO_H */
+

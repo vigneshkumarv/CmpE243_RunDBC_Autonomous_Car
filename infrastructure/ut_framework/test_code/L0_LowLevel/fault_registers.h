@@ -27,13 +27,17 @@
 extern "C" {
 #endif
 
+
+
 #include "LPC17xx.h"
-#define FAULT_PRESENT_VAL 0xDEADBEEF                  ///< Value loaded to FAULT_EXISTS upon a crash
-#define FAULT_LAST_RUNNING_TASK_NAME LPC_RTC->GPREG0  ///< FreeRTOS crash info register
-#define FAULT_EXISTS LPC_RTC->GPREG1                  ///< Fault flag is stored here
-#define FAULT_PC LPC_RTC->GPREG2                      ///< CPU PC counter after the crash
-#define FAULT_LR LPC_RTC->GPREG3                      ///< CPU Link register after the crash
-#define FAULT_PSR LPC_RTC->GPREG4                     ///< CPU PSR register
+#define FAULT_PRESENT_VAL               0xDEADBEEF          ///< Value loaded to FAULT_EXISTS upon a crash
+#define FAULT_LAST_RUNNING_TASK_NAME    LPC_RTC->GPREG0     ///< FreeRTOS crash info register
+#define FAULT_EXISTS                    LPC_RTC->GPREG1     ///< Fault flag is stored here
+#define FAULT_PC                        LPC_RTC->GPREG2     ///< CPU PC counter after the crash
+#define FAULT_LR                        LPC_RTC->GPREG3     ///< CPU Link register after the crash
+#define FAULT_PSR                       LPC_RTC->GPREG4     ///< CPU PSR register
+
+
 
 #ifdef __cplusplus
 }

@@ -46,18 +46,20 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <stdbool.h>
 #include <stdint.h>
+#include <stdbool.h>
+
+
 
 /**
  * 8-byte structure accessible by 8-bit, 16-bit, 32-bit or as whole 64-bit
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
 typedef union {
-  uint64_t qword;      ///< All 64-bits of data of a CAN message
-  uint32_t dwords[2];  ///< dwords[0] = Byte 0-3,   dwords[1] = Byte 4-7
-  uint16_t words[4];   ///<  words[0] = Byte 0-1 ... words[3] = Byte 6-7
-  uint8_t bytes[8];    ///< 8 bytes of a CAN message
+    uint64_t qword;     ///< All 64-bits of data of a CAN message
+    uint32_t dwords[2]; ///< dwords[0] = Byte 0-3,   dwords[1] = Byte 4-7
+    uint16_t words [4]; ///<  words[0] = Byte 0-1 ... words[3] = Byte 6-7
+    uint8_t  bytes [8]; ///< 8 bytes of a CAN message
 } can_data_t;
 
 /**
@@ -65,19 +67,19 @@ typedef union {
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
 typedef struct {
-  union {
-    uint32_t frame;  ///< 32-bit CAN frame aligned with frame_fields (bit members)
-    struct {
-      uint32_t : 16;          ///< Unused space
-      uint32_t data_len : 4;  ///< Data length
-      uint32_t : 10;          ///< Unused space
-      uint32_t is_rtr : 1;    ///< Message is an RTR type
-      uint32_t is_29bit : 1;  ///< If message ID is 29-bit type
-    } frame_fields;
-  };
+    union {
+        uint32_t frame; ///< 32-bit CAN frame aligned with frame_fields (bit members)
+        struct {
+            uint32_t          : 16; ///< Unused space
+            uint32_t data_len : 4;  ///< Data length
+            uint32_t          : 10; ///< Unused space
+            uint32_t is_rtr   : 1;  ///< Message is an RTR type
+            uint32_t is_29bit : 1;  ///< If message ID is 29-bit type
+        } frame_fields;
+    };
 
-  uint32_t msg_id;  ///< CAN Message ID (11-bit or 29-bit)
-  can_data_t data;  ///< CAN data
+    uint32_t msg_id; ///< CAN Message ID (11-bit or 29-bit)
+    can_data_t data; ///< CAN data
 } __attribute__((__packed__)) can_msg_t;
 
 /**
@@ -85,25 +87,25 @@ typedef struct {
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
 typedef struct {
-  struct {
-    uint32_t msg_id : 11;   ///< 11-bit message-id
-    uint32_t : 5;           ///< Unused
-    uint32_t data_len : 4;  ///< Message length
-    uint32_t : 4;           ///< Unused
-    uint32_t semphr : 2;    ///< Semaphore bits
-    uint32_t : 4;           ///< Unused
-    uint32_t rtr : 1;       ///< RTR message
-    uint32_t : 1;           ///< Unused (FF bit, not applicable to FullCAN)
-  };
+    struct {
+        uint32_t msg_id   : 11; ///< 11-bit message-id
+        uint32_t          :  5; ///< Unused
+        uint32_t data_len :  4; ///< Message length
+        uint32_t          :  4; ///< Unused
+        uint32_t semphr   :  2; ///< Semaphore bits
+        uint32_t          :  4; ///< Unused
+        uint32_t rtr      :  1; ///< RTR message
+        uint32_t          :  1; ///< Unused (FF bit, not applicable to FullCAN)
+    };
 
-  can_data_t data;  ///< CAN data
+    can_data_t data;    ///< CAN data
 } __attribute__((__packed__)) can_fullcan_msg_t;
 
 /// The CAN BUS type
 typedef enum {
-  can1,     ///< CAN #1
-  can2,     ///< CAN #2
-  can_max,  ///< Do not use or change
+    can1,        ///< CAN #1
+    can2,        ///< CAN #2
+    can_max,     ///< Do not use or change
 } can_t;
 
 /**
@@ -137,8 +139,8 @@ typedef void (*can_void_func_t)(uint32_t);
  * @post  The CAN bus is initialized, and by default, no messages are accepted until
  *        CAN filter is setup, and CAN_reset_bus() is called.
  */
-bool CAN_init(can_t can, uint32_t baudrate_kbps, uint16_t rxq_size, uint16_t txq_size, can_void_func_t bus_off_cb,
-              can_void_func_t data_ovr_cb);
+bool CAN_init(can_t can, uint32_t baudrate_kbps, uint16_t rxq_size, uint16_t txq_size,
+              can_void_func_t bus_off_cb, can_void_func_t data_ovr_cb);
 
 /**
  * Receive a message of the given CAN BUS.
@@ -185,11 +187,10 @@ void CAN_reset_bus(can_t can);
 /** @} */
 
 /** @{ Watermark and counter API */
-uint16_t CAN_get_rx_watermark(can_t can);  ///< RX FreeRTOS Queue watermark
-uint16_t CAN_get_tx_watermark(can_t can);  ///< TX FreeRTOS Queue watermark
-uint16_t CAN_get_tx_count(can_t can);      ///< Number of messages written to the CAN HW
-uint16_t CAN_get_rx_count(
-    can_t can);  ///< Number of messages successfully queued from CAN interrupt (not including dropped)
+uint16_t CAN_get_rx_watermark(can_t can); ///< RX FreeRTOS Queue watermark
+uint16_t CAN_get_tx_watermark(can_t can); ///< TX FreeRTOS Queue watermark
+uint16_t CAN_get_tx_count(can_t can); ///< Number of messages written to the CAN HW
+uint16_t CAN_get_rx_count(can_t can); ///< Number of messages successfully queued from CAN interrupt (not including dropped)
 /** @} */
 
 /**
@@ -222,22 +223,22 @@ void CAN_bypass_filter_accept_all_msgs(void);
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
 typedef union {
-  struct {
-    uint16_t id : 11;      ///< Standard 11-bit CAN ID
-    uint16_t fc_intr : 1;  ///< Message interrupt bit: ONLY USED FOR FULLCAN
-    uint16_t disable : 1;  ///< Set to 1 to disable the slot
-    uint16_t can_num : 3;  ///< CAN controller number (0=CAN1, 1=CAN2)
-  };
-  uint16_t raw;
+    struct {
+        uint16_t id      : 11;///< Standard 11-bit CAN ID
+        uint16_t fc_intr : 1; ///< Message interrupt bit: ONLY USED FOR FULLCAN
+        uint16_t disable : 1; ///< Set to 1 to disable the slot
+        uint16_t can_num : 3; ///< CAN controller number (0=CAN1, 1=CAN2)
+    };
+    uint16_t raw;
 } __attribute__((__packed__)) can_std_id_t;
 
 /**
  * Standard ID group is nothing but a inclusive range of LOW and HIGH IDs
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
-typedef struct {      ///< CAN standard ID group
-  can_std_id_t low;   ///< Low range
-  can_std_id_t high;  ///< High range
+typedef struct {            ///< CAN standard ID group
+    can_std_id_t low;       ///< Low range
+    can_std_id_t high;      ///< High range
 } can_std_grp_id_t;
 
 /**
@@ -245,17 +246,17 @@ typedef struct {      ///< CAN standard ID group
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
 typedef struct {
-  uint32_t id : 29;      ///< Extended 29-bit CAN ID
-  uint32_t can_num : 3;  ///< CAN controller number (0=CAN1, 1=CAN2)
+    uint32_t id      : 29;  ///< Extended 29-bit CAN ID
+    uint32_t can_num : 3;   ///< CAN controller number (0=CAN1, 1=CAN2)
 } __attribute__((__packed__)) can_ext_id_t;
 
 /**
  * Extended ID group is nothing but a inclusive range of LOW and HIGH IDs
  * DO NOT CHANGE THIS STRUCTURE - it maps to the hardware
  */
-typedef struct {      ///< CAN extended ID group
-  can_ext_id_t low;   ///< Low range
-  can_ext_id_t high;  ///< High range
+typedef struct {            ///< CAN extended ID group
+    can_ext_id_t low;       ///< Low range
+    can_ext_id_t high;      ///< High range
 } can_ext_grp_id_t;
 
 /**
@@ -284,7 +285,7 @@ can_ext_id_t CAN_gen_eid(can_t can, uint32_t id);
  *          OFF mode while the entry is added.
  *
  * @note TO DO: Enabling fc_intr bit (FullCAN interrupts) is not yet supported
- */
+*/
 bool CAN_fullcan_add_entry(can_t can, can_std_id_t id1, can_std_id_t id2);
 
 /**
@@ -292,7 +293,7 @@ bool CAN_fullcan_add_entry(can_t can, can_std_id_t id1, can_std_id_t id2);
  * the pointer in memory where the actual CAN message (FullCAN entry) is stored in memory.
  * @param fc_id The FullCAN entry originally passed to CAN_fullcan_add_entry()
  */
-can_fullcan_msg_t *CAN_fullcan_get_entry_ptr(can_std_id_t fc_id);
+can_fullcan_msg_t* CAN_fullcan_get_entry_ptr(can_std_id_t fc_id);
 
 /**
  * FullCAN entries may update at any time by the HW, so this method provides a means
@@ -354,9 +355,12 @@ uint8_t CAN_fullcan_get_num_entries(void);
  *                       elist, 0, eglist, 1);
  * @endcode
  */
-bool CAN_setup_filter(const can_std_id_t *std_id_list, uint16_t sid_cnt, const can_std_grp_id_t *std_group_id_list,
-                      uint16_t sgp_cnt, const can_ext_id_t *ext_id_list, uint16_t eid_cnt,
+bool CAN_setup_filter(const can_std_id_t *std_id_list,           uint16_t sid_cnt,
+                      const can_std_grp_id_t *std_group_id_list, uint16_t sgp_cnt,
+                      const can_ext_id_t *ext_id_list,           uint16_t eid_cnt,
                       const can_ext_grp_id_t *ext_group_id_list, uint16_t egp_cnt);
+
+
 
 #ifdef __cplusplus
 }

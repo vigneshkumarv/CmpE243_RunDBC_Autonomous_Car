@@ -29,6 +29,8 @@
 extern "C" {
 #endif
 
+
+
 /**
  * Initializes the ADC Peripheral
  * @note The PIN that will be used by ADC needs to be selected using PINSEL externally
@@ -41,6 +43,8 @@ void adc0_init(void);
  * @note If FreeRTOS is running, adc conversion will use interrupts and not poll for the result.
  */
 uint16_t adc0_get_reading(uint8_t channel_num);
+
+
 
 #ifdef __cplusplus
 }

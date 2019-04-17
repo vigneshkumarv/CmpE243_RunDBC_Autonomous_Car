@@ -62,34 +62,38 @@ uint32_t DWT_CYCLES_ADDED = 0; /* Used on ARM Cortex-M only */
 
 #if (SELECTED_PORT == PORT_ARM_CortexM)
 
-void prvTraceInitCortexM() {
-  /* Make sure DWT is enabled is enabled, if supported */
-  REG_DEMCR |= DEMCR_TRCENA;
+void prvTraceInitCortexM()
+{
+	/* Make sure DWT is enabled is enabled, if supported */
+	REG_DEMCR |= DEMCR_TRCENA;
 
-  do {
-    /* Verify that DWT is supported */
-    if (REG_DEMCR == 0) {
-      vTraceError("DWT not supported by this chip!");
-      break;
-    }
+	do{
+		/* Verify that DWT is supported */
+		if (REG_DEMCR == 0)
+		{
+			vTraceError("DWT not supported by this chip!");
+			break;
+		}
 
-    /* Verify that DWT_CYCCNT is supported */
-    if (REG_DWT_CTRL & DWT_CTRL_NOCYCCNT) {
-      vTraceError("DWT_CYCCNT not supported by this chip!");
-      break;
-    }
+		/* Verify that DWT_CYCCNT is supported */
+		if (REG_DWT_CTRL & DWT_CTRL_NOCYCCNT)
+		{
+			vTraceError("DWT_CYCCNT not supported by this chip!");
+			break;
+		}
 
-    /* Reset the cycle counter */
-    REG_DWT_CYCCNT = 0;
+		/* Reset the cycle counter */
+		REG_DWT_CYCCNT = 0;
 
-    /* Enable the cycle counter */
-    REG_DWT_CTRL |= DWT_CTRL_CYCCNTENA;
+		/* Enable the cycle counter */
+		REG_DWT_CTRL |= DWT_CTRL_CYCCNTENA;
 
-  } while (0); /* breaks above jump here */
+	}while(0);	/* breaks above jump here */
 
-  if (RecorderDataPtr->frequency == 0) {
-    RecorderDataPtr->frequency = TRACE_CPU_CLOCK_HZ / HWTC_DIVISOR;
-  }
+	if (RecorderDataPtr->frequency == 0)
+	{
+		RecorderDataPtr->frequency = TRACE_CPU_CLOCK_HZ / HWTC_DIVISOR;
+	}
 }
 
 #endif
@@ -105,69 +109,78 @@ void prvTraceInitCortexM() {
  * the code of vTracePortGetTimeStamp if using the HWTC macros.
  *
  ******************************************************************************/
-void vTracePortGetTimeStamp(uint32_t *pTimestamp) {
-  static uint32_t last_traceTickCount = 0;
-  static uint32_t last_hwtc_count = 0;
-  uint32_t traceTickCount = 0;
-  uint32_t hwtc_count = 0;
+void vTracePortGetTimeStamp(uint32_t *pTimestamp)
+{
+	static uint32_t last_traceTickCount = 0;
+	static uint32_t last_hwtc_count = 0;
+	uint32_t traceTickCount = 0;
+	uint32_t hwtc_count = 0;
 
-  if (trace_disable_timestamp == 1) {
-    if (pTimestamp) *pTimestamp = last_timestamp;
-    return;
-  }
+	if (trace_disable_timestamp == 1)
+	{
+		if (pTimestamp)
+			*pTimestamp = last_timestamp;
+		return;
+	}
 
-  /* Retrieve HWTC_COUNT only once since the same value should be used all throughout this function. */
+	/* Retrieve HWTC_COUNT only once since the same value should be used all throughout this function. */
 #if (HWTC_COUNT_DIRECTION == DIRECTION_INCREMENTING)
-  hwtc_count = HWTC_COUNT;
+	hwtc_count = HWTC_COUNT;
 #elif (HWTC_COUNT_DIRECTION == DIRECTION_DECREMENTING)
-  hwtc_count = HWTC_PERIOD - HWTC_COUNT;
+	hwtc_count = HWTC_PERIOD - HWTC_COUNT;
 #else
-  Junk text to cause compiler error - HWTC_COUNT_DIRECTION is not set correctly !Should be DIRECTION_INCREMENTING or
-      DIRECTION_DECREMENTING
+	Junk text to cause compiler error - HWTC_COUNT_DIRECTION is not set correctly!
+	Should be DIRECTION_INCREMENTING or DIRECTION_DECREMENTING
 #endif
 
 #if (SELECTED_PORT == PORT_Win32)
-  /* The Win32 port uses ulGetRunTimeCounterValue for timestamping, which in turn
-  uses QueryPerformanceCounter. That function is not always reliable when used over
-  multiple threads. We must therefore handle rare cases where the timestamp is less
-  than the previous. In practice, the Win32 should "never" roll over since the
-  performance counter is 64 bit wide. */
+	/* The Win32 port uses ulGetRunTimeCounterValue for timestamping, which in turn
+	uses QueryPerformanceCounter. That function is not always reliable when used over
+	multiple threads. We must therefore handle rare cases where the timestamp is less
+	than the previous. In practice, the Win32 should "never" roll over since the
+	performance counter is 64 bit wide. */
 
-  if (last_hwtc_count > hwtc_count) {
-    hwtc_count = last_hwtc_count;
-  }
+	if (last_hwtc_count > hwtc_count)
+	{
+		hwtc_count = last_hwtc_count;
+	}
 #endif
 
-  if (last_traceTickCount - uiTraceTickCount - 1 < 0x80000000) {
-    /* This means last_traceTickCount is higher than uiTraceTickCount,
-    so we have previously compensated for a missed tick.
-    Therefore we use the last stored value because that is more accurate. */
-    traceTickCount = last_traceTickCount;
-  } else {
-    /* Business as usual */
-    traceTickCount = uiTraceTickCount;
-  }
+	if (last_traceTickCount - uiTraceTickCount - 1 < 0x80000000)
+	{
+		/* This means last_traceTickCount is higher than uiTraceTickCount,
+		so we have previously compensated for a missed tick.
+		Therefore we use the last stored value because that is more accurate. */
+		traceTickCount = last_traceTickCount;
+	}
+	else
+	{
+		/* Business as usual */
+		traceTickCount = uiTraceTickCount;
+	}
 
-  /* Check for overflow. May occur if the update of uiTraceTickCount has been
-  delayed due to disabled interrupts. */
-  if (traceTickCount == last_traceTickCount && hwtc_count < last_hwtc_count) {
-    /* A trace tick has occurred but not been executed by the kernel, so we compensate manually. */
-    traceTickCount++;
-  }
+	/* Check for overflow. May occur if the update of uiTraceTickCount has been
+	delayed due to disabled interrupts. */
+	if (traceTickCount == last_traceTickCount && hwtc_count < last_hwtc_count)
+	{
+		/* A trace tick has occurred but not been executed by the kernel, so we compensate manually. */
+		traceTickCount++;
+	}
 
-  /* Check if the return address is OK, then we perform the calculation. */
-  if (pTimestamp) {
-    /* Get timestamp from trace ticks. Scale down the period to avoid unwanted overflows. */
-    *pTimestamp = traceTickCount * (HWTC_PERIOD / HWTC_DIVISOR);
-    /* Increase timestamp by (hwtc_count + "lost hardware ticks from scaling down period") / HWTC_DIVISOR. */
-    *pTimestamp += (hwtc_count + traceTickCount * (HWTC_PERIOD % HWTC_DIVISOR)) / HWTC_DIVISOR;
+	/* Check if the return address is OK, then we perform the calculation. */
+	if (pTimestamp)
+	{
+		/* Get timestamp from trace ticks. Scale down the period to avoid unwanted overflows. */
+		*pTimestamp = traceTickCount * (HWTC_PERIOD / HWTC_DIVISOR);
+		/* Increase timestamp by (hwtc_count + "lost hardware ticks from scaling down period") / HWTC_DIVISOR. */
+		*pTimestamp += (hwtc_count + traceTickCount * (HWTC_PERIOD % HWTC_DIVISOR)) / HWTC_DIVISOR;
 
-    last_timestamp = *pTimestamp;
-  }
+		last_timestamp = *pTimestamp;
+	}
 
-  /* Store the previous values. */
-  last_traceTickCount = traceTickCount;
-  last_hwtc_count = hwtc_count;
+	/* Store the previous values. */
+	last_traceTickCount = traceTickCount;
+	last_hwtc_count = hwtc_count;
 }
 
 #endif

@@ -23,6 +23,8 @@ extern "C" {
 #endif
 #include "c_tlm_comp.h"
 
+
+
 /**
  * @file
  * This file allows to get telemetry data in binary format.  This only provides
@@ -45,6 +47,7 @@ extern "C" {
  * @endcode
  */
 
+
 /**
  * @{
  * Get the size of the binary data which should be used to allocate
@@ -54,6 +57,7 @@ extern "C" {
 uint32_t tlm_binary_get_size_one(tlm_component *comp_ptr);
 uint32_t tlm_binary_get_size_all(void);
 /** @} */
+
 
 /**
  * @{
@@ -66,6 +70,7 @@ uint32_t tlm_binary_get_one(tlm_component *comp_ptr, char *binary);
 uint32_t tlm_binary_get_all(char *binary);
 /** @} */
 
+
 /**
  * @{
  * Compare the binary data with the latest telemetry's binary data
@@ -76,6 +81,8 @@ uint32_t tlm_binary_get_all(char *binary);
 bool tlm_binary_compare_one(tlm_component *comp_ptr, char *binary);
 bool tlm_binary_compare_all(char *binary);
 /** @} */
+
+
 
 #ifdef __cplusplus
 }

@@ -28,6 +28,8 @@
 extern "C" {
 #endif
 
+
+
 /**
  * Delays in microseconds
  * @param micro_sec The delay in microseconds
@@ -51,6 +53,7 @@ char is_freertos_running();
  */
 void log_boot_info(const char*);
 
+
 /**
  * Macro that can be used to print the timing/performance of a block
  * Example:
@@ -62,9 +65,10 @@ void log_boot_info(const char*);
  *      // At the end, the time taken between this block will be printed
  * @endcode
  */
-#define PRINT_EXECUTION_SPEED()                                \
-  for (unsigned int __time = sys_get_uptime_us(); __time != 0; \
-       printf("   Finished in %u us\n", (unsigned int)sys_get_uptime_us() - __time), __time = 0)
+#define PRINT_EXECUTION_SPEED() for(unsigned int __time=sys_get_uptime_us(); __time!=0; \
+                                    printf("   Finished in %u us\n", (unsigned int)sys_get_uptime_us()-__time),__time=0)
+
+
 
 #ifdef __cplusplus
 }

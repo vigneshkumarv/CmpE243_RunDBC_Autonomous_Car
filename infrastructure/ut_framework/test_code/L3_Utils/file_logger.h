@@ -33,6 +33,8 @@ extern "C" {
 #endif
 #include <stdint.h>
 
+
+
 /**
  * @{
  * The main parameters are the buffer size, and number of message buffers. The buffer size controls how
@@ -53,15 +55,16 @@ extern "C" {
  * So in an event when no logging calls occur and there is data in the buffer, we will write it to the
  * file after this time.
  */
-#define FILE_LOGGER_BUFFER_SIZE (1 * 1024)    ///< Recommend multiples of 512
-#define FILE_LOGGER_NUM_BUFFERS 10            ///< Number of buffers (need to have enough while file is being written)
-#define FILE_LOGGER_LOG_MSG_MAX_LEN 150       ///< Max length of a log message
-#define FILE_LOGGER_FILENAME "0:log.csv"      ///< Destination filename (0: for SPI flash, 1: for SD card)
-#define FILE_LOGGER_STACK_SIZE (3 * 512 / 4)  ///< Stack size in 32-bit (1 = 4 bytes for 32-bit CPU)
-#define FILE_LOGGER_FLUSH_TIME_SEC (1 * 60)   ///< Logs are flushed after this time
-#define FILE_LOGGER_BLOCK_TIME_MS (10)  ///< If no buffer available within this time, block time counter will increment
-#define FILE_LOGGER_KEEP_FILE_OPEN (0)  ///< If non-zero, the file will be kept open
+#define FILE_LOGGER_BUFFER_SIZE      (1 * 1024)     ///< Recommend multiples of 512
+#define FILE_LOGGER_NUM_BUFFERS      10             ///< Number of buffers (need to have enough while file is being written)
+#define FILE_LOGGER_LOG_MSG_MAX_LEN  150            ///< Max length of a log message
+#define FILE_LOGGER_FILENAME         "0:log.csv"    ///< Destination filename (0: for SPI flash, 1: for SD card)
+#define FILE_LOGGER_STACK_SIZE       (3 * 512 / 4)  ///< Stack size in 32-bit (1 = 4 bytes for 32-bit CPU)
+#define FILE_LOGGER_FLUSH_TIME_SEC   (1 * 60)       ///< Logs are flushed after this time
+#define FILE_LOGGER_BLOCK_TIME_MS    (10)           ///< If no buffer available within this time, block time counter will increment
+#define FILE_LOGGER_KEEP_FILE_OPEN   (0)            ///< If non-zero, the file will be kept open
 /** @} */
+
 
 /**
  * Enumeration of the type of the log message.
@@ -69,11 +72,11 @@ extern "C" {
  * But these can be passed to logger_get_logged_call_count()
  */
 typedef enum {
-  log_debug,  ///< Debug logs are printed to stdio (printf) unless disabled by logger_set_printf()
-  log_info,
-  log_warn,
-  log_error,
-  log_last,  ///< Marks the last entry, do not use
+    log_debug,  ///< Debug logs are printed to stdio (printf) unless disabled by logger_set_printf()
+    log_info,
+    log_warn,
+    log_error,
+    log_last, ///< Marks the last entry, do not use
 } logger_msg_t;
 
 /**
@@ -102,11 +105,12 @@ void logger_set_printf(logger_msg_t type, bool enable);
  *      LOG_INFO("Error %i encountered", error_number);
  * @endcode
  */
-#define LOG_ERROR(msg, p...) logger_log(log_error, __FILE__, __FUNCTION__, __LINE__, msg, ##p)
-#define LOG_WARN(msg, p...) logger_log(log_warn, __FILE__, __FUNCTION__, __LINE__, msg, ##p)
-#define LOG_INFO(msg, p...) logger_log(log_info, __FILE__, __FUNCTION__, __LINE__, msg, ##p)
-#define LOG_DEBUG(msg, p...) logger_log(log_debug, __FILE__, __FUNCTION__, __LINE__, msg, ##p)
+#define LOG_ERROR(msg, p...)  logger_log (log_error, __FILE__, __FUNCTION__, __LINE__, msg, ## p)
+#define LOG_WARN(msg, p...)   logger_log (log_warn,  __FILE__, __FUNCTION__, __LINE__, msg, ## p)
+#define LOG_INFO(msg, p...)   logger_log (log_info,  __FILE__, __FUNCTION__, __LINE__, msg, ## p)
+#define LOG_DEBUG(msg, p...)  logger_log (log_debug, __FILE__, __FUNCTION__, __LINE__, msg, ## p)
 /** @} */
+
 
 /**
  * This macro will log INFO message without filename, function name, and line number.
@@ -117,7 +121,7 @@ void logger_set_printf(logger_msg_t type, bool enable);
  *       the data will be written to buffer using the logger task and eventually flushed out to the file
  *       either after the timeout or when the buffer is full.
  */
-#define LOG_SIMPLE_MSG(msg, p...) logger_log(log_info, NULL, NULL, 0, msg, ##p)
+#define LOG_SIMPLE_MSG(msg, p...)       logger_log (log_info, NULL, NULL, 0, msg, ## p)
 
 /**
  * Logs a raw message without any header such as the timestamp.
@@ -126,7 +130,7 @@ void logger_set_printf(logger_msg_t type, bool enable);
  *       the data will be written to buffer using the logger task and eventually flushed out to the file
  *       either after the timeout or when the buffer is full.
  */
-#define LOG_RAW_MSG(msg, p...) logger_log_raw(msg, ##p)
+#define LOG_RAW_MSG(msg, p...)          logger_log_raw(msg, ## p)
 
 /**
  * Macro to flush the logs.
@@ -135,7 +139,9 @@ void logger_set_printf(logger_msg_t type, bool enable);
  *
  * @note Flushing is not needed when the OS is running.
  */
-#define LOG_FLUSH() logger_send_flush_request()
+#define LOG_FLUSH()                     logger_send_flush_request()
+
+
 
 /**
  * Flushes the cached log data to the file
@@ -174,20 +180,26 @@ uint16_t logger_get_highest_file_write_time_ms(void);
  */
 uint16_t logger_get_num_buffers_watermark(void);
 
+
+
+
+
 /* Do not use rest of the API after this line */
 
 /**
  * Logs a message.
  * You should not use this directly, the macros pass the arguments to this function.
  */
-void logger_log(logger_msg_t type, const char* filename, const char* func_name, unsigned line_num, const char* msg,
-                ...);
+void logger_log(logger_msg_t type, const char * filename, const char * func_name, unsigned line_num,
+                const char * msg, ...);
 
 /**
  * @see LOG_RAW_MSG()
  * You should not use this directly, the macros pass the arguments to this function.
  */
-void logger_log_raw(const char* msg, ...);
+void logger_log_raw(const char * msg, ...);
+
+
 
 #ifdef __cplusplus
 }

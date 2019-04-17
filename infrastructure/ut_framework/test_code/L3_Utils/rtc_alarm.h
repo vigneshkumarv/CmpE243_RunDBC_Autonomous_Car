@@ -33,14 +33,16 @@ extern "C" {
 #include "FreeRTOS.h"
 #include "semphr.h"
 
+
+
 /**
  * Frequency of a recurring alarm
  */
 typedef enum {
-  everySecond = 0,
-  everyMinute = 1,
-  everyHour = 2,
-  everyDay = 3,
+    everySecond = 0,
+    everyMinute = 1,
+    everyHour   = 2,
+    everyDay    = 3,
 } alarm_freq_t;
 
 /**
@@ -49,8 +51,10 @@ typedef enum {
  * it has been created.
  */
 typedef struct {
-  uint8_t hour, min, sec;
+    uint8_t hour, min, sec;
 } alarm_time_t;
+
+
 
 /**
  * Enables a permanent recurring alarm every second, minute, or hour
@@ -79,16 +83,15 @@ void rtc_alarm_create_recurring(alarm_freq_t freq, SemaphoreHandle_t *pAlarm);
  *      my_alarm_time->hour = 13
  * @endcode
  */
-alarm_time_t *rtc_alarm_create(alarm_time_t time, SemaphoreHandle_t *pAlarm);
+alarm_time_t* rtc_alarm_create(alarm_time_t time, SemaphoreHandle_t *pAlarm);
 
 /**
  * Turns off an alarm that was created by rtc_alarm_create()
  * Nothing special here, the hour is set to 25, which will never occur.
  */
-static inline void rtc_alarm_off(alarm_time_t *p) {
-  p->hour = 25;
-  p->min = p->sec = 0;
-}
+static inline void rtc_alarm_off(alarm_time_t *p) { p->hour = 25; p->min = p->sec=0; }
+
+
 
 #ifdef __cplusplus
 }
