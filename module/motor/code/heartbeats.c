@@ -6,7 +6,7 @@
 #include <can.h>
 #include "LED_wrapper.h"
 #include "generated-can/generated_can.h"
-#include "motor_drive.h"
+//#include "motor_drive.h"
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -34,11 +34,11 @@ void handle_heartbeats(void) {
     // val = can_msg.data.qword;
   }
   // handle mia from master heartbeat
-  if (dbc_handle_mia_MASTER_HEARTBEAT(&rx_master_heartbeat_msg, 100)) {  // an mia has occurred, do something
+  if (dbc_handle_mia_MASTER_HEARTBEAT(&rx_master_heartbeat_msg, 1000)) {  // an mia has occurred, do something
     LED_2_on();
-    Stop();
+    // Stop();
 
   } else {
-    LED_2_off();
+    // LED_2_off();
   }
 }

@@ -7,25 +7,22 @@
 #include "pwm_wrapper.h"
 #include "lpc_pwm.hpp"
 
+PWM * pwm3_ptr; // pwm3 = P2.2
+PWM * pwm1_ptr; // pwm1 = P2.0
 
-//PWM pwm1(PWM::pwm1,100); // 8 works
-// pwm2(PWM::pwm2,8); // 10 works
+bool Set_PWM_for_Servo(float input){
 
-PWM * pwm2_ptr;
-//PWM pwm2(PWM::pwm2,100); // 10 works
-
-bool Set_PWM1_for_Servo(float input){
-
-    //pwm1.set(input);
+    pwm1_ptr->set(input);
     return true;
 }
-bool Set_PWM2_for_DC(float input){
+bool Set_PWM_for_DC(float input){
 
-    pwm2_ptr->set(input);
+    pwm3_ptr->set(input);
     return true;
 }
 
-void pwm2_init(void)
+void PWMs_init(void)
 {
-    pwm2_ptr = new PWM(PWM::pwm2, 100);
+    pwm3_ptr = new PWM(PWM::pwm3, 100);
+    pwm1_ptr = new PWM(PWM::pwm1, 100);
 }
