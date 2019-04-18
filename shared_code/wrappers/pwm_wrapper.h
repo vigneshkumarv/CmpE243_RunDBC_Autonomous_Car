@@ -14,9 +14,9 @@ extern "C" {
 #include "stdbool.h"
 #include "stdint.h"
 
-bool Set_PWM1_for_Servo(float input);
-bool Set_PWM2_for_DC(float input);
-void pwm2_init(void);
+bool Set_PWM_for_Servo(float input);
+bool Set_PWM_for_DC(float input);
+void PWMs_init(void);
 
 #ifdef __cplusplus
 }
