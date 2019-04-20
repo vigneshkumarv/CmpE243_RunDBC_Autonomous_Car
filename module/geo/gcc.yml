@@ -1,5 +1,5 @@
 compiler:
-  path: gcc
+  path: x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
     - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L2_Drivers/'
