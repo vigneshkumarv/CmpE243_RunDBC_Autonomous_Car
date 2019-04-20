@@ -11,6 +11,7 @@
 #include "math.h"
 #include "queue.h"
 #include "uart_wrapper.h"
+#include "string.h"
 
 #define PI 3.141592653
 

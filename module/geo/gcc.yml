@@ -1,7 +1,15 @@
 compiler:
-  path: x86_64-w64-mingw32-gcc
+  path: gcc
   source_path: 
     - './code/'
+    - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L2_Drivers/'
+    - 'C:/SJSU_Dev/projects/my_project/L3_Utils/'
+    - 'C:/SJSU_Dev/projects/my_project/generated_can/'
+    - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L0_LowLevel/'
+    - 'C:/autonomous-car/module/geo/geo_project/L5_Application/'
+    - 'C:/autonomous-car/module/geo/code/'
+    - 'C:/autonomous-car/module/geo/tests/'
+    - 'C:/autonomous-car/shared_code/wrappers/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -24,7 +32,14 @@ compiler:
       - './code_permanent_mocks/'
       # Source code under test
       - './code/'
-      - *unit_tests_path
+      - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L2_Drivers/'
+      - 'C:/SJSU_Dev/projects/my_project/L3_Utils/'
+      - 'C:/SJSU_Dev/projects/my_project/generated_can'
+      - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L0_LowLevel/'
+      - 'C:/autonomous-car/module/geo/geo_project/L5_Application/'
+      - 'C:/autonomous-car/module/geo/code/'
+      - 'C:/autonomous-car/module/geo/tests/'
+      - 'C:/autonomous-car/shared_code/wrappers/'
   defines:
     prefix: '-D'
     items:

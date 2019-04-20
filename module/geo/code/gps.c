@@ -4,8 +4,8 @@
 static float gps_data_longitude = 0;
 static float gps_data_latitude = 0;
 static bool is_data_invalid = false;
-static float destination_latitude = 37.34;
-static float destination_longitude = -121.88;
+static float destination_latitude = 37.33485;
+static float destination_longitude = -121.880899;
 static char delim[] = ",";
 
 void gps_module_init(void) {
