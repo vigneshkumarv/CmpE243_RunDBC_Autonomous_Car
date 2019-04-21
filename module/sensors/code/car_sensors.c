@@ -1,10 +1,10 @@
 #include "car_sensors.h"
 #include "adc0.h"
-#include "lpc_sys.h"
+//#include "lpc_sys.h"
 
 extern SENSOR_DATA_t sensor_data;
-extern int get_distance_cm_left_ultrasonic();
-extern int get_distance_cm_right_ultrasonic();
+extern int get_distance_cm_left_ultrasonic(void);
+extern int get_distance_cm_right_ultrasonic(void);
 extern void set_distance_cm_left_ultrasonic(int cm);
 extern void set_distance_cm_right_ultrasonic(int cm);
 
@@ -24,10 +24,10 @@ static queue_S right_ultrasonic;
 static queue_S middle_ultrasonic;
 static queue_S rear_ir;
 
-static int previous_value = 20;
+//static int previous_value = 20;
 
-static int sum = 0;
-static int counter = 0;
+//static int sum = 0;
+//static int counter = 0;
 
 // initialization ultrasonic sensors
 void init_sensors(void) {
@@ -128,151 +128,6 @@ void calibrate_sensors(sensor_position whichSensor) {
       int average = queue__update_and_get_average(&middle_ultrasonic, middle_value);
       sensor_data.SENSOR_DATA_MiddleUltrasonic = average;
       printf("middle: %dcm \n", average);
-
-    //int current_value = (adc0_get_reading(4) * 0.5 * 2.54 * (1024.0 / 4096.0) / 1.5);
-    // printf("individual value: %d \n", current_value);
-    /*
-    counter++;
-    if (counter <= 20){
-        int current_value = adc0_get_reading(4);
-        sum += current_value;
-
-    }
-    if (counter == 20){
-        int average = sum / 20;
-        printf("Middle average ADC value: %d\n", average);
-        sum = 0;
-        counter = 0;
-    }
-*/
-    /*
-    if (current_value < 20) {
-      current_value = 20;
-    } else if (current_value >= 600)
-      current_value = previous_value;
-
-    queue__update_middle(&middle_ultrasonic, current_value, &max_value, &min_value, &second_max);
-    if ((max_value - second_max) > 100) {
-      sensor_data.SENSOR_DATA_MiddleUltrasonic = second_max;
-      previous_value = second_max;
-    } else if ((max_value - second_max) < 100) {
-      // sensor_data.SENSOR_DATA_MiddleUltrasonic =(second_max+max_value)/2;
-      sensor_data.SENSOR_DATA_MiddleUltrasonic = second_max;
-      previous_value = second_max;
-    }
-    /*
-    else {
-        sensor_data.SENSOR_DATA_MiddleUltrasonic = min_value;
-    }
-    */
-
-    //printf("final middle: %d ", sensor_data.SENSOR_DATA_MiddleUltrasonic);
   }
 }
 
-/*if (whichSensor == left) {
-    counter_left_ultrasonic++;
-    if (counter_left_ultrasonic <= 5) {
-        int temp = get_distance_cm_left_ultrasonic();
-        if (temp > 2) {
-            if (temp > max_value_left_ultrasonic) {
-                max_value_left_ultrasonic = temp;
-            }
-        }
-    }
-    if (counter_left_ultrasonic == 5) {
-        max_value_left_ultrasonic = (max_value_left_ultrasonic > 255)? 255 : max_value_left_ultrasonic;
-        set_distance_cm_left_ultrasonic(max_value_left_ultrasonic);
-        sensor_data.SENSOR_DATA_LeftUltrasonic = max_value_left_ultrasonic;
-        printf("left calibrated value: %d \n",max_value_left_ultrasonic);
-        counter_left_ultrasonic = 0;
-        max_value_left_ultrasonic = 2;
-    }
-}
-else {
-    counter_right_ultrasonic++;
-    if (counter_right_ultrasonic <= 5) {
-        int temp = get_distance_cm_right_ultrasonic();
-        if (temp > 2) {
-            if (temp > max_value_right_ultrasonic) {
-                max_value_right_ultrasonic = temp;
-            }
-        }
-    }
-    if (counter_right_ultrasonic == 5) {
-        max_value_right_ultrasonic = (max_value_right_ultrasonic > 255)? 255 : max_value_right_ultrasonic;
-        set_distance_cm_right_ultrasonic(max_value_right_ultrasonic);
-        sensor_data.SENSOR_DATA_RightUltrasonic = max_value_right_ultrasonic;
-        printf("right calibrated value: %d \n",max_value_right_ultrasonic);
-        counter_right_ultrasonic = 0;
-        max_value_right_ultrasonic = 2;
-    }
-}*/
-
-// middle code:
-
-/*distance_middle_ultrasonic = (adc0_get_reading(4) * 0.5 * 2.54 * (1024.0 / 4096.0) / 1.5);
-  counter_middle_ultrasonic++;
-
-  if (counter_middle_ultrasonic <= 5) {
-
-      int temp = distance_middle_ultrasonic;
-
-      if (temp > 20) {
-          if (temp > max_value_middle_ultrasonic) {
-              second_max_middle_ultrasonic = max_value_middle_ultrasonic;
-              max_value_middle_ultrasonic = temp;
-          }
-          else if (temp > second_max_middle_ultrasonic) {
-              second_max_middle_ultrasonic = temp;
-          }
-          if (temp < min_value_middle_ultrasonic) {
-              min_value_middle_ultrasonic = temp;
-          }
-      }
-  }
-  if (counter_middle_ultrasonic == 5) {
-      if (max_value_middle_ultrasonic > 40) {
-          if (!(second_max_middle_ultrasonic == 20)) {
-              if ((max_value_middle_ultrasonic - second_max_middle_ultrasonic) < 100) {
-                  max_value_middle_ultrasonic = (max_value_middle_ultrasonic + second_max_middle_ultrasonic) / 2.0;
-              }
-              else
-                  max_value_middle_ultrasonic = second_max_middle_ultrasonic;
-              sensor_data.SENSOR_DATA_MiddleUltrasonic = max_value_middle_ultrasonic;
-          }
-          else {
-              sensor_data.SENSOR_DATA_MiddleUltrasonic = max_value_middle_ultrasonic;
-          }
-      }
-      else {
-          if(min_value_middle_ultrasonic == 600)
-              sensor_data.SENSOR_DATA_MiddleUltrasonic = 20;
-          else
-              sensor_data.SENSOR_DATA_MiddleUltrasonic = min_value_middle_ultrasonic;
-      }
-      counter_middle_ultrasonic = 0;
-      max_value_middle_ultrasonic = 20;
-      second_max_middle_ultrasonic = 20;
-      min_value_middle_ultrasonic = 600;
-      printf("middle distance: %d\n", sensor_data.SENSOR_DATA_MiddleUltrasonic);
-  }*/
-
-// rear code:
-
-/*counter_ir++;
-
-           if (counter_ir <= 5) {
-               distance_rear_ir = 227648 * pow(adc0_get_reading(5), -1.27);
-               int temp = distance_rear_ir;
-               sum_ir += temp;
-           }
-           if (counter_ir == 5) {
-
-               int average = sum_ir / 5;
-               printf("rear ir sensor: %d \n", average);
-
-               sensor_data.SENSOR_DATA_RearIr = average;
-               counter_ir = 0;
-               sum_ir = 0;
-           }*/

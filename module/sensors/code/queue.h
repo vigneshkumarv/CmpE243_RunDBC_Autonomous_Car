@@ -11,9 +11,7 @@ typedef struct {
   int rear;
   int size;
   int sum;
-  int max;
-  int min;
-  int second_max;
+
   // TODO: Add more members as needed
 } queue_S;
 
@@ -26,7 +24,5 @@ bool queue__pop(queue_S *queue, int *pop_value);
 int queue__get_count(queue_S *queue);
 
 int queue__update_and_get_average(queue_S *queue, int value);
-
-void queue__update_middle(queue_S *queue, int push_value, int *max_value, int *min_value, int *second_max);
 
 #endif
