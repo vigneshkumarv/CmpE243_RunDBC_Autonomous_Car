@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "Z:\CMPE243\SJSU_Dev\projects\sensor_project\generated_can\generated_can.h"
+#include "generated_can.h"
 #include "queue.h"
 #include "sensor_wrapper.h"
 #include "utilities.h"
