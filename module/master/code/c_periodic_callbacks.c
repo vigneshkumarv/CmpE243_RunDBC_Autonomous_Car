@@ -10,11 +10,24 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "master_can.h"
+#include "obstacle_avoidance.h"
 
-MASTER_DRIVE_CMD_t drive_data = {0};
+// MASTER_DRIVE_CMD_t drive_data = {0};
+
+static obstacle_avoidance_S obstacle_avoidance_data;
 
 bool c_period_init(void) {
+  obstacle_avoidance_data.left_bumper_triggered = false;
+  obstacle_avoidance_data.right_bumper_triggered = false;
+  obstacle_avoidance_data.left_ultrasonic_cm = 0;
+  obstacle_avoidance_data.right_ultrasonic_cm = 0;
+  obstacle_avoidance_data.middle_ultrasonic_cm = 0;
+  obstacle_avoidance_data.rear_ir_cm = 0;
+  obstacle_avoidance_data.motor_speed = 0;
+  obstacle_avoidance_data.steer_direction = 0;
+  obstacle_avoidance_data.motor_direction = 0;
   bool can_is_initialized = init_can();
+
   return can_is_initialized;
 }
 
@@ -26,8 +39,10 @@ void c_period_1Hz(uint32_t count) {
   (void)count;
 }
 void c_period_10Hz(uint32_t count) {
-  send_drive_cmd(&drive_data);
-  read_can();
+  read_can_10Hz(&obstacle_avoidance_data);
+  forward_avoidance(&obstacle_avoidance_data);
+  send_drive_cmd(obstacle_avoidance_data);
+
   (void)count;
 }
 
