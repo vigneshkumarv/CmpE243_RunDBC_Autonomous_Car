@@ -1,11 +1,11 @@
 #include "unity.h"
 
+#include <stdio.h>
 #include <string.h>
 #include "Mockuart_wrapper.h"
 #include "Mockcompass.h"
 #include "gps.h"
-#include <stdio.h>
-#include "Mockqueue.h"
+#include "queue.h"
 //#include "Mockwrappers.h"
 void setUp(void) {
 }
@@ -20,12 +20,12 @@ float destination_latitude = 37.33485;
 float destination_longitude = -121.880899;
 char var = ' ';
 char *pBuff = &var;
+//static char delim[] = ",";
+queue_S queue;
 /*
 
 
-static char delim[] = ",";
 
-queue_S queue_gps;
  */
 void test_gps_module_init(void)
 {
@@ -90,41 +90,38 @@ void test_gps_get_distance(void)
 }
 
 
-//
-//void test_gps_get_deflection_angle(void)
-//{
-//
-//	float deflection = 0, gps_bearing = 0, compass_bearing = 2500;
-//	gps_get_deflection_angle(gps_bearing, compass_bearing);
-//	TEST_ASSERT_EQUAL_INT(, deflection);
-//
-//}
-//
 void test_gps_obtain_data(void)
 {
-    //int counter = 0;
     uart2_gets_ExpectAnyArgsAndReturn(true);
 
     gps_obtain_data();
-    TEST_ASSERT_EQUAL_INT(1, parse_counter);
+    TEST_ASSERT_FALSE(is_data_invalid);
+    TEST_ASSERT_EQUAL_INT(0, parse_counter);
 
 
 }
 //
 //
-//void test_gps_process_data(void)
-//{
-//	  float gps_longitude_avg = 0;
-//      float gps_latitude_avg = 0;
-//	  float latitude_data = 0, longitude_data = 0;
-//	  is_data_invalid = false;
-//	  queue__update_and_get_average_Expect();
-//	  gps_process_data(void);
-//	  TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
-//      TEST_ASSERT_EQUAL_INT(1, queue_gps->size);
-//      TEST_ASSERT_EQUAL_FLOAT(0.6222759, queue_gps->sum);
-//
-//}
+void test_gps_process_data(void)
+{
+    queue.size=0;
+    //queue__update_and_get_average_Expect();
+    gps_process_data();
+    TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
+    TEST_ASSERT_EQUAL_INT(1, queue.size);
+    TEST_ASSERT_TRUE(is_data_invalid);
+
+    gps_process_data();
+    TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
+    TEST_ASSERT_EQUAL_INT(2, queue.size);
+    TEST_ASSERT_TRUE(is_data_invalid);
+
+    gps_process_data();
+    TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
+    TEST_ASSERT_EQUAL_INT(3, queue.size);
+    TEST_ASSERT_TRUE(is_data_invalid);
+
+}
 
 
 
