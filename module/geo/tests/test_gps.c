@@ -4,23 +4,25 @@
 #include "Mockuart_wrapper.h"
 #include "Mockcompass.h"
 #include "gps.h"
-#include "stdio.h"
+#include <stdio.h>
 #include "Mockqueue.h"
 //#include "Mockwrappers.h"
 void setUp(void) {
 }
 void tearDown(void) {
 }
+
 int parse_counter = 0;
-static bool is_data_invalid = false;
-static float gps_data_latitude = 37.336554;
-static float gps_data_longitude = -121.881848;
-char var = 'a';
+bool is_data_invalid = false;
+float gps_data_latitude = 37.336554;
+float gps_data_longitude = -121.881848;
+float destination_latitude = 37.33485;
+float destination_longitude = -121.880899;
+char var = ' ';
 char *pBuff = &var;
 /*
 
-static float destination_latitude = 37.33485;
-static float destination_longitude = -121.880899;
+
 static char delim[] = ",";
 
 queue_S queue_gps;
@@ -53,94 +55,77 @@ void test_gps_obtain_and_process_data(void)
     TEST_ASSERT_EQUAL_INT(-121, gps_data_longitude);
     TEST_ASSERT_EQUAL_INT(0, parse_counter);
     TEST_ASSERT_FALSE(is_data_invalid);
-
-    count++;  //count = 1
-    uart2_gets_ExpectAnyArgsAndReturn(true);
+    //
+    count=2;
+    read_compass_heading_ExpectAnyArgsAndReturn(false);
     gps_obtain_and_process_data(count);
-    //TEST_ASSERT_EQUAL_INT(1, parse_counter);
+    TEST_ASSERT_EQUAL_INT(37, gps_data_latitude);
+    TEST_ASSERT_EQUAL_INT(-121, gps_data_longitude);
+    TEST_ASSERT_EQUAL_INT(0, parse_counter);
     TEST_ASSERT_FALSE(is_data_invalid);
-    //
-    //
-    //    count = 4;
-    //    gps_obtain_and_process_data(count);
-    //    TEST_ASSERT_EQUAL_INT(1, parse_counter);
-    //    TEST_ASSERT_TRUE(is_data_invalid);
-    //
-    //    count = 5;
-    //    gps_obtain_and_process_data(count);
-    //    TEST_ASSERT_EQUAL_INT(1, parse_counter);
-    //    TEST_ASSERT_TRUE(is_data_invalid);
 
 }
-/*
+
+void test_gps_get_bearing(void)
+{
+    float bearing = 0;
+    bearing=gps_get_bearing(gps_data_latitude, gps_data_longitude, destination_latitude, destination_longitude);
+    TEST_ASSERT_EQUAL_FLOAT(45.724, bearing);
+    TEST_ASSERT_EQUAL_FLOAT(37.336554, gps_data_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.881848, gps_data_longitude);
+    TEST_ASSERT_EQUAL_FLOAT(37.33485, destination_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.880899, destination_longitude);
+}
+//
+//
 void test_gps_get_distance(void)
 {
-	double lon_difference = 0;
-	gps_get_bearing(gps_latitude, gps_longitude, destination_latitude, destination_longitude);
-	TEST_ASSERT_EQUAL_INT(0, gps_latitude);
-	TEST_ASSERT_EQUAL_INT(0, gps_longitude);
-	TEST_ASSERT_EQUAL_INT(0.65128, destination_latitude);
-	TEST_ASSERT_EQUAL_INT(-2.126144, destination_longitude);
-	TEST_ASSERT_EQUAL_INT(-121.880899,lon_difference);
-}	
-
-void test_gps_get_distance(void)
-{
-	gps_get_distance(gps_latitude, gps_longitude, destination_latitude, destination_longitude);
-    TEST_ASSERT_EQUAL_INT(0, gps_latitude);
-	TEST_ASSERT_EQUAL_INT(0, gps_longitude);
-	TEST_ASSERT_EQUAL_INT(0.65128, destination_latitude);
-	TEST_ASSERT_EQUAL_INT(-2.126144, destination_longitude);
-
+    float distance = 0;
+    distance = gps_get_distance(gps_data_latitude, gps_data_longitude, destination_latitude, destination_longitude);
+    TEST_ASSERT_EQUAL_FLOAT(37.336554, gps_data_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.881848, gps_data_longitude);
+    TEST_ASSERT_EQUAL_FLOAT(37.33485, destination_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.880899, destination_longitude);
+    TEST_ASSERT_EQUAL_FLOAT( 9.44397e+06, distance);
 }
 
-void test_gps_get_deflection_angle(void)
-{
 
-	float deflection = 0, gps_bearing = 0, compass_bearing = 2500;
-	gps_get_deflection_angle(gps_bearing, compass_bearing);
-	TEST_ASSERT_EQUAL_INT(, deflection);
-
-}
-
+//
+//void test_gps_get_deflection_angle(void)
+//{
+//
+//	float deflection = 0, gps_bearing = 0, compass_bearing = 2500;
+//	gps_get_deflection_angle(gps_bearing, compass_bearing);
+//	TEST_ASSERT_EQUAL_INT(, deflection);
+//
+//}
+//
 void test_gps_obtain_data(void)
 {
-	int counter = 0;
+    //int counter = 0;
+    uart2_gets_ExpectAnyArgsAndReturn(true);
 
-	char data_array[100] = "$GPRMA,A,372011.6,N,1215254.7,W,,,ss.s,ccc,vv.v,W*hh";
+    gps_obtain_data();
+    TEST_ASSERT_EQUAL_INT(1, parse_counter);
 
-	gps_module_get_data_Expect(data_array);
-	gps_obtain_data(void);
-	TEST_ASSERT_EQUAL_INT(6, counter);
-	TEST_ASSERT_EQUAL_INT(372011.6, gps_latitude);
-	TEST_ASSERT_EQUAL_INT(1215254.7, gps_longitude);
-	TEST_ASSERT_EQUAL_FALSE(is_data_invalid);
-
-	data_array[100] = "$GPRMA,N,1215254.7,W,,,ss.s,ccc,vv.v,W*hh";
-	gps_module_get_data_Expect(data_array);
-	gps_obtain_data(void);
-	TEST_ASSERT_EQUAL_INT(3, counter);
-	TEST_ASSERT_EQUAL_INT(1215254.7, gps_latitude);
-	TEST_ASSERT_EQUAL_TRUE(is_data_invalid);
 
 }
+//
+//
+//void test_gps_process_data(void)
+//{
+//	  float gps_longitude_avg = 0;
+//      float gps_latitude_avg = 0;
+//	  float latitude_data = 0, longitude_data = 0;
+//	  is_data_invalid = false;
+//	  queue__update_and_get_average_Expect();
+//	  gps_process_data(void);
+//	  TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
+//      TEST_ASSERT_EQUAL_INT(1, queue_gps->size);
+//      TEST_ASSERT_EQUAL_FLOAT(0.6222759, queue_gps->sum);
+//
+//}
 
-
-void test_gps_process_data(void)
-{
-	  float gps_longitude_avg = 0;
-      float gps_latitude_avg = 0;
-	  float latitude_data = 0, longitude_data = 0;
-	  is_data_invalid = false;
-	  queue__update_and_get_average_Expect();
-	  gps_process_data(void);
-	  TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
-      TEST_ASSERT_EQUAL_INT(1, queue_gps->size);
-      TEST_ASSERT_EQUAL_FLOAT(0.6222759, queue_gps->sum);
-
-}	  
-
- */
 
 
 
