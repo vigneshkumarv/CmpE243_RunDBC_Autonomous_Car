@@ -3,12 +3,11 @@ compiler:
   source_path: 
     - './code/'
     - '../../shared_code/wrappers/'
-    - '../../../SJSU_Dev/projects/sensor_project/L2_Drivers/'
-    - 'C:/Users/YUI/CMPE243/autonomous-car/shared_code/wrappers/'
+    - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
+    - '../../infrastructure/ut_framework/test_code/L3_Utils/'
     - '../../shared_code/'
-    - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/L2_Drivers/'
     - '../../../SJSU_Dev/projects/sensor_project/'
-    - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/generated_can/'
+    - '../../../SJSU_Dev/projects/sensor_project/generated_can/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -33,11 +32,12 @@ compiler:
       # Source code under test
       - './code/'
       - '../../shared_code/wrappers/'
-      - 'C:/Users/YUI/CMPE243/autonomous-car/shared_code/wrappers/'
-      - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/L2_Drivers/'
+      - '../../shared_code/wrappers/'
+      - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
+      - '../../infrastructure/ut_framework/test_code/L3_Utils/'
       - '../../../SJSU_Dev/projects/sensor_project/L2_Drivers/'
       - '../../../SJSU_Dev/projects/sensor_project/'
-      - 'Z:/CMPE243/SJSU_Dev/projects/sensor_project/generated_can/'
+      - '../../../SJSU_Dev/projects/sensor_project/generated_can/'
       - *unit_tests_path
   defines:
     prefix: '-D'

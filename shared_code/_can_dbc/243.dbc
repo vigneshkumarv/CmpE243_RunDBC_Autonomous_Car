@@ -73,7 +73,7 @@ BO_ 513 MOTOR_DATA: 4 MOTOR
 
 BO_ 1 MASTER_DRIVE_CMD: 4 MASTER
  SG_ MASTER_DRIVE_CMD_steer : 0|8@1- (1,0) [0|0] "" MOTOR
- SG_ MASTER_DRIVE_CMD_speed : 8|16@1+ (0.1,0) [0|0] "mph" MOTOR
+ SG_ MASTER_DRIVE_CMD_speed : 8|16@1+ (0.1,0) [0|0] "mps" MOTOR
  SG_ MASTER_DRIVE_CMD_direction : 24|2@1+ (1,0) [0|0] "" MOTOR
 
 

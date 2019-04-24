@@ -3,6 +3,7 @@
 #include <string.h>
 #include "MockLED_wrapper.h"
 #include "Mockcan.h"
+#include "Mockobstacle_avoidance.h"
 #include "generated_can.h"
 #include "master_can.h"
 
