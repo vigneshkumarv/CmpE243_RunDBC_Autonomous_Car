@@ -1,9 +1,5 @@
-/*
- * pwm_wrapper.cpp
- *
- *  Created on: Mar 31, 2019
- *      Author: lenovo
- */
+//pwm_wrapper.cpp
+
 #include "pwm_wrapper.h"
 #include "lpc_pwm.hpp"
 

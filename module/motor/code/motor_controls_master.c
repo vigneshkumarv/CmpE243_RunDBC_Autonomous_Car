@@ -13,15 +13,8 @@
 #include "LED_wrapper.h"
 #include "pwm_wrapper.h"
 
-//static int state;
-//static int reverse_cnt;
-//static bool is_reverse = false; // start in stop state
-
-//static float stop_speed = 15.0;
-//static float reverse_low_speed = 14.1;
-
 static int steer_angle = 0; // 0 for straight, -128 for full left, 127 for full right
-static float mph = 0.0;
+static float mps = 0.0;
 static uint8_t direction_raw = 0; // 0 for stop, 1 for forward, 2 for reverse
 
 MASTER_DRIVE_CMD_t rx_master_drive_msg;
@@ -40,8 +33,8 @@ void control_car_with_master(void)
     // from -45deg to +45deg
     steer_angle = rx_master_drive_msg.MASTER_DRIVE_CMD_steer;
 
-    // from 0-100mph
-    mph = rx_master_drive_msg.MASTER_DRIVE_CMD_speed;
+    // from 0-100 m/s
+    mps = rx_master_drive_msg.MASTER_DRIVE_CMD_speed;
 
     // stop, forward, backward
     direction_raw = rx_master_drive_msg.MASTER_DRIVE_CMD_direction;
@@ -49,6 +42,8 @@ void control_car_with_master(void)
     direction_E direction = get_direction(direction_raw);
 
     steer_car(steer_angle);
-    move_car(direction, mph);
+    move_car(direction, mps);
+
+    send_Motor_Data(steer_angle, direction_raw); // goes to Master and Bridge
 
 }

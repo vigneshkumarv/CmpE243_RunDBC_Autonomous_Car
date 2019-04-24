@@ -3,7 +3,7 @@
 #include "unity.h"
 
 #include "Mockcan.h"
-#include "generated-can/generated_can.h"
+#include "generated_can.h"
 #include "MockLED_wrapper.h"
 #include "motor_controls_master.h"
 #include "motor_helpers.h"

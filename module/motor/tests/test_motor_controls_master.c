@@ -30,6 +30,7 @@ void test_control_car_with_master(void)
 
     Set_PWM_for_Servo_ExpectAndReturn(15.0, true);
     Set_PWM_for_DC_ExpectAndReturn(15.0, true);
+    LED_4_off_Expect();
 
     control_car_with_master();
 }

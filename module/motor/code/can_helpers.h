@@ -8,3 +8,4 @@ void init_can1_bus(void);
 void check_and_handle_canbus_state(void);
 float get_pwm_from_mph(float mph);
 void read_Master_Drive_Cmd(void);
+void send_Motor_Data(int steer_angle, uint8_t direction_raw);

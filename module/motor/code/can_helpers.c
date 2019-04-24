@@ -7,10 +7,22 @@
 #include <can.h>
 #include "pwm_wrapper.h"
 #include "LED_wrapper.h"
-#include "generated-can/generated_can.h"
+#include "generated_can.h"
+#include "can_helpers.h"
+//#include "generated-can/generated_can.h"
 
-extern int motor_speed_RPM;
+// extern int motor_speed_RPM; // this is unused here
+extern float speed_act;
 extern MASTER_DRIVE_CMD_t rx_master_drive_msg;
+
+void send_Motor_Data(int steer_angle, uint8_t direction_raw)
+{   // also send speed_act
+    MOTOR_DATA_t motor_data = {0};
+    motor_data.MOTOR_DATA_steer = steer_angle;
+    motor_data.MOTOR_DATA_speed = speed_act;
+    motor_data.MOTOR_DATA_direction = direction_raw;
+    dbc_encode_and_send_MOTOR_DATA(&motor_data);
+}
 
 void read_Master_Drive_Cmd(void)
 {
@@ -22,7 +34,7 @@ void read_Master_Drive_Cmd(void)
         can_msg_hdr.dlc = can_msg.frame_fields.data_len;
         dbc_decode_MASTER_DRIVE_CMD(&rx_master_drive_msg, can_msg.data.bytes, &can_msg_hdr);
         //steer = rx_master_drive_msg.MASTER_DRIVE_CMD_steer;
-        //mph = rx_master_drive_msg.MASTER_DRIVE_CMD_speed;
+        //mps = rx_master_drive_msg.MASTER_DRIVE_CMD_speed;
         //direction = rx_master_drive_msg.MASTER_DRIVE_CMD_direction;
     }
     if (dbc_handle_mia_MASTER_DRIVE_CMD(&rx_master_drive_msg, 100))
@@ -38,7 +50,7 @@ void check_and_handle_canbus_state(void)
     {
         LED_1_on();
         CAN_reset_bus(can1);
-        printf("CAN1 bus had to be restarted\n");
+        //printf("CAN1 bus had to be restarted\n");
     }
     else
     {

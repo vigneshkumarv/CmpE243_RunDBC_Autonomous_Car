@@ -2,6 +2,7 @@
 
 #include "unity.h"
 #include "Mockpwm_wrapper.h"
+#include "MockLED_wrapper.h"
 //#include <stdio.h>
 
 
@@ -21,39 +22,58 @@ void test_steer_car(void)
 {
     // straight
     Set_PWM_for_Servo_ExpectAndReturn(15.0, true);
+    LED_4_off_Expect();
     steer_car(0);
+
 
     // full right
     Set_PWM_for_Servo_ExpectAndReturn(20.0, true);
+    LED_4_on_Expect();
     steer_car(45);
+
+
 
     // slight right
     Set_PWM_for_Servo_ExpectAndReturn(16.1111, true);
+    LED_4_off_Expect();
     steer_car(10);
+
 
     // easy right
     Set_PWM_for_Servo_ExpectAndReturn(16.0, true);
+    LED_4_off_Expect();
     steer_car(9);
+
 
     // full left
     Set_PWM_for_Servo_ExpectAndReturn(10.0, true);
+    LED_4_on_Expect();
     steer_car(-45);
+
 
     // slight left
     Set_PWM_for_Servo_ExpectAndReturn(13.8889, true);
+    LED_4_off_Expect();
     steer_car(-10);
+
 
     // easy left
     Set_PWM_for_Servo_ExpectAndReturn(14.0, true);
+    LED_4_off_Expect();
     steer_car(-9);
+
 
     // beyond max right
     Set_PWM_for_Servo_ExpectAndReturn(20.0, true);
+    LED_4_on_Expect();
     steer_car(65);
+
 
     // beyond max left
     Set_PWM_for_Servo_ExpectAndReturn(10.0, true);
+    LED_4_on_Expect();
     steer_car(-180);
+
 }
 
 void test_move_car(void)
