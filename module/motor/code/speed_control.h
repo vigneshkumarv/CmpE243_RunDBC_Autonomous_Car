@@ -3,9 +3,9 @@
 #include <stdbool.h>
 
 typedef struct {
-    float meters_per_sec;
-    float int_cmd_old;
-    bool isBackward;
+  float meters_per_sec;
+  float int_cmd_old;
+  bool isBackward;
 } speed_control_t;
 
 float get_RPM_from_MPS(float mps);

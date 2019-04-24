@@ -35,8 +35,8 @@ void handle_heartbeats(void) {
   }
   // handle mia from master heartbeat
   if (dbc_handle_mia_MASTER_HEARTBEAT(&rx_master_heartbeat_msg, 1000)) {  // an mia has occurred, do something
-      //printf("MIA from heartbeat!\n");
-      LED_2_on();
+    // printf("MIA from heartbeat!\n");
+    LED_2_on();
     // Stop();
 
   } else {

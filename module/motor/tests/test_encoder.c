@@ -11,13 +11,6 @@
 //#include <eint.h>
 //#include "encoder.h"
 
-
-
-
-
-void test_get_RPM_from_MPH(void)
-{
-
-    //get_RPM_from_MPH(10.0);
+void test_get_RPM_from_MPH(void) {
+  // get_RPM_from_MPH(10.0);
 }
-
