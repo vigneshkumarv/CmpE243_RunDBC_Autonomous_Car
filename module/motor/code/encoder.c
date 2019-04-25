@@ -4,7 +4,12 @@
 #include <eint.h>  //
 #include "gpio_wrapper.h"
 
-int encoder_count = 0;
+static int encoder_count = 0;
+
+int get_encoder_count(void)
+{
+    return encoder_count;
+}
 
 void capture_encoderA_rising() {
   if (read_P2_5() == 0) {

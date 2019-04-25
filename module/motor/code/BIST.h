@@ -1,4 +1,9 @@
 // BIST.h
 
-void continue_BIST(void);
-void check_and_handle_BIST(void);
+#ifndef _BIST_H
+#define _BIST_H
+
+bool isDoneWithInnerBIST(void);
+bool isBISTactive(void);
+
+#endif
