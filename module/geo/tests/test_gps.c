@@ -14,8 +14,8 @@ void tearDown(void) {
 
 int parse_counter = 0;
 bool is_data_invalid = false;
-float gps_data_latitude = 37.336554;
-float gps_data_longitude = -121.881848;
+float gps_data_latitude = 37.336553;
+float gps_data_longitude = -121.881850;
 float destination_latitude = 37.33485;
 float destination_longitude = -121.880899;
 char var = ' ';
@@ -86,7 +86,7 @@ void test_gps_get_distance(void)
     TEST_ASSERT_EQUAL_FLOAT(-121.881848, gps_data_longitude);
     TEST_ASSERT_EQUAL_FLOAT(37.33485, destination_latitude);
     TEST_ASSERT_EQUAL_FLOAT(-121.880899, destination_longitude);
-    TEST_ASSERT_EQUAL_FLOAT( 9.44397e+06, distance);
+    TEST_ASSERT_EQUAL_FLOAT( 207.494, distance);
 }
 
 
@@ -100,12 +100,12 @@ void test_gps_obtain_data(void)
 
 
 }
-//
-//
+
+
 void test_gps_process_data(void)
 {
     queue.size=0;
-    //queue__update_and_get_average_Expect();
+    queue__update_and_get_average_Expect();
     gps_process_data();
     TEST_ASSERT_EQUAL_FLOAT(0.6222759, latitude_data);
     TEST_ASSERT_EQUAL_INT(1, queue.size);
