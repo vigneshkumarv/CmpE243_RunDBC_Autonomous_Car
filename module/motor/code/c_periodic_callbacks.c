@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+<<<<<<< module/motor/code/c_periodic_callbacks.c
 #include "utilities.h"
 
 #include "pwm_wrapper.h"
@@ -35,15 +36,50 @@
 //  - [encoder's raw RPM value: not including gear ratio]
 //    or
 //  - actual MPS
+=======
+
+#include "pwm_wrapper.h"
+//#include "motor_controls_switch.h"
+#include "LCD_wrapper.h"
+#include "LED_wrapper.h"
+#include "encoder.h"
+#include "heartbeats.h"
+#include "motor_controls_master.h"
+
+// LED1=on when CAN1 is off the bus
+// LED2=on when MIA from master heartbeat
+// LED3=on when MIA from master drive command
+// LED4=on when either:
+//  - encoder sees no movement
+//    or
+//  - [steering full left or full right]
+// LCD displays either:
+//  - actual RPM value
+//    or
+//  - [actual MPH]
+
+// for encoder
+int motor_speed_RPM = 0;
+// extern int encoder_count;
+
+static float speed;
+>>>>>>> module/motor/code/c_periodic_callbacks.c
+
+// define interrupts for encoder
+// keep global counter for encoder_count
 
 bool c_period_init(void) {
   init_can1_bus();
   enable_encoder_interrupts();
   PWMs_init();
+<<<<<<< module/motor/code/c_periodic_callbacks.c
   Set_PWM_for_DC(15.0);
   Set_PWM_for_Servo(15.0);
   delay_ms(500);
   init_speed_state();
+=======
+  speed = 15.0;
+>>>>>>> module/motor/code/c_periodic_callbacks.c
 
   return true;
 }
@@ -58,7 +94,12 @@ void c_period_1Hz(uint32_t count) {
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
+<<<<<<< module/motor/code/c_periodic_callbacks.c
   if (!isBISTactive()) control_car_with_master();
+=======
+  control_car_with_master();
+  // control_car_with_switches();
+>>>>>>> module/motor/code/c_periodic_callbacks.c
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms

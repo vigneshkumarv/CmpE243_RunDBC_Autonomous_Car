@@ -11,7 +11,7 @@ void read_left_right_ultrasonic_sensors(void) {
 void read_middle_rear_sensors(void) {
   distance_sensor_read(middle);
   // printf("middle distance: %d\n", get_distance_cm_middle_ultrasonic());
-  //distance_sensor_read(rear);
+  distance_sensor_read(rear);
   // printf("rear distance: %d\n", get_distance_cm_rear_ir());
 }
 
