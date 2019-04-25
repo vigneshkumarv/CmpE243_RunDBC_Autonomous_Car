@@ -19,11 +19,8 @@ void test_queue__init(void){
 
 void test_queue__push(void)
 {
-    /**Test all the chars of all uppercase alphabets
-     * After pushing 26 uppercase alphabets into testQueue, the size should be 26, rear should be 26, front should still be 0 (since there is no queue__pop has been called)
-    */
     int num_in_queue = 0;
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 3; i++)
     {
         num_in_queue = num_in_queue + 1;
         TEST_ASSERT_TRUE(queue__push(&testQueue, num_in_queue));
@@ -35,8 +32,8 @@ void test_queue__push(void)
     
     /*The queue__push function should return false when the user tries to push when the testQueue is full*/
     TEST_ASSERT_FALSE(queue__push(&testQueue, num_in_queue));
-    TEST_ASSERT_EQUAL(10, queue__get_count(&testQueue));
-    TEST_ASSERT_EQUAL(9, testQueue.rear);
+    TEST_ASSERT_EQUAL(3, queue__get_count(&testQueue));
+    TEST_ASSERT_EQUAL(2, testQueue.rear);
     TEST_ASSERT_EQUAL(0, testQueue.front);
     
 }
@@ -50,17 +47,17 @@ void test_queue__pop(void){
      * testQueue.front should increment by 1 in every loop
      */
     int num_from_queue;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 3; i++) {
         TEST_ASSERT_TRUE(queue__pop(&testQueue, &num_from_queue));
         TEST_ASSERT_EQUAL(i+1, testQueue.front);
-        TEST_ASSERT_EQUAL(9, testQueue.rear);
-        TEST_ASSERT_EQUAL(10-i-1, queue__get_count(&testQueue));
+        TEST_ASSERT_EQUAL(2, testQueue.rear);
+        TEST_ASSERT_EQUAL(3-i-1, queue__get_count(&testQueue));
     }
     /* Return false when trying to execute the queue__pop function when the size is 0
      */
     TEST_ASSERT_FALSE(queue__pop(&testQueue, &num_from_queue));
-    TEST_ASSERT_EQUAL(10, testQueue.front);
-    TEST_ASSERT_EQUAL(9, testQueue.rear);
+    TEST_ASSERT_EQUAL(3, testQueue.front);
+    TEST_ASSERT_EQUAL(2, testQueue.rear);
     TEST_ASSERT_EQUAL(0, queue__get_count(&testQueue));
 }
 
@@ -134,12 +131,27 @@ void test_queue__update_and_get_average(void) {
     int num_in_queue = 0;
     
     queue__init(&testQueue_new);
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 3; i++)
     {
         num_in_queue = num_in_queue + 1;
         queue__update_and_get_average(&testQueue_new, num_in_queue);
     }
 
-    TEST_ASSERT_EQUAL(20/10, queue__update_and_get_average(&testQueue_new, 5));
+    TEST_ASSERT_EQUAL(2, queue__update_and_get_average(&testQueue_new, 3));
+
+}
+
+
+void test_queue__update_and_get_median(void) {
+    int num_in_queue = 0;
+    
+    queue__init(&testQueue_new);
+    for (int i = 0; i < 3; i++)
+    {
+        num_in_queue = num_in_queue + 1;
+        queue__update_and_get_median(&testQueue_new, num_in_queue);
+    }
+
+    TEST_ASSERT_EQUAL(3, queue__update_and_get_median(&testQueue_new, 10));
 
 }

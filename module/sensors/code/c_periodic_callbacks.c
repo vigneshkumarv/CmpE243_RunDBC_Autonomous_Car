@@ -27,17 +27,21 @@ void c_period_1Hz(uint32_t count) {
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
-
-  read_left_right_ultrasonic_sensors();
-  delay_ms(40);
-  read_middle_rear_sensors();
-  read_left_right_bumper_sensors();
-  send_can_msg(&sensor_module);
-  delay_ms(40);
 }
 
 void c_period_100Hz(uint32_t count) {
   (void)count;
+
+  if (count % 5 == 0){
+      read_left_right_ultrasonic_sensors();
+      read_left_right_bumper_sensors();
+      send_can_msg(&sensor_module);
+  }
+  else if (count % 5 == 3){
+      read_middle_rear_sensors();
+      send_can_msg(&sensor_module);
+  }
+
 }
 
 void c_period_1000Hz(uint32_t count) {

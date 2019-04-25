@@ -40,23 +40,31 @@ void test_c_period_1Hz(void) {
 
 void test_c_period_10Hz(void) {
 
-  //can_t sensor_module_test;
-
-  read_left_right_ultrasonic_sensors_Expect();
-  delay_ms_Expect(40);
-  delay_ms_IgnoreArg_milli_sec();
-
-  read_middle_rear_sensors_Expect();
-
-  read_left_right_bumper_sensors_Expect();
-  send_can_msg_Expect(&sensor_module);
-  send_can_msg_IgnoreArg_sensor_module();
-  delay_ms_Expect(40);
-  delay_ms_IgnoreArg_milli_sec();
 
   c_period_10Hz(0);
 }
 
-void test_c_period_100Hz(void) { c_period_100Hz(0); }
+void test_c_period_100Hz(void) { 
+
+  read_left_right_ultrasonic_sensors_Expect();
+  read_left_right_bumper_sensors_Expect();
+  send_can_msg_Expect(&sensor_module);
+  send_can_msg_IgnoreArg_sensor_module();
+  c_period_100Hz(0); 
+
+  read_middle_rear_sensors_Expect();
+  send_can_msg_Expect(&sensor_module);
+  send_can_msg_IgnoreArg_sensor_module();
+  c_period_100Hz(6);
+
+  c_period_100Hz(11);
+
+
+  read_left_right_ultrasonic_sensors_Expect();
+  read_left_right_bumper_sensors_Expect();
+  send_can_msg_Expect(&sensor_module);
+  send_can_msg_IgnoreArg_sensor_module();
+  c_period_100Hz(12); 
+  }
 
 void test_c_period_1000Hz(void) { c_period_1000Hz(0); }
