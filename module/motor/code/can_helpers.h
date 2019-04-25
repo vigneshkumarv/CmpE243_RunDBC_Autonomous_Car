@@ -15,5 +15,4 @@ float get_pwm_from_mph(float mph);
 void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg);
 void send_Motor_Data(float speed_act, int steer_angle, uint8_t direction_raw);
 
-
 #endif

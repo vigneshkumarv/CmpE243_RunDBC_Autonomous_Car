@@ -58,13 +58,11 @@ void c_period_1Hz(uint32_t count) {
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
-  if (!isBISTactive())
-      control_car_with_master();
+  if (!isBISTactive()) control_car_with_master();
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
   (void)count;
-
 }
 void c_period_1000Hz(uint32_t count) {
   /* NOTE: by default this function is not called.

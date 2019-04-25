@@ -1,15 +1,15 @@
 // motor_helpers.c
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdbool.h>
 
-#include "motor_helpers.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
-#include "speed_control.h"
 #include "motor_controls_master.h"
+#include "motor_helpers.h"
 #include "pwm_wrapper.h"
+#include "speed_control.h"
 
 float stop_pwm = 15.0;
 float reverse_SM_pwm = 13.0;  // 13.5 // 13.0 works
@@ -18,23 +18,18 @@ static speed_control_t speed_state;                      // pointer makes the bo
 static speed_control_t *speed_state_ptr = &speed_state;  //
 static rev_state_E rev_state = rev_state_1_of_4;
 
-speed_control_t get_speed_state(void)
-{
-    return *speed_state_ptr;
-}
+speed_control_t get_speed_state(void) { return *speed_state_ptr; }
 
-void init_speed_state(void)
-{
+void init_speed_state(void) {
   speed_state_ptr->meters_per_sec_cmd = 0.0;
   speed_state_ptr->int_cmd_old = 0.0;
   speed_state_ptr->isBackward = false;
 }
 
-bool reverse_statemachine(void) // every 100ms this would be called
-{ // returns true if state machine is finished
+bool reverse_statemachine(void)  // every 100ms this would be called
+{                                // returns true if state machine is finished
   bool ret = false;
-  switch (rev_state)
-  {
+  switch (rev_state) {
     case (rev_state_1_of_4):
       Set_PWM_for_DC(stop_pwm);  // stop
       rev_state = rev_state_2_of_4;
@@ -55,18 +50,16 @@ bool reverse_statemachine(void) // every 100ms this would be called
       rev_state = rev_state_normal;
       ret = true;
       break;
-    default: // already in reverse, dont follow state machine
+    default:  // already in reverse, dont follow state machine
       rev_state = rev_state_normal;
       ret = true;
   }
   return ret;
 }
 
-direction_E get_direction(uint8_t direction_raw)
-{
+direction_E get_direction(uint8_t direction_raw) {
   direction_E ret;
-  switch (direction_raw)
-  {
+  switch (direction_raw) {
     case (1):
       ret = forward;
       break;
@@ -79,12 +72,10 @@ direction_E get_direction(uint8_t direction_raw)
   return ret;
 }
 
-void move_car(direction_E direction, float mps)
-{
+void move_car(direction_E direction, float mps) {
   float pwm_val = 15.0;
 
-  switch (direction)
-  {
+  switch (direction) {
     case (forward):
       speed_state_ptr->isBackward = false;
       speed_state_ptr->meters_per_sec_cmd = mps;
@@ -93,10 +84,10 @@ void move_car(direction_E direction, float mps)
       Set_PWM_for_DC(pwm_val);
       break;
     case (backward):
-      if (reverse_statemachine()) // when SM is done
+      if (reverse_statemachine())  // when SM is done
       {
-          pwm_val = get_pwm_for_speed_control(speed_state_ptr);
-          Set_PWM_for_DC(pwm_val);
+        pwm_val = get_pwm_for_speed_control(speed_state_ptr);
+        Set_PWM_for_DC(pwm_val);
       }
       speed_state_ptr->isBackward = true;
       break;
@@ -106,8 +97,7 @@ void move_car(direction_E direction, float mps)
   }
 }
 
-void steer_car(int steer_angle)
-{
+void steer_car(int steer_angle) {
   // -45 implies full left
   // 0 implies straight
   // 45 implies full right
@@ -119,13 +109,11 @@ void steer_car(int steer_angle)
   {
     pwm_val = 20.0;
     // LED_4_on();
-  }
-  else if (steer_angle <= (-1 * max_angle))  // steer full left
+  } else if (steer_angle <= (-1 * max_angle))  // steer full left
   {
     pwm_val = 10.0;
     // LED_4_on();
-  }
-  else  // steer normally
+  } else  // steer normally
   {
     pwm_val = 15.0 + (5.0 * steer_angle / max_angle);
     // LED_4_off();

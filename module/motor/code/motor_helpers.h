@@ -6,7 +6,6 @@
 #include "motor_controls_master.h"
 #include "speed_control.h"
 
-
 typedef enum {
   stop,
   forward,
@@ -14,11 +13,11 @@ typedef enum {
 } direction_E;
 
 typedef enum {
-    rev_state_1_of_4,
-    rev_state_2_of_4,
-    rev_state_3_of_4,
-    rev_state_4_of_4,
-    rev_state_normal,
+  rev_state_1_of_4,
+  rev_state_2_of_4,
+  rev_state_3_of_4,
+  rev_state_4_of_4,
+  rev_state_normal,
 } rev_state_E;
 
 speed_control_t get_speed_state(void);

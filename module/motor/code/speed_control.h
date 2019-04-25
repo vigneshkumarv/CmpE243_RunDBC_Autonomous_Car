@@ -26,4 +26,4 @@ float get_RPM_raw_10Hz(void);
 float get_pwm_for_speed_control(speed_control_t *speed_state);
 int check_for_large_error(void);
 
-#endif // _SPEED_CONTROL_H
+#endif  // _SPEED_CONTROL_H
