@@ -45,7 +45,7 @@ void delay_ms(unsigned int milli_sec);
 /**
  * @returns non-zero result if FreeRTOS is running
  */
-char is_freertos_running();
+char is_freertos_running(void);
 
 /**
  * Logs CPU boot information to the Storage

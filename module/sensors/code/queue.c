@@ -1,7 +1,8 @@
 #include "queue.h"
 #include <stdio.h>
 
-#define QUEUE_MAX 10
+//#define QUEUE_MAX 10
+#define QUEUE_MAX 3
 
 void queue__init(queue_S *queue) {
   queue->front = 0;
@@ -53,4 +54,22 @@ int queue__update_and_get_average(queue_S *queue, int value) {
   }
   queue__push(queue, value);
   return (queue->sum / QUEUE_MAX);
+}
+
+int queue__update_and_get_median(queue_S *queue, int value) {
+  int pop_value;
+  if (queue->size == QUEUE_MAX) {
+    queue__pop(queue, &pop_value);
+  }
+  queue__push(queue, value);
+
+  if ((queue->queue_memory[0] >= queue->queue_memory[1]) && (queue->queue_memory[0] >= queue->queue_memory[2]))
+      return (queue->queue_memory[1] >= queue->queue_memory[2]) ? queue->queue_memory[1] : queue->queue_memory[2];
+
+  else if ((queue->queue_memory[1] >= queue->queue_memory[0]) && (queue->queue_memory[1] >= queue->queue_memory[2]))
+      return (queue->queue_memory[0] >= queue->queue_memory[2]) ? queue->queue_memory[0] : queue->queue_memory[2];
+
+  else
+      return (queue->queue_memory[1]> queue->queue_memory[0]) ? queue->queue_memory[1] : queue->queue_memory[0];
+
 }

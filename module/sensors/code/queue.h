@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 typedef struct {
-  int queue_memory[10];
+  int queue_memory[3];
   int front;
   int rear;
   int size;
@@ -24,5 +24,7 @@ bool queue__pop(queue_S *queue, int *pop_value);
 int queue__get_count(queue_S *queue);
 
 int queue__update_and_get_average(queue_S *queue, int value);
+
+int queue__update_and_get_median(queue_S *queue, int value);
 
 #endif

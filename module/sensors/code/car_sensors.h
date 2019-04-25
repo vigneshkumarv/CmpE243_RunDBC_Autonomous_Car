@@ -11,6 +11,8 @@
 #include "sensor_wrapper.h"
 #include "utilities.h"
 
+SENSOR_DATA_t sensor_data;
+
 typedef enum {
   left = 0,
   middle = 1,

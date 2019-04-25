@@ -1,10 +1,11 @@
 #include "read_and_send.h"
 
-SENSOR_DATA_t sensor_data = {0};
+//extern int get_distance_cm_middle_ultrasonic();
 
 // this function reads all sensors
 void read_left_right_ultrasonic_sensors(void) {
   distance_sensor_read(left);
+  //delay_ms(10);
   distance_sensor_read(right);
 }
 
