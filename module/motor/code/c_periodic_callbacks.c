@@ -5,12 +5,10 @@
  *      Author: reldn_000
  */
 
+#include "c_periodic_callbacks.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "c_periodic_callbacks.h"
-#include "utilities.h"
-#include "pwm_wrapper.h"
 #include "BIST.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
@@ -19,7 +17,9 @@
 #include "heartbeats.h"
 #include "motor_controls_master.h"
 #include "motor_helpers.h"
+#include "pwm_wrapper.h"
 #include "uart_wrapper.h"
+#include "utilities.h"
 
 // LED1=on when CAN1 is off the bus
 // LED2=on when MIA from master heartbeat
@@ -67,7 +67,7 @@ void c_period_10Hz(uint32_t count) {
   // we should move this to 20Hz which we can do by
   // calling it in 100Hz and then doing 'if (0 == (count % 5)) { ...'
   if (!isBISTactive()) {
-      control_car_with_master();
+    control_car_with_master();
   }
 }
 

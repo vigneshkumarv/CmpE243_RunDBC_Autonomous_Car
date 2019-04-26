@@ -90,36 +90,36 @@ void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg) {
   }
 #endif
 
-  // handle MIAs
-  // XXX: Increment MIA counters for all messages you handle above
-  if (dbc_handle_mia_MASTER_DRIVE_CMD(rx_master_drive_msg, 100)) {
-    LED_3_on();
-    Set_PWM_for_DC(15.0);  // XXX This is a hack
-    // The PWM should turn off based on the message data
-    // since message data will go to MIA values, we should not need to do this
+    // handle MIAs
+    // XXX: Increment MIA counters for all messages you handle above
+    if (dbc_handle_mia_MASTER_DRIVE_CMD(rx_master_drive_msg, 100)) {
+      LED_3_on();
+      Set_PWM_for_DC(15.0);  // XXX This is a hack
+      // The PWM should turn off based on the message data
+      // since message data will go to MIA values, we should not need to do this
+    }
+    // XXX: when and where is LED3 turned off?
   }
-  // XXX: when and where is LED3 turned off?
-}
 
-void check_and_handle_canbus_state(void) {
-  if (CAN_is_bus_off(can1)) {
-    LED_1_on();
+  void check_and_handle_canbus_state(void) {
+    if (CAN_is_bus_off(can1)) {
+      LED_1_on();
+      CAN_reset_bus(can1);
+    } else {
+      LED_1_off();
+    }
+  }
+
+  bool dbc_app_send_can_msg(uint32_t mid, uint8_t dlc, uint8_t bytes[8]) {
+    can_msg_t can_msg = {0};
+    can_msg.msg_id = mid;
+    can_msg.frame_fields.data_len = dlc;
+    memcpy(can_msg.data.bytes, bytes, dlc);
+    return CAN_tx(can1, &can_msg, 0);
+  }
+
+  void init_can1_bus(void) {
+    CAN_init(can1, 100, 32, 32, NULL, NULL);
+    CAN_bypass_filter_accept_all_msgs();
     CAN_reset_bus(can1);
-  } else {
-    LED_1_off();
   }
-}
-
-bool dbc_app_send_can_msg(uint32_t mid, uint8_t dlc, uint8_t bytes[8]) {
-  can_msg_t can_msg = {0};
-  can_msg.msg_id = mid;
-  can_msg.frame_fields.data_len = dlc;
-  memcpy(can_msg.data.bytes, bytes, dlc);
-  return CAN_tx(can1, &can_msg, 0);
-}
-
-void init_can1_bus(void) {
-  CAN_init(can1, 100, 32, 32, NULL, NULL);
-  CAN_bypass_filter_accept_all_msgs();
-  CAN_reset_bus(can1);
-}
