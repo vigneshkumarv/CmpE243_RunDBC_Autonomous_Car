@@ -66,11 +66,18 @@ void send_Motor_Data(float speed_act, int steer_angle, uint8_t direction_raw) {
 
 void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg) {
   can_msg_t can_msg;
+
   while (CAN_rx(can1, &can_msg, 0)) {
     dbc_msg_hdr_t can_msg_hdr;
     can_msg_hdr.mid = can_msg.msg_id;
     can_msg_hdr.dlc = can_msg.frame_fields.data_len;
 
+    // Since you are providing the &can_msg_hdr, you don't have to use them
+    // Only one will decode based on the message ID match
+    dbc_decode_MASTER_DRIVE_CMD(rx_master_drive_msg, can_msg.data.bytes, &can_msg_hdr);
+    dbc_decode_MASTER_HEARTBEAT(&rx_master_heartbeat_msg, can_msg.data.bytes, &can_msg_hdr);
+
+#if 0
     switch (can_msg_hdr.mid) {
       case (1):  // Motor Drive Cmd
       {
@@ -81,12 +88,17 @@ void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg) {
         break;
     }
   }
+#endif
 
   // handle MIAs
+  // XXX: Increment MIA counters for all messages you handle above
   if (dbc_handle_mia_MASTER_DRIVE_CMD(rx_master_drive_msg, 100)) {
     LED_3_on();
-    Set_PWM_for_DC(15.0);  //
+    Set_PWM_for_DC(15.0);  // XXX This is a hack
+    // The PWM should turn off based on the message data
+    // since message data will go to MIA values, we should not need to do this
   }
+  // XXX: when and where is LED3 turned off?
 }
 
 void check_and_handle_canbus_state(void) {

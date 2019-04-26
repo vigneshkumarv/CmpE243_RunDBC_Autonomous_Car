@@ -11,9 +11,13 @@
 #include "pwm_wrapper.h"
 #include "speed_control.h"
 
-float stop_pwm = 15.0;
-float reverse_SM_pwm = 13.0;  // 13.5 // 13.0 works
+const float STOP_PWM = 15.0;
+const float REVERSE_SM_PWM = 13.0;  // 13.5 // 13.0 works
 
+// xxx
+// Since 'speed_state_ptr' alawys points to 'speed_state'
+// you do not need this pointer at all.
+// just use 'speed_state.'(whatever) all the time
 static speed_control_t speed_state;                      // pointer makes the board crash
 static speed_control_t *speed_state_ptr = &speed_state;  //
 static rev_state_E rev_state = rev_state_1_of_4;
@@ -31,22 +35,22 @@ bool reverse_statemachine(void)  // every 100ms this would be called
   bool ret = false;
   switch (rev_state) {
     case (rev_state_1_of_4):
-      Set_PWM_for_DC(stop_pwm);  // stop
+      Set_PWM_for_DC(STOP_PWM);  // stop
       rev_state = rev_state_2_of_4;
       ret = false;
       break;
     case (rev_state_2_of_4):
-      Set_PWM_for_DC(reverse_SM_pwm);  // reverse
+      Set_PWM_for_DC(REVERSE_SM_PWM);  // reverse
       rev_state = rev_state_3_of_4;
       ret = false;
       break;
     case (rev_state_3_of_4):
-      Set_PWM_for_DC(stop_pwm);  // stop
+      Set_PWM_for_DC(STOP_PWM);  // stop
       rev_state = rev_state_4_of_4;
       ret = false;
       break;
     case (rev_state_4_of_4):
-      Set_PWM_for_DC(reverse_SM_pwm);  // reverse
+      Set_PWM_for_DC(REVERSE_SM_PWM);  // reverse
       rev_state = rev_state_normal;
       ret = true;
       break;
@@ -93,7 +97,7 @@ void move_car(direction_E direction, float mps) {
       break;
     default:  // stop
       rev_state = rev_state_1_of_4;
-      Set_PWM_for_DC(stop_pwm);
+      Set_PWM_for_DC(STOP_PWM);
   }
 }
 
@@ -103,8 +107,11 @@ void steer_car(int steer_angle) {
   // 45 implies full right
 
   float pwm_val;
-  int max_angle = 45;
+  const int max_angle = 45;
 
+  // XXX This is great for now, but later if you realize you can benefit from
+  // a 5-state steering, then prove to yourself that you need it, then
+  // implement 'slight left' and 'left' and 'center' etc.
   if (steer_angle >= max_angle)  // steer full right
   {
     pwm_val = 20.0;

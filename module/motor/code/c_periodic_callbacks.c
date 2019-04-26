@@ -5,14 +5,12 @@
  *      Author: reldn_000
  */
 
-#include "c_periodic_callbacks.h"
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "c_periodic_callbacks.h"
 #include "utilities.h"
-
 #include "pwm_wrapper.h"
-//#include "motor_controls_switch.h"
 #include "BIST.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
@@ -42,6 +40,9 @@ bool c_period_init(void) {
   PWMs_init();
   Set_PWM_for_DC(15.0);
   Set_PWM_for_Servo(15.0);
+
+  // XXX: Don't have magic code, why is this here?
+  // Atleast comment it
   delay_ms(500);
   init_speed_state();
 
@@ -53,12 +54,21 @@ bool c_period_reg_tlm(void) { return true; }
 void c_period_1Hz(uint32_t count) {
   (void)count;
   check_and_handle_canbus_state();
+
+  // XXX SUPER BAD BUG
+  // This function should be renamed to:
+  // 'handle_heartbeat_cause_bugs_and_eat_CAN_messages()'
   handle_heartbeats();
 }
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
-  if (!isBISTactive()) control_car_with_master();
+  // XXX: Since the sensor loop and other things will be 20Hz
+  // we should move this to 20Hz which we can do by
+  // calling it in 100Hz and then doing 'if (0 == (count % 5)) { ...'
+  if (!isBISTactive()) {
+      control_car_with_master();
+  }
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
