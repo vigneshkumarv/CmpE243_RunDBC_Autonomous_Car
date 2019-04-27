@@ -6,14 +6,12 @@
 #include <stdint.h>
 
 typedef struct {
-  int queue_memory[10];
+  int queue_memory[3];
   int front;
   int rear;
   int size;
   int sum;
-  int max;
-  int min;
-  int second_max;
+
   // TODO: Add more members as needed
 } queue_S;
 
@@ -27,6 +25,6 @@ int queue__get_count(queue_S *queue);
 
 int queue__update_and_get_average(queue_S *queue, int value);
 
-void queue__update_middle(queue_S *queue, int push_value, int *max_value, int *min_value, int *second_max);
+int queue__update_and_get_median(queue_S *queue, int value);
 
 #endif
