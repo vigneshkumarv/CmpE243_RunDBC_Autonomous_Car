@@ -42,10 +42,14 @@ void handle_heartbeats(void) {
 #endif
 
   // handle mia from master heartbeat
+<<<<<<< module/motor/code/heartbeats.c
   // XXX: If you are expecting this function to be called at 1Hz
   // then this function should be named 'handle_heartbeat_1Hz()'
   if (dbc_handle_mia_MASTER_HEARTBEAT(&rx_master_heartbeat_msg, 1000)) {  // an mia has occurred, do something
     // printf("MIA from heartbeat!\n");
+=======
+  if (dbc_handle_mia_MASTER_HEARTBEAT(&rx_master_heartbeat_msg, 1000)) {  // an mia has occurred, do something
+>>>>>>> module/motor/code/heartbeats.c
     LED_2_on();
     // Stop();
 

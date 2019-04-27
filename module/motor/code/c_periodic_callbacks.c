@@ -21,6 +21,12 @@
 #include "uart_wrapper.h"
 #include "utilities.h"
 
+#include "pwm_wrapper.h"
+#include "LCD_wrapper.h"
+#include "LED_wrapper.h"
+#include "encoder.h"
+#include "motor_controls_master.h"
+
 // LED1=on when CAN1 is off the bus
 // LED2=on when MIA from master heartbeat
 // LED3=on when MIA from master drive command
@@ -36,6 +42,19 @@
 
 MASTER_DRIVE_CMD_t rx_master_drive_msg;
 MASTER_HEARTBEAT_t rx_master_heartbeat_msg;
+=======
+// LED4=on when either:
+//  - encoder sees no movement
+//    or
+//  - [steering full left or full right]
+// LCD displays either:
+//  - actual RPM value
+//    or
+//  - [actual MPH]
+
+
+// define interrupts for encoder
+// keep global counter for encoder_count
 
 bool c_period_init(void) {
   init_can1_bus();
@@ -78,6 +97,8 @@ void c_period_10Hz(uint32_t count) {
                   rx_master_drive_msg.MASTER_DRIVE_CMD_direction);  // direction
 
   send_Motor_Debug();
+  control_car_with_master();
+
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms
