@@ -14,10 +14,10 @@ void tearDown(void) {
 
 int parse_counter = 0;
 bool is_data_invalid = false;
-float gps_data_latitude = 37.318517;
-float gps_data_longitude = -121.910842;
-float destination_latitude = 37.335181;
-float destination_longitude = -121.881076;
+float gps_data_latitude = 37.336323;
+float gps_data_longitude =  -121.885027;
+float destination_latitude = 37.338370;
+float destination_longitude =  -121.880773;
 char var = ' ';
 char *pBuff = &var;
 //static char delim[] = ",";
@@ -70,11 +70,11 @@ void test_gps_get_bearing(void)
 {
     float bearing = 0;
     bearing=gps_get_bearing(gps_data_latitude, gps_data_longitude, destination_latitude, destination_longitude);
-    TEST_ASSERT_EQUAL_FLOAT(45.724, bearing);
-    TEST_ASSERT_EQUAL_FLOAT(37.336554, gps_data_latitude);
-    TEST_ASSERT_EQUAL_FLOAT(-121.881848, gps_data_longitude);
-    TEST_ASSERT_EQUAL_FLOAT(37.33485, destination_latitude);
-    TEST_ASSERT_EQUAL_FLOAT(-121.880899, destination_longitude);
+    TEST_ASSERT_EQUAL_FLOAT( 301.201, bearing);
+    TEST_ASSERT_EQUAL_FLOAT( 37.336323, gps_data_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.885027, gps_data_longitude);
+    TEST_ASSERT_EQUAL_FLOAT(37.338370, destination_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.880773, destination_longitude);
 }
 //
 //
@@ -82,11 +82,11 @@ void test_gps_get_distance(void)
 {
     float distance = 0;
     distance = gps_get_distance(gps_data_latitude, gps_data_longitude, destination_latitude, destination_longitude);
-    TEST_ASSERT_EQUAL_FLOAT(37.318517, gps_data_latitude);
-    TEST_ASSERT_EQUAL_FLOAT(-121.910842, gps_data_longitude);
-    TEST_ASSERT_EQUAL_FLOAT(37.335181, destination_latitude);
-    TEST_ASSERT_EQUAL_FLOAT(-121.881076, destination_longitude);
-    TEST_ASSERT_EQUAL_FLOAT( 207.494, distance);
+    TEST_ASSERT_EQUAL_FLOAT(37.336323, gps_data_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.885027, gps_data_longitude);
+    TEST_ASSERT_EQUAL_FLOAT(37.338370, destination_latitude);
+    TEST_ASSERT_EQUAL_FLOAT(-121.880773, destination_longitude);
+    TEST_ASSERT_EQUAL_FLOAT( 439.102, distance);
 }
 
 
