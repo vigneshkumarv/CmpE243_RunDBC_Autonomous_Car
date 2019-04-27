@@ -6,11 +6,11 @@
 
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
+#include "generated_can.h"
 #include "motor_controls_master.h"
 #include "motor_helpers.h"
 #include "pwm_wrapper.h"
 #include "speed_control.h"
-#include "generated_can.h"
 
 const float STOP_PWM = 15.0;
 const float REVERSE_SM_PWM = 13.0;  // 13.5 // 13.0 works
@@ -62,8 +62,7 @@ bool reverse_statemachine(void)  // every 100ms this would be called
   return ret;
 }
 
-void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps)
-{
+void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps) {
   float pwm_val = 15.0;
 
   switch (direction_cmd) {
@@ -88,8 +87,7 @@ void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps)
   }
 }
 
-void steer_car(int steer_angle)
-{
+void steer_car(int steer_angle) {
   // -45 implies full left
   // 0 implies straight
   // 45 implies full right

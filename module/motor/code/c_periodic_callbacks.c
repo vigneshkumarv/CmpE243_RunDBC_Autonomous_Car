@@ -9,11 +9,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "can_helpers.h"
 #include "BIST.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
 #include "Serial_LCD.h"
+#include "can_helpers.h"
 #include "encoder.h"
 #include "motor_controls_master.h"
 #include "motor_helpers.h"
@@ -37,7 +37,6 @@
 MASTER_DRIVE_CMD_t rx_master_drive_msg;
 MASTER_HEARTBEAT_t rx_master_heartbeat_msg;
 
-
 bool c_period_init(void) {
   init_can1_bus();
   enable_encoder_interrupts();
@@ -47,7 +46,7 @@ bool c_period_init(void) {
 
   // XXX: Don't have magic code, why is this here?
   // Atleast comment it
-  //delay_ms(500);
+  // delay_ms(500);
   init_speed_state();
 
   return true;
@@ -71,15 +70,12 @@ void c_period_10Hz(uint32_t count) {
   // this also does MIAs
   read_All_CAN_Messages(&rx_master_drive_msg, &rx_master_heartbeat_msg);
 
-  if (!isBISTactive())
-  {
+  if (!isBISTactive()) {
     control_car_with_master(&rx_master_drive_msg);
   }
 
-  send_Motor_Data(getSpeedAct(),
-                  rx_master_drive_msg.MASTER_DRIVE_CMD_steer,
-                  rx_master_drive_msg.MASTER_DRIVE_CMD_direction); //direction
-
+  send_Motor_Data(getSpeedAct(), rx_master_drive_msg.MASTER_DRIVE_CMD_steer,
+                  rx_master_drive_msg.MASTER_DRIVE_CMD_direction);  // direction
 
   send_Motor_Debug();
 }

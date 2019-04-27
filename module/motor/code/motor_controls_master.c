@@ -12,9 +12,7 @@
 #include "pwm_wrapper.h"
 #include "speed_control.h"
 
-
-void control_car_with_master(MASTER_DRIVE_CMD_t* rx_master_drive_msg)
-{
+void control_car_with_master(MASTER_DRIVE_CMD_t* rx_master_drive_msg) {
   // read drive command from master (get steer, speed, direction)
   // and do stuff
   // also determine target state (reverse or non-reverse)
@@ -23,8 +21,5 @@ void control_car_with_master(MASTER_DRIVE_CMD_t* rx_master_drive_msg)
   steer_car(rx_master_drive_msg->MASTER_DRIVE_CMD_steer);
 
   // from 0-100 m/s
-  move_car(rx_master_drive_msg->MASTER_DRIVE_CMD_direction,
-           rx_master_drive_msg->MASTER_DRIVE_CMD_speed);
-
-
+  move_car(rx_master_drive_msg->MASTER_DRIVE_CMD_direction, rx_master_drive_msg->MASTER_DRIVE_CMD_speed);
 }

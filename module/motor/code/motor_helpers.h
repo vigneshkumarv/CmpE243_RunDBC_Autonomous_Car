@@ -3,9 +3,9 @@
 #define _MOTOR_HELPERS_H
 
 #include <stdbool.h>
+#include "generated_can.h"
 #include "motor_controls_master.h"
 #include "speed_control.h"
-#include "generated_can.h"
 
 typedef enum {
   rev_state_1_of_4,
