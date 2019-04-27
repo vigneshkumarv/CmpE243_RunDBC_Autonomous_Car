@@ -10,6 +10,7 @@
 #include "motor_helpers.h"
 #include "pwm_wrapper.h"
 #include "speed_control.h"
+#include "generated_can.h"
 
 const float STOP_PWM = 15.0;
 const float REVERSE_SM_PWM = 13.0;  // 13.5 // 13.0 works
@@ -61,33 +62,19 @@ bool reverse_statemachine(void)  // every 100ms this would be called
   return ret;
 }
 
-direction_E get_direction(uint8_t direction_raw) {
-  direction_E ret;
-  switch (direction_raw) {
-    case (1):
-      ret = forward;
-      break;
-    case (2):
-      ret = backward;
-      break;
-    default:
-      ret = stop;
-  }
-  return ret;
-}
-
-void move_car(direction_E direction, float mps) {
+void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps)
+{
   float pwm_val = 15.0;
 
-  switch (direction) {
-    case (forward):
+  switch (direction_cmd) {
+    case (forward_cmd):
       speed_state_ptr->isBackward = false;
       speed_state_ptr->meters_per_sec_cmd = mps;
       rev_state = rev_state_1_of_4;
       pwm_val = get_pwm_for_speed_control(speed_state_ptr);
       Set_PWM_for_DC(pwm_val);
       break;
-    case (backward):
+    case (backward_cmd):
       if (reverse_statemachine())  // when SM is done
       {
         pwm_val = get_pwm_for_speed_control(speed_state_ptr);
@@ -101,7 +88,8 @@ void move_car(direction_E direction, float mps) {
   }
 }
 
-void steer_car(int steer_angle) {
+void steer_car(int steer_angle)
+{
   // -45 implies full left
   // 0 implies straight
   // 45 implies full right

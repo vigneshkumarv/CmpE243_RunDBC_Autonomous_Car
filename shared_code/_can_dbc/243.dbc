@@ -88,6 +88,14 @@ BO_ 1 MASTER_DRIVE_CMD: 4 MASTER
  SG_ MASTER_DRIVE_CMD_speed : 8|16@1+ (0.1,0) [0|0] "MPS" MOTOR
  SG_ MASTER_DRIVE_CMD_direction : 24|2@1+ (1,0) [0|0] "" MOTOR
 
+BA_ "FieldType" SG_ 1 MASTER_DRIVE_CMD_direction "MASTER_DRIVE_CMD_direction_E";
+BA_ "FieldType" SG_ 513 MOTOR_DATA_direction "MOTOR_DATA_direction_E";
+
+
+VAL_ 1 MASTER_DRIVE_CMD_direction 0 "stop_cmd" 1 "forward_cmd" 2 "backward_cmd" ;
+VAL_ 513 MOTOR_DATA_direction 0 "stop_act" 1 "forward_act" 2 "backward_act" ;
+
+
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;

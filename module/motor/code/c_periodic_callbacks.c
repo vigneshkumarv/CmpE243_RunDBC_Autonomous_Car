@@ -9,12 +9,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "can_helpers.h"
 #include "BIST.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
 #include "Serial_LCD.h"
 #include "encoder.h"
-#include "heartbeats.h"
 #include "motor_controls_master.h"
 #include "motor_helpers.h"
 #include "pwm_wrapper.h"
@@ -34,6 +34,10 @@
 //    or
 //  - actual MPS
 
+MASTER_DRIVE_CMD_t rx_master_drive_msg;
+MASTER_HEARTBEAT_t rx_master_heartbeat_msg;
+
+
 bool c_period_init(void) {
   init_can1_bus();
   enable_encoder_interrupts();
@@ -43,7 +47,7 @@ bool c_period_init(void) {
 
   // XXX: Don't have magic code, why is this here?
   // Atleast comment it
-  delay_ms(500);
+  //delay_ms(500);
   init_speed_state();
 
   return true;
@@ -54,11 +58,6 @@ bool c_period_reg_tlm(void) { return true; }
 void c_period_1Hz(uint32_t count) {
   (void)count;
   check_and_handle_canbus_state();
-
-  // XXX SUPER BAD BUG
-  // This function should be renamed to:
-  // 'handle_heartbeat_cause_bugs_and_eat_CAN_messages()'
-  handle_heartbeats();
 }
 void c_period_10Hz(uint32_t count) {
   (void)count;
@@ -66,9 +65,23 @@ void c_period_10Hz(uint32_t count) {
   // XXX: Since the sensor loop and other things will be 20Hz
   // we should move this to 20Hz which we can do by
   // calling it in 100Hz and then doing 'if (0 == (count % 5)) { ...'
-  if (!isBISTactive()) {
-    control_car_with_master();
+
+  sendHeartbeat();
+
+  // this also does MIAs
+  read_All_CAN_Messages(&rx_master_drive_msg, &rx_master_heartbeat_msg);
+
+  if (!isBISTactive())
+  {
+    control_car_with_master(&rx_master_drive_msg);
   }
+
+  send_Motor_Data(getSpeedAct(),
+                  rx_master_drive_msg.MASTER_DRIVE_CMD_steer,
+                  rx_master_drive_msg.MASTER_DRIVE_CMD_direction); //direction
+
+
+  send_Motor_Debug();
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms

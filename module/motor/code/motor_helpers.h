@@ -5,12 +5,7 @@
 #include <stdbool.h>
 #include "motor_controls_master.h"
 #include "speed_control.h"
-
-typedef enum {
-  stop,
-  forward,
-  backward,
-} direction_E;
+#include "generated_can.h"
 
 typedef enum {
   rev_state_1_of_4,
@@ -22,9 +17,8 @@ typedef enum {
 
 speed_control_t get_speed_state(void);
 bool reverse_statemachine(void);
-direction_E get_direction(uint8_t direction_raw);
 void steer_car(int steer_angle);
-void move_car(direction_E direction, float mps);
+void move_car(MASTER_DRIVE_CMD_direction_E direction, float mps);
 void init_speed_state(void);
 
 #endif
