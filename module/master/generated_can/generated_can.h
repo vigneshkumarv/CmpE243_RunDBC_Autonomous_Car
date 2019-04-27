@@ -26,7 +26,7 @@ static const dbc_msg_hdr_t SENSOR_HEARTBEAT_HDR = {256, 1};
 static const dbc_msg_hdr_t BRIDGE_HEARTBEAT_HDR = {1024, 1};
 static const dbc_msg_hdr_t MOTOR_HEARTBEAT_HDR = {512, 1};
 static const dbc_msg_hdr_t MASTER_HEARTBEAT_HDR = {0, 1};
-static const dbc_msg_hdr_t GEO_DATA_HDR = {769, 1};
+static const dbc_msg_hdr_t GEO_DATA_HDR = {769, 8};
 static const dbc_msg_hdr_t SENSOR_DATA_HDR = {257, 8};
 static const dbc_msg_hdr_t BRIDGE_DATA_HDR = {1025, 1};
 static const dbc_msg_hdr_t MOTOR_DATA_HDR = {513, 1};
@@ -67,9 +67,10 @@ typedef struct {
   // No dbc_mia_info_t for a message that we will send
 } MASTER_HEARTBEAT_t;
 
-/// Message: GEO_DATA from 'GEO', DLC: 1 byte(s), MID: 769
+/// Message: GEO_DATA from 'GEO', DLC: 8 byte(s), MID: 769
 typedef struct {
-  uint8_t GEO_DATA_cmd;  ///< B7:0   Destination: MASTER
+  float GEO_DATA_Distance;  ///< B31:0   Destination: MASTER
+  float GEO_DATA_Angle;     ///< B63:32   Destination: MASTER
 
   dbc_mia_info_t mia_info;
 } GEO_DATA_t;
@@ -276,8 +277,16 @@ static inline bool dbc_decode_GEO_DATA(GEO_DATA_t *to, const uint8_t bytes[8], c
   }
 
   uint32_t raw;
-  raw = ((uint32_t)((bytes[0])));  ///< 8 bit(s) from B0
-  to->GEO_DATA_cmd = ((raw));
+  raw = ((uint32_t)((bytes[0])));         ///< 8 bit(s) from B0
+  raw |= ((uint32_t)((bytes[1]))) << 8;   ///< 8 bit(s) from B8
+  raw |= ((uint32_t)((bytes[2]))) << 16;  ///< 8 bit(s) from B16
+  raw |= ((uint32_t)((bytes[3]))) << 24;  ///< 8 bit(s) from B24
+  to->GEO_DATA_Distance = ((raw * 0.01));
+  raw = ((uint32_t)((bytes[4])));         ///< 8 bit(s) from B32
+  raw |= ((uint32_t)((bytes[5]))) << 8;   ///< 8 bit(s) from B40
+  raw |= ((uint32_t)((bytes[6]))) << 16;  ///< 8 bit(s) from B48
+  raw |= ((uint32_t)((bytes[7]))) << 24;  ///< 8 bit(s) from B56
+  to->GEO_DATA_Angle = ((raw * 0.1));
 
   to->mia_info.mia_counter_ms = 0;  ///< Reset the MIA counter
 

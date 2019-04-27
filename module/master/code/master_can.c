@@ -72,7 +72,7 @@ void check_and_restart_can() {
   }
 }
 
-bool read_can_10Hz(obstacle_avoidance_S* sensor_values) {
+bool read_can_50Hz(navigation_sensors_S* sensor_values) {
   bool all_heartbeats_good = true;
   can_msg_t rx_msg = {0};
   while (CAN_rx(can1, &rx_msg, 0)) {
@@ -94,23 +94,23 @@ bool read_can_10Hz(obstacle_avoidance_S* sensor_values) {
     }
   }
 
-  if (dbc_handle_mia_BRIDGE_HEARTBEAT(&bridge_heartbeat_msg, 100)) {
+  if (dbc_handle_mia_BRIDGE_HEARTBEAT(&bridge_heartbeat_msg, 20)) {
     LED_1_on();
     all_heartbeats_good = false;
   }
-  if (dbc_handle_mia_GEO_HEARTBEAT(&geo_heartbeat_msg, 100)) {
+  if (dbc_handle_mia_GEO_HEARTBEAT(&geo_heartbeat_msg, 20)) {
     LED_2_on();
     all_heartbeats_good = false;
   }
-  if (dbc_handle_mia_MOTOR_HEARTBEAT(&motor_heartbeat_msg, 100)) {
+  if (dbc_handle_mia_MOTOR_HEARTBEAT(&motor_heartbeat_msg, 20)) {
     LED_3_on();
     all_heartbeats_good = false;
   }
-  if (dbc_handle_mia_SENSOR_HEARTBEAT(&sensor_heartbeat_msg, 100)) {
+  if (dbc_handle_mia_SENSOR_HEARTBEAT(&sensor_heartbeat_msg, 20)) {
     LED_4_on();
     all_heartbeats_good = false;
   }
-  if (dbc_handle_mia_SENSOR_DATA(&sensor_data_msg, 100)) {
+  if (dbc_handle_mia_SENSOR_DATA(&sensor_data_msg, 20)) {
     sensor_values->left_bumper_triggered = (bool)sensor_data_msg.SENSOR_DATA_LeftBumper;
     sensor_values->right_bumper_triggered = (bool)sensor_data_msg.SENSOR_DATA_RightBumper;
     sensor_values->left_ultrasonic_cm = sensor_data_msg.SENSOR_DATA_LeftUltrasonic;
@@ -135,7 +135,7 @@ bool read_can_10Hz(obstacle_avoidance_S* sensor_values) {
   return all_heartbeats_good;
 }
 
-void send_drive_cmd(obstacle_avoidance_S drive_data) {
+void send_drive_cmd(navigation_motor_cmd_S drive_data) {
   MASTER_DRIVE_CMD_t drive_msg = {0};
   drive_msg.MASTER_DRIVE_CMD_direction = drive_data.motor_direction;
   drive_msg.MASTER_DRIVE_CMD_speed = drive_data.motor_speed;

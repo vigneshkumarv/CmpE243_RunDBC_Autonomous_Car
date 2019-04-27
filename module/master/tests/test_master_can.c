@@ -3,9 +3,12 @@
 #include <string.h>
 #include "MockLED_wrapper.h"
 #include "Mockcan.h"
-#include "Mockobstacle_avoidance.h"
+#include "Mocknavigation.h"
 #include "generated_can.h"
 #include "master_can.h"
+
+navigation_sensors_S sensor_data = {0};
+navigation_motor_cmd_S motor_command = {0};
 
 void setUp(void) {}
 
@@ -26,10 +29,10 @@ void test_check_and_restart_can(void) {
   check_and_restart_can();
 }
 
-void test_read_can(void) {
+void test_read_can_50Hz(void) {
   can_msg_t test_rx_msg = {0};
 
-  for (int index = 0; index < 30; index++) {
+  for (int index = 0; index < 150; index++) {
     CAN_rx_ExpectAndReturn(can1, NULL, 0, false);
     CAN_rx_IgnoreArg_msg();
     //    if (index < 29){
@@ -38,7 +41,7 @@ void test_read_can(void) {
     LED_3_off_Expect();
     LED_4_off_Expect();
     //    }
-    TEST_ASSERT_TRUE(read_can());
+    TEST_ASSERT_TRUE(read_can_50Hz(&sensor_data));
   }
   CAN_rx_ExpectAndReturn(can1, NULL, 0, false);
   CAN_rx_IgnoreArg_msg();
@@ -46,7 +49,7 @@ void test_read_can(void) {
   LED_2_on_Expect();
   LED_3_on_Expect();
   LED_4_on_Expect();
-  TEST_ASSERT_FALSE(read_can());
+  TEST_ASSERT_FALSE(read_can_50Hz(&sensor_data));
 
   test_rx_msg.msg_id = BRIDGE_HEARTBEAT_HDR.mid;
   test_rx_msg.frame_fields.data_len = BRIDGE_HEARTBEAT_HDR.dlc;
@@ -77,5 +80,5 @@ void test_read_can(void) {
 
   LED_4_off_Expect();
 
-  TEST_ASSERT_TRUE(read_can());
+  TEST_ASSERT_TRUE(read_can_50Hz(&sensor_data));
 }
