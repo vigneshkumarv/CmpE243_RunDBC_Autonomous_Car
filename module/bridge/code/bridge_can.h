@@ -9,9 +9,9 @@
 #define BRIDGE_CAN_H_
 #include <stdbool.h>
 #include <stdio.h>
-#include "string.h"
 #include "can.h"
 #include "generated_can/generated_can.h"
+#include "string.h"
 
 bool bridge_uart2_init(void);
 bool bridge_CAN_init(void);
