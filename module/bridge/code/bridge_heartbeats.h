@@ -8,16 +8,6 @@
 #ifndef BRIDGE_HEARTBEATS_H_
 #define BRIDGE_HEARTBEATS_H_
 
-
-
-
-
-
 bool send_bridge_heartbeat_1hz();
-
-
-
-
-
 
 #endif /* BRIDGE_HEARTBEATS_H_ */
