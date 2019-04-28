@@ -2,11 +2,11 @@
  * bridge_can.c
  *
  *  Created on: Apr 26, 2019
- *      Author: lenovo
+ *      Author: Vignesh
  */
 
 #include "bridge_can.h"
-#include "Uart2.h"
+#include "uart_wrapper.h"
 #include "uart0_min.h"
 #define SIZE 50
 #define ON "CARON"
@@ -35,7 +35,9 @@ typedef struct {
 
 Geo_Data to_android;
 
-bool bridge_uart2_init(void) { return uart_init(9600, 64, 64); }
+bool bridge_uart2_init(void) {
+    return uart2_init(9600, 64, 64);
+}
 
 bool bridge_CAN_init(void) {
   CAN_init(can1, 100, 32, 32, NULL, NULL);
@@ -68,7 +70,7 @@ void geo_distance_and_angle(dbc_msg_hdr_t* geo_distance_and_angle) {
     to_android.distance_from_destination = geo_distanceNangle_data.GEO_DATA_Distance;
     sprintf(RX_buffer, "A%dD%d", (int)to_android.deflection_angle, (int)to_android.distance_from_destination);
 
-    uart2_putchar(*RX_buffer, 0);
+    uart2_putLine(RX_buffer, 0);
   }
 }
 
@@ -78,7 +80,7 @@ void geo_latitude_and_longitude(dbc_msg_hdr_t* geo_latitude_and_longitude) {
     to_android.geo_src_latitude = geo_source_data.GEO_DATA_Latitude;
     to_android.geo_src_longitude = geo_source_data.GEO_DATA_Longitude;
     sprintf(RX_buffer, "L%fG%f", to_android.geo_src_latitude, to_android.geo_src_longitude);
-    uart2_putchar(*RX_buffer, 0);
+    uart2_putLine(RX_buffer, 0);
   }
 }
 
@@ -98,7 +100,7 @@ void turn_car_on_or_off(void) {
 void check_app_message_delimiter(void) {
   char char_in_message_from_app = 0;
 
-  (uart2_getchar(&char_in_message_from_app, 0));
+  (uart2_getChar(&char_in_message_from_app, 0));
 
   if (('~' != char_in_message_from_app) && ('\0' != char_in_message_from_app)) {
     // printf("%c\n", char_in_message_from_app);
