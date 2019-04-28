@@ -9,41 +9,72 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include "can.h"
+#include "bridge_heartbeats.h"
+#include "bridge_can.h"
+
+
+
 
 
 
 bool c_period_init(void)
 {
-
+    bridge_CAN_init();
+    bridge_uart2_init();
     return true;
 }
+
+
+
+
+
 
 bool c_period_reg_tlm(void)
 {
     return true;
 }
 
+
+
+
+
+
 void c_period_1Hz(uint32_t count)
 {
-
+    send_bridge_heartbeat_1hz();
+    bridge_if_CAN_is_off_then_reset_1hz();
     (void) count;
 }
+
+
+
+
+
+
 void c_period_10Hz(uint32_t count)
 {
+    bridge_send_start_stop_CAN_10Hz();
     (void) count;
 }
+
+
+
+
+
 
 void c_period_100Hz(uint32_t count)
 {
-
     (void) count;
-
 }
+
+
+
+
+
+
 void c_period_1000Hz(uint32_t count)
 {
-    /* NOTE: by default this function is not called.
-     * You must enable it in main.cpp by setting
-     * const bool run_1Khz = true;*/
     (void) count;
 }
 
