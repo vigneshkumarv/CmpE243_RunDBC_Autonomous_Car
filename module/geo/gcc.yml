@@ -1,5 +1,5 @@
 compiler:
-  path: x86_64-w64-mingw32-gcc
+  path:  x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
     - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L2_Drivers/'
@@ -7,7 +7,8 @@ compiler:
     - 'C:/SJSU_Dev/projects/my_project/generated_can/'
     - 'C:/autonomous-car/infrastructure/ut_framework/test_code/L0_LowLevel/'
     - 'C:/autonomous-car/module/geo/geo_project/L5_Application/'
-    - 'C:/autonomous-car/module/geo/code/'
+    - 'C:/autonomous-car/module/geo/code/compass.h/'
+    - 'C:/autonomous-car/module/geo/code/gps.h/'
     - 'C:/autonomous-car/module/geo/tests/'
     - 'C:/autonomous-car/shared_code/wrappers/'
   unit_tests_path: &unit_tests_path 'tests/'
