@@ -6,8 +6,8 @@
  */
 
 #include "bridge_can.h"
-#include "uart_wrapper.h"
 #include "uart0_min.h"
+#include "uart_wrapper.h"
 #define SIZE 50
 #define ON "CARON"
 #define OFF "CAROFF"
@@ -35,9 +35,7 @@ typedef struct {
 
 Geo_Data to_android;
 
-bool bridge_uart2_init(void) {
-    return uart2_init(9600, 64, 64);
-}
+bool bridge_uart2_init(void) { return uart2_init(9600, 64, 64); }
 
 bool bridge_CAN_init(void) {
   CAN_init(can1, 100, 32, 32, NULL, NULL);
