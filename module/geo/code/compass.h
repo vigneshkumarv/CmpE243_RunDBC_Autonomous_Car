@@ -8,9 +8,9 @@
 #include <stdio.h>
 #include "can.h"
 #include "generated_can.h"
+#include "geo_can.h"
 #include "i2c_wrapper.h"
 #include "utilities.h"
-#include "geo_can.h"
 
 #define COMPASS_ADDRESS 0xC0
 #define COMPASS_COMMAND_REG 0x0
@@ -27,7 +27,7 @@ bool read_compass_heading(float* result);
 // bits 0 and 1 of result reflect the calibration status (0 un-calibrated, 3 fully calibrated)
 bool check_calibration_level(uint8_t* result);
 
-void send_calibration_debug_msg(can_t * geo_module);
+void send_calibration_debug_msg(can_t* geo_module);
 
 // functions used for storing and erasing calibration profile
 // different from cmps11, CMPS12 is continually auto calibrating

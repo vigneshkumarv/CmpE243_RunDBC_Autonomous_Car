@@ -1,4 +1,4 @@
-//c_periodic_callbacks.c for the geo module
+// c_periodic_callbacks.c for the geo module
 
 #include "c_periodic_callbacks.h"
 #include <stdbool.h>
