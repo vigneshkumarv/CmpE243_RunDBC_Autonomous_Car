@@ -7,17 +7,23 @@
 //GPIO right_echo(P2_3);
 GPIO bumper_sensor_pin_left(P1_19);
 GPIO bumper_sensor_pin_right(P1_20);
+GPIO gpio_middle_trigger(P2_1);
+GPIO gpio_left_right_trigger(P2_0);
 //GPIO middle_echo(P2_0);
+
+
 //initialization of ultrasonic sensors
+
+void init_gpio_middle_trigger_pin(void)
+{
+    gpio_middle_trigger.setAsOutput();
+}
+void init_gpio_left_right_trigger_pin(void)
+{
+    gpio_left_right_trigger.setAsInput();
+}
+
 /*
-void init_left_trig_pin(pin_mode pinMode)
-{
-  left_trig.setAsOutput();
-}
-void init_left_echo_pin(pin_mode pinMode)
-{
-  left_echo.setAsInput();
-}
 void init_right_trig_pin(pin_mode pinMode)
 {
   right_trig.setAsOutput();
@@ -69,30 +75,30 @@ void init_right_bumper(void)
 }
 
 //set trig pin to low or high
-/*
-void left_trig_pin_set(pin_value pinValue)
-{
-  if(pinValue == high)
-  {
-    left_trig.setHigh();
-  }
-  else
-  {
-    left_trig.setLow();
-  }
-}
-void right_trig_pin_set(pin_value pinValue)
-{
-  if(pinValue == high)
-  {
-    right_trig.setHigh();
-  }
-  else
-  {
-    right_trig.setLow();
-  }
-}
 
+void gpio_middle_trigger_set(pin_value pinValue)
+{
+  if(pinValue == high)
+  {
+      gpio_middle_trigger.setHigh();
+  }
+  else
+  {
+      gpio_middle_trigger.setLow();
+  }
+}
+void gpio_left_right_trigger_set(pin_value pinValue)
+{
+  if(pinValue == high)
+  {
+      gpio_left_right_trigger.setHigh();
+  }
+  else
+  {
+      gpio_left_right_trigger.setLow();
+  }
+}
+/*
 //read echo pin value - true = high, false = low
 bool read_left_echo_pin(void)
 {

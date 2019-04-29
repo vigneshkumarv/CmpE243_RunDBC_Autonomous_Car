@@ -19,6 +19,9 @@ typedef enum { low = 0, high = 1 } pin_value;
 //void init_left_echo_pin(pin_mode pinMode);
 //void init_right_trig_pin(pin_mode pinMode);
 //void init_right_echo_pin(pin_mode pinMode);
+
+void init_gpio_middle_trigger_pin(void);
+void init_gpio_left_right_trigger_pin(void);
 void init_middle_an_pin(void);
 void init_left_an_pin(void);
 void init_right_an_pin(void);
@@ -34,6 +37,9 @@ void init_middle_echo_pin(void);   // setup middle echo pin
 // read echo pin value - true = high, false = low
 //bool read_left_echo_pin(void);
 //bool read_right_echo_pin(void);
+
+void gpio_middle_trigger_set(pin_value pinValue);
+void gpio_left_right_trigger_set(pin_value pinValue);
 bool read_bumper_sensor_pin_left(void);
 bool read_bumper_sensor_pin_right(void);
 
