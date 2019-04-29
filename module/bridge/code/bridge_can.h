@@ -26,7 +26,6 @@ typedef struct {
   float distance_from_destination;
 } Geo_Data_S;
 
-
 void geo_distance_and_angle(Geo_Data_S* geo_distance_and_angle);
 void geo_latitude_and_longitude(Geo_Data_S* geo_latitude_and_longitude);
 

@@ -28,7 +28,7 @@ void c_period_1Hz(uint32_t count) {
 }
 
 void c_period_10Hz(uint32_t count) {
-    receive_CAN_data_10Hz();
+  receive_CAN_data_10Hz();
   (void)count;
 }
 
