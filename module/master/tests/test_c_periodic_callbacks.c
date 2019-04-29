@@ -4,8 +4,10 @@
 #include "Mocknavigation.h"
 #include "c_periodic_callbacks.h"
 
+extern navigation_state_machine_S state_variables;
 extern navigation_sensors_S sensor_data;
 extern navigation_motor_cmd_S motor_command;
+extern GEO_DATA_t geo_data;
 
 void setUp(void) {}
 
@@ -34,7 +36,7 @@ void test_c_period_10Hz(void) { c_period_10Hz(100); }
 void test_c_period_100Hz(void) {
   c_period_100Hz(3);
 
-  read_can_50Hz_ExpectAndReturn(&sensor_data, true);
+  read_can_50Hz_ExpectAndReturn(&sensor_data, &geo_data, &state_variables, true);
   navigation_state_machine_ExpectAnyArgs();
   send_drive_cmd_Expect(motor_command);
   c_period_100Hz(38);

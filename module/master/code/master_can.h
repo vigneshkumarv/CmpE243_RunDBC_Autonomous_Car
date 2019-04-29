@@ -14,7 +14,8 @@ typedef struct {
 
 bool init_can(void);
 void check_and_restart_can(void);
-bool read_can_50Hz(navigation_sensors_S* sensor_values);
+bool read_can_50Hz(navigation_sensors_S* sensor_values, GEO_DATA_t* geo_data,
+                   navigation_state_machine_S* state_variables);
 void send_drive_cmd(navigation_motor_cmd_S drive_data);
 void send_heartbeat_msg(void);
 

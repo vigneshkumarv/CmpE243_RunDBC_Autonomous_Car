@@ -5,6 +5,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "generated_can.h"
 
 typedef enum {
   INIT = 0,
@@ -37,8 +38,8 @@ typedef struct {
 } navigation_state_machine_S;
 
 void init_navigation(navigation_state_machine_S* state_variables, navigation_sensors_S* sensor_data,
-                     navigation_motor_cmd_S* motor_command);
-void navigation_state_machine(navigation_state_machine_S* state, navigation_sensors_S sensor_data,
+                     GEO_DATA_t* geo_data, navigation_motor_cmd_S* motor_command);
+void navigation_state_machine(navigation_state_machine_S* state, navigation_sensors_S sensor_data, GEO_DATA_t geo_data,
                               navigation_motor_cmd_S* motor_command);
 
 /******************************************************************************
@@ -51,5 +52,6 @@ void set_motor_command(navigation_motor_cmd_S* motor_command, uint8_t motor_dire
                        int16_t steer_direction);
 void front_obstacle_processing(navigation_state_machine_S* state_variables, navigation_sensors_S sensor_data);
 void front_bump_processing(navigation_state_machine_S* state_variables, navigation_sensors_S sensor_data);
+int16_t geo_steering(GEO_DATA_t geo_data);
 
 #endif /* NAVIGATION_H_ */

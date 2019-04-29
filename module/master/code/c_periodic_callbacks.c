@@ -1,9 +1,4 @@
-/*
- * c_periodic_callbacks.c
- *
- *  Created on: Feb 16, 2019
- *      Author: reldn_000
- */
+// c_period_callbacks.c
 
 #include "c_periodic_callbacks.h"
 #include <stdbool.h>
@@ -15,12 +10,19 @@
 navigation_state_machine_S state_variables;
 navigation_sensors_S sensor_data;
 navigation_motor_cmd_S motor_command;
+GEO_DATA_t geo_data;
+
+navigation_motor_cmd_S test_motor_command;
 
 bool c_period_init(void) {
-  init_navigation(&state_variables, &sensor_data, &motor_command);
+  init_navigation(&state_variables, &sensor_data, &geo_data, &motor_command);
 
   // For testing, auto start navigation
-  state_variables.go = true;
+  //  state_variables.go = true;
+
+  test_motor_command.motor_direction = 1;
+  test_motor_command.motor_speed = 1;
+  test_motor_command.steer_direction = 25;
 
   bool can_is_initialized = init_can();
 
@@ -37,9 +39,12 @@ void c_period_1Hz(uint32_t count) {
 void c_period_10Hz(uint32_t count) { (void)count; }
 void c_period_100Hz(uint32_t count) {
   if (0 == count % 2) {
-    read_can_50Hz(&sensor_data);
-    navigation_state_machine(&state_variables, sensor_data, &motor_command);
+    read_can_50Hz(&sensor_data, &geo_data, &state_variables);
+    navigation_state_machine(&state_variables, sensor_data, geo_data, &motor_command);
     send_drive_cmd(motor_command);
+
+    // test drive
+    //    send_drive_cmd(test_motor_command);
   }
 }
 void c_period_1000Hz(uint32_t count) {
