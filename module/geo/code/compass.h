@@ -14,6 +14,7 @@
 #define COMPASS_ADDRESS 0xC0
 #define COMPASS_COMMAND_REG 0x0
 GEO_DATA_t geo_data;
+GEO_COORDINATE_DATA_t geo_coordinate_data;
 
 // read heading from compass.
 // return true is reading is successful

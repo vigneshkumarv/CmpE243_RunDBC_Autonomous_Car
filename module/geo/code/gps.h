@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include "compass.h"
 #include "generated_can.h"
+#include "geo_can.h"
 #include "math.h"
 #include "queue.h"
 #include "uart_wrapper.h"
@@ -27,14 +28,20 @@
 queue_S longitude_data_queue;
 queue_S latitude_data_queue;
 
+typedef struct {
+  float longitude;
+  float latitude;
+} coordinate;
+
 void gps_module_init(void);
 void gps_module_get_data(char* pBuff);
 
-float gps_get_bearing(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude);
-float gps_get_distance(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude);
+float gps_get_bearing(coordinate gps_data, coordinate dest_data);
+float gps_get_distance(coordinate gps_data, coordinate dest_data);
 float gps_get_deflection_angle(float gps_bearing, float compass_heading);
 void gps_obtain_and_process_data(int count);
-void gps_obtain_data(void);
+coordinate gps_obtain_data(void);
 void gps_process_data(void);
+void gps_get_checkpoint_coordinate(void);
 
 #endif  // GPS_H__

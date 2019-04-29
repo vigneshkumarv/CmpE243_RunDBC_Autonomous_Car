@@ -1,7 +1,7 @@
 #include "queue.h"
 #include <stdio.h>
 
-#define QUEUE_MAX 10
+#define QUEUE_MAX 3
 
 void queue__init(queue_S *queue) {
   queue->front = 0;
