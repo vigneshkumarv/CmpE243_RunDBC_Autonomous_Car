@@ -32,13 +32,23 @@ void c_period_10Hz(uint32_t count) {
 void c_period_100Hz(uint32_t count) {
   (void)count;
 
-  if (count % 5 == 0){
+  if (count % 10 == 0){
+      // Set the trigger pin high for 20 micro-seconds, and then set it low.
+      // Read the sensor values after 50ms to ensure that the ADC value is ready and accurate.
       read_left_right_ultrasonic_sensors();
+      gpio_middle_trigger_set(high);
+      delay_us(20);
+      gpio_middle_trigger_set(low);
+
       read_left_right_bumper_sensors();
       send_can_msg(&sensor_module);
   }
-  else if (count % 5 == 3){
+  else if (count % 10 == 5){
       read_middle_rear_sensors();
+      gpio_left_right_trigger_set(high);
+      delay_us(20);
+      gpio_left_right_trigger_set(low);
+
       send_can_msg(&sensor_module);
   }
 

@@ -18,7 +18,13 @@ void init_sensors(void)
     init_right_an_pin();
     init_left_bumper();
     init_right_bumper();
-
+    init_gpio_middle_trigger_pin();
+    init_gpio_left_right_trigger_pin();
+    /*
+    gpio_left_right_trigger_set(high);
+    delay_us(20);
+    gpio_left_right_trigger_set(low);
+    */
     queue__init(&left_ultrasonic);
     queue__init(&right_ultrasonic);
     queue__init(&middle_ultrasonic);
@@ -69,12 +75,16 @@ void bumper_sensor_read(sensor_position whichSensor)
 void calibrate_sensors(sensor_position whichSensor)
 {
     if (whichSensor == left) {
-
+        // Conevert the ADC reading to distance between the obstacles and the car in cm.
         int left_value = 0.3182 * adc0_get_reading(3) - 0.3959;
+
+        // Set a maximum distance to 255cm (2.55m).
         if (left_value >= 255) {
             left_value = 255;
         }
+        // put the new distance value into the queue and get the median value from the queue.
         int median = queue__update_and_get_median(&left_ultrasonic, left_value);
+        // put the median value into can message.
         sensor_data.SENSOR_DATA_LeftUltrasonic = median;
         printf("left: %dcm ", median);
     }
