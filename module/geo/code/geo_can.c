@@ -60,7 +60,7 @@ void send_can_msg_to_bridge(can_t* geo_module, GEO_COORDINATE_DATA_t* geo_data) 
   CAN_tx(*geo_module, &can_msg, 0);
 }
 
-void send_can_msg_debug(can_t* geo_module, GEO_DEBUG_DATA_t * debug_data) {
+void send_can_msg_debug(can_t* geo_module, GEO_DEBUG_DATA_t* debug_data) {
   can_msg_t can_msg = {0};
 
   // Encode the CAN message's data bytes, get its header and set the CAN message's DLC and length
