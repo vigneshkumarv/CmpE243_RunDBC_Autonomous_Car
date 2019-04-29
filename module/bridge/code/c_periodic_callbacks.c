@@ -28,12 +28,12 @@ void c_period_1Hz(uint32_t count) {
 }
 
 void c_period_10Hz(uint32_t count) {
-  receive_geo_CAN_data_10Hz();
+    receive_CAN_data_10Hz();
   (void)count;
 }
 
 void c_period_100Hz(uint32_t count) {
-  bridge_send_start_stop_CAN_10Hz();
+  bridge_send_start_stop_CAN_100Hz();
   (void)count;
 }
 

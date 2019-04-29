@@ -17,7 +17,7 @@ bool bridge_uart2_init(void);
 bool bridge_CAN_init(void);
 
 void is_bridge_CAN_busoff_then_reset_1hz(void);
-void receive_geo_CAN_data_10Hz(void);
+void receive_CAN_data_10Hz(void);
 
 typedef struct {
   float geo_src_latitude;
@@ -26,10 +26,11 @@ typedef struct {
   float distance_from_destination;
 } Geo_Data_S;
 
+
 void geo_distance_and_angle(Geo_Data_S* geo_distance_and_angle);
 void geo_latitude_and_longitude(Geo_Data_S* geo_latitude_and_longitude);
 
-void bridge_send_start_stop_CAN_10Hz(void);
+void bridge_send_start_stop_CAN_100Hz(void);
 
 bool turn_on_car(void);
 bool turn_off_car(void);
