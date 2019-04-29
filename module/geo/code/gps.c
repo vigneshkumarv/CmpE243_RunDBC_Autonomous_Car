@@ -38,7 +38,6 @@ void gps_obtain_and_process_data(int count) {
     }
 }
 
-// float gps_get_bearing(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude) {
 float gps_get_bearing(coordinate gps_data, coordinate dest_data) {
     double bearing = 0, lon_difference = 0;
     gps_data.latitude = (gps_data.latitude * PI) / 180;
@@ -58,7 +57,6 @@ float gps_get_bearing(coordinate gps_data, coordinate dest_data) {
     return bearing;
 }
 
-// float gps_get_distance(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude) {
 float gps_get_distance(coordinate gps_data, coordinate dest_data) {
     gps_data.latitude = (gps_data.latitude * PI) / 180;
     gps_data.longitude = (-gps_data.longitude * PI) / 180;

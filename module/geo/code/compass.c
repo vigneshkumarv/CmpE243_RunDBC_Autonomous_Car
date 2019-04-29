@@ -29,6 +29,16 @@ bool check_calibration_level(uint8_t* result) {
   return is_calibration_successful;
 }
 
+void send_calibration_debug_msg(can_t * geo_module)
+{
+    uint8_t result;
+    if(check_calibration_level(&result))
+    {
+        DEBUG_data.GEO_COMPASS_Calibration = result;
+        send_can_msg_debug(geo_module, &DEBUG_data);
+    }
+}
+
 void storing_compass_calibration_profile(void) {
   unsigned char calibration_values[3] = {0xF0, 0xF5, 0xF6};
 
