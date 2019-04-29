@@ -35,7 +35,6 @@ void gps_obtain_and_process_data(int count) {
   }
 }
 
-// float gps_get_bearing(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude) {
 float gps_get_bearing(coordinate gps_data, coordinate dest_data) {
   double bearing = 0, lon_difference = 0;
   gps_data.latitude = (gps_data.latitude * PI) / 180;
@@ -55,7 +54,6 @@ float gps_get_bearing(coordinate gps_data, coordinate dest_data) {
   return bearing;
 }
 
-// float gps_get_distance(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude) {
 float gps_get_distance(coordinate gps_data, coordinate dest_data) {
   gps_data.latitude = (gps_data.latitude * PI) / 180;
   gps_data.longitude = (-gps_data.longitude * PI) / 180;
@@ -137,7 +135,7 @@ void gps_process_data(void) {
       float longitude_data = ((int)(gps_data.longitude / 100)) +
                              (((int)gps_data.longitude % 100) + (gps_data.longitude - (int)(gps_data.longitude))) / 60;
       gps_longitude_avg = -1 * (queue__update_and_get_average(&longitude_data_queue, longitude_data));
-      printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
+      //printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
     }
 
     coordinate gps_avg = {gps_longitude_avg, gps_latitude_avg};

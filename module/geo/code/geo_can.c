@@ -59,3 +59,15 @@ void send_can_msg_to_bridge(can_t* geo_module, GEO_COORDINATE_DATA_t* geo_data) 
   // Queue the CAN message to be sent out
   CAN_tx(*geo_module, &can_msg, 0);
 }
+
+void send_can_msg_debug(can_t* geo_module, GEO_DEBUG_DATA_t * debug_data) {
+  can_msg_t can_msg = {0};
+
+  // Encode the CAN message's data bytes, get its header and set the CAN message's DLC and length
+  dbc_msg_hdr_t msg_hdr = dbc_encode_GEO_DEBUG_DATA(can_msg.data.bytes, debug_data);
+  can_msg.msg_id = msg_hdr.mid;
+  can_msg.frame_fields.data_len = msg_hdr.dlc;
+
+  // Queue the CAN message to be sent out
+  CAN_tx(*geo_module, &can_msg, 0);
+}
