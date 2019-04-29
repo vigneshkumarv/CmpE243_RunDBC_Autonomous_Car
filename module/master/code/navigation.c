@@ -26,8 +26,8 @@ const uint8_t MOTOR_STOP = 0;
 const uint8_t MOTOR_FORWARD = 1;
 const uint8_t MOTOR_REVERSE = 2;
 
-const float NAVIGATION_SPEED = 18;
-const float OBSTACLE_SPEED = 17;
+const float NAVIGATION_SPEED = 0.5;
+const float OBSTACLE_SPEED = .25;
 
 const int16_t STEER_STRAIGHT = 0;
 const int16_t STEER_OBSTACLE = 25;
@@ -38,7 +38,7 @@ const int16_t STEER_OBSTACLE = 25;
  *
  ******************************************************************************/
 void init_navigation(navigation_state_machine_S* state_variables, navigation_sensors_S* sensor_data,
-                     navigation_motor_cmd_S* motor_command) {
+                     GEO_DATA_t* geo_data, navigation_motor_cmd_S* motor_command) {
   state_variables->go = false;
   state_variables->state = INIT;
 
@@ -49,13 +49,16 @@ void init_navigation(navigation_state_machine_S* state_variables, navigation_sen
   sensor_data->middle_ultrasonic_cm = 0;
   sensor_data->rear_ir_cm = 0;
 
+  geo_data->GEO_DATA_Angle = 0.0;
+  geo_data->GEO_DATA_Distance = 0.0;
+
   motor_command->motor_speed = 0;
   motor_command->steer_direction = 0;
   motor_command->motor_direction = 0;
 }
 
 void navigation_state_machine(navigation_state_machine_S* state_variables, navigation_sensors_S sensor_data,
-                              navigation_motor_cmd_S* motor_command) {
+                              GEO_DATA_t geo_data, navigation_motor_cmd_S* motor_command) {
   switch (state_variables->state) {
     case INIT:
       set_motor_command(motor_command, MOTOR_STOP, 0, STEER_STRAIGHT);
@@ -71,7 +74,11 @@ void navigation_state_machine(navigation_state_machine_S* state_variables, navig
       steer_processing(state_variables, sensor_data);
       front_obstacle_processing(state_variables, sensor_data);
       front_bump_processing(state_variables, sensor_data);
-      set_motor_command(motor_command, MOTOR_FORWARD, NAVIGATION_SPEED, STEER_STRAIGHT);
+      int16_t nav_steer_angle = geo_steering(geo_data);
+      set_motor_command(motor_command, MOTOR_FORWARD, NAVIGATION_SPEED, nav_steer_angle);
+
+      // test drive straight
+      //      set_motor_command(motor_command, MOTOR_FORWARD, NAVIGATION_SPEED, STEER_STRAIGHT);
       break;
     case OBSTACLE_RIGHT:
       steer_processing(state_variables, sensor_data);
@@ -150,4 +157,15 @@ void front_bump_processing(navigation_state_machine_S* state_variables, navigati
   if ((!sensor_data.left_bumper_triggered) | (!sensor_data.right_bumper_triggered)) {
     state_variables->state = OBSTACLE_MIDDLE_CLOSE;
   }
+}
+
+int16_t geo_steering(GEO_DATA_t geo_data) {
+  int16_t steer_angle = 0;
+  if ((geo_data.GEO_DATA_Angle < -5) | (geo_data.GEO_DATA_Angle > 5)) {
+    steer_angle = (geo_data.GEO_DATA_Angle * 45) / 180;
+  }
+  steer_angle = (steer_angle > 45) ? 45 : steer_angle;
+  steer_angle = (steer_angle < -45) ? -45 : steer_angle;
+
+  return steer_angle;
 }
