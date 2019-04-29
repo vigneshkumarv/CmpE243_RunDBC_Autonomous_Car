@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 typedef struct {
-  float queue_memory[10];
+  float queue_memory[3];
   int front;
   int rear;
   int size;

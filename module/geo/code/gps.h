@@ -1,3 +1,5 @@
+// Functions for geographic sensors
+
 #ifndef GPS_H__
 #define GPS_H__
 
@@ -34,8 +36,8 @@ typedef struct {
 void gps_module_init(void);
 void gps_module_get_data(char* pBuff);
 
-float gps_get_bearing(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude);
-float gps_get_distance(float gps_latitude, float gps_longitude, float des_latitude, float des_longitude);
+float gps_get_bearing(coordinate gps_data, coordinate dest_data);
+float gps_get_distance(coordinate gps_data, coordinate dest_data);
 float gps_get_deflection_angle(float gps_bearing, float compass_heading);
 void gps_obtain_and_process_data(int count);
 coordinate gps_obtain_data(void);

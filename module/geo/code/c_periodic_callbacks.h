@@ -12,12 +12,11 @@
 extern "C" {
 #endif
 
-
 /*
+
 #ifndef C_PERIODIC_CALLBACKS_H_
 #define C_PERIODIC_CALLBACKS_H_
 */
-
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -34,7 +33,6 @@ void c_period_1000Hz(uint32_t count);
 #ifdef __cplusplus
 }
 #endif
-//#endif
 #endif /* C_PERIOD_CALLBACKS_H__ */
 
 //#endif /* C_PERIODIC_CALLBACKS_H_ */
