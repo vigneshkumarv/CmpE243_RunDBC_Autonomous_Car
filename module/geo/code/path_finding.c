@@ -1,5 +1,5 @@
 // gps.c
-#include "path_finding.h"
+/*#include "path_finding.h"
 #include "can.h"
 #include "generated_can.h"
 
@@ -8,8 +8,9 @@ typedef struct {
   float latitude;
 } coordinate;
 
-void test_float() { printf("float = %u double = %u\n", sizeof(float), sizeof(double)); }
+void test_float() { printf("float = %u double = %u\n", sizeof(float), sizeof(double)); }*/
 
+/*
 /// xxx you cannot have data defined at header files
 coordinate coordinate_array[] = {{-121.8808995, 37.33485351}, {-121.8806246, 37.33459682}, {-121.8803357, 37.33473333},
                                  {-121.8800418, 37.33487361}, {-121.8797657, 37.33500183}, {-121.8794967, 37.33512216},
@@ -29,7 +30,8 @@ static const int total_num_of_pts = sizeof(coordinate_array) / sizeof(coordinate
 GEO_DATA_t geo_data = {0};
 GEO_SOURCE_DATA_t gps_source_data = {0};
 coordinate next_checkpoint = {0};
-
+*/
+/*
 void init_path_finding(void) {
   // place current location into coordinate array
   coordinate_array[total_num_of_pts - 2].latitude = current_location.latitude;
@@ -104,3 +106,4 @@ void can_receive_data(void) {
     dbc_decode_GEO_SOURCE_DATA(&gps_source_data, can_msg.data.bytes, &can_msg_hdr);
   }
 }
+*/

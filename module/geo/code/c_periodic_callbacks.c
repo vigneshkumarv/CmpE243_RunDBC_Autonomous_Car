@@ -24,7 +24,7 @@ bool c_period_reg_tlm(void) { return true; }
 void c_period_1Hz(uint32_t count) {
   (void)count;
   send_heartbeat_msg(&GEO_module);
-  send_calibration_debug_msg(&GEO_module);
+  send_debug_msg(&GEO_module);
 }
 
 void c_period_10Hz(uint32_t count) {
