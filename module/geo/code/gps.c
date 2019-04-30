@@ -135,7 +135,7 @@ void gps_process_data(void) {
       float longitude_data = ((int)(gps_data.longitude / 100)) +
                              (((int)gps_data.longitude % 100) + (gps_data.longitude - (int)(gps_data.longitude))) / 60;
       gps_longitude_avg = -1 * (queue__update_and_get_average(&longitude_data_queue, longitude_data));
-      // printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
+       //printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
     }
 
     coordinate gps_avg = {gps_longitude_avg, gps_latitude_avg};
@@ -149,8 +149,8 @@ void gps_process_data(void) {
     float gps_distance = gps_get_distance(gps_avg, dest_data);
     geo_data.GEO_DATA_Distance = gps_distance;
     geo_data.GEO_DATA_Angle = gps_deflection;
-    printf("distance: %f, angle: %f \n", gps_distance, gps_deflection);
-    // printf("distance: %f, angle: %f \n", gps_distance, compass_heading);
+    //printf("distance: %f, angle: %f \n", gps_distance, gps_deflection);
+    //printf("distance: %f, angle: %f \n", gps_distance, compass_heading);
   } else {
     is_data_invalid = false;
   }

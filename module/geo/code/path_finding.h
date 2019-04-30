@@ -1,6 +1,6 @@
 // Functions for geographic sensors
 
-#ifndef PATH_FINDING_H__
+/*#ifndef PATH_FINDING_H__
 #define PATH_FINDING_H__
 
 #include <stdbool.h>
@@ -13,10 +13,8 @@
 
 void init_path_finding(void);
 void path_calculation(void);
-/**
- * find_path() only needs to run at a slow rate like 1hz
- */
+
 coordinate path_finding(void);
 
 void can_receive_data(void);
-#endif  // PATH_FINDING_H__
+#endif */  // PATH_FINDING_H__

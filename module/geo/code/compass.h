@@ -27,7 +27,7 @@ bool read_compass_heading(float* result);
 // bits 0 and 1 of result reflect the calibration status (0 un-calibrated, 3 fully calibrated)
 bool check_calibration_level(uint8_t* result);
 
-void send_calibration_debug_msg(can_t* geo_module);
+void send_debug_msg(can_t* geo_module);
 
 // functions used for storing and erasing calibration profile
 // different from cmps11, CMPS12 is continually auto calibrating

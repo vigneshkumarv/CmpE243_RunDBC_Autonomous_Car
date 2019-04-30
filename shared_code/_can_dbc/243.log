@@ -16,6 +16,14 @@ MSG_ID: 512 	MSG_TYPE: S 	MSG_NAME: MOTOR_HEARTBEAT
 MSG_ID: 0 	MSG_TYPE: S 	MSG_NAME: MASTER_HEARTBEAT
 	SIG_NAME: MASTER_HEARTBEAT_cmd, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 
+MSG_ID: 770 	MSG_TYPE: S 	MSG_NAME: GEO_COORDINATE_DATA
+	SIG_NAME: GEO_DATA_Latitude, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: GEO_DATA_Longitude, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 771 	MSG_TYPE: S 	MSG_NAME: GEO_DEBUG_DATA
+	SIG_NAME: GEO_COMPASS_Calibration, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: GEO_COMPASS_Heading, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
 MSG_ID: 769 	MSG_TYPE: S 	MSG_NAME: GEO_DATA
 	SIG_NAME: GEO_DATA_Distance, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 	SIG_NAME: GEO_DATA_Angle, STATUS: Invalid Max or Min value., ACTION: Value Set to default
@@ -28,8 +36,9 @@ MSG_ID: 257 	MSG_TYPE: S 	MSG_NAME: SENSOR_DATA
 	SIG_NAME: SENSOR_DATA_MiddleUltrasonic, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 	SIG_NAME: SENSOR_DATA_RearIr, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 
-MSG_ID: 1025 	MSG_TYPE: S 	MSG_NAME: BRIDGE_DATA
-	SIG_NAME: BRIDGE_DATA_cmd, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+MSG_ID: 1026 	MSG_TYPE: S 	MSG_NAME: BRIDGE_CHECKPOINT
+	SIG_NAME: BRIDGE_DATA_Latitude, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: BRIDGE_DATA_Longitude, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 
 MSG_ID: 513 	MSG_TYPE: S 	MSG_NAME: MOTOR_DATA
 	SIG_NAME: MOTOR_DATA_steer, STATUS: Invalid Max or Min value., ACTION: Value Set to default
