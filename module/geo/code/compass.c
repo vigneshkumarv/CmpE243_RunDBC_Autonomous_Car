@@ -32,13 +32,13 @@ bool check_calibration_level(uint8_t* result) {
 void send_debug_msg(can_t* geo_module) {
   uint8_t calibration_result = 7;
   float heading_value = 0;
-  //if (check_calibration_level(&calibration_result)) {
-      check_calibration_level(&calibration_result);
-    DEBUG_data.GEO_COMPASS_Calibration = calibration_result;
-    //printf("calibration level: %d \n", DEBUG_data.GEO_COMPASS_Calibration);
-    read_compass_heading(&heading_value);
-    DEBUG_data.GEO_COMPASS_Heading = heading_value;
-    send_can_msg_debug(geo_module, &DEBUG_data);
+  // if (check_calibration_level(&calibration_result)) {
+  check_calibration_level(&calibration_result);
+  DEBUG_data.GEO_COMPASS_Calibration = calibration_result;
+  // printf("calibration level: %d \n", DEBUG_data.GEO_COMPASS_Calibration);
+  read_compass_heading(&heading_value);
+  DEBUG_data.GEO_COMPASS_Heading = heading_value;
+  send_can_msg_debug(geo_module, &DEBUG_data);
   //}
 }
 
