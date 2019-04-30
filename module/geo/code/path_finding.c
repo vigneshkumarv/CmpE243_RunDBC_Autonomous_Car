@@ -1,5 +1,5 @@
 // gps.c
-/*#include "path_finding.h"
+#include "path_finding.h"
 #include "can.h"
 #include "generated_can.h"
 
@@ -118,4 +118,4 @@ void can_receive_data(void)
         dbc_decode_GEO_DATA(&geo_data, can_msg.data.bytes, &can_msg_hdr);
         dbc_decode_GEO_SOURCE_DATA(&gps_source_data, can_msg.data.bytes, &can_msg_hdr);
     }
-}*/
+}
