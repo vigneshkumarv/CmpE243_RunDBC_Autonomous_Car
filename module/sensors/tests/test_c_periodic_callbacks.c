@@ -5,6 +5,7 @@
 #include "Mockread_and_send.h"
 #include "Mockutilities.h"
 #include "Mockcan.h"
+#include "Mocksensor_wrapper.h"
 
 can_t sensor_module;
 
@@ -47,24 +48,24 @@ void test_c_period_10Hz(void) {
 void test_c_period_100Hz(void) { 
 
   read_left_right_ultrasonic_sensors_Expect();
+  gpio_middle_trigger_set_Expect(high);
+  delay_us_Expect(20);
+  gpio_middle_trigger_set_Expect(low);
   read_left_right_bumper_sensors_Expect();
   send_can_msg_Expect(&sensor_module);
   send_can_msg_IgnoreArg_sensor_module();
   c_period_100Hz(0); 
 
   read_middle_rear_sensors_Expect();
+  gpio_left_right_trigger_set_Expect(high);
+  delay_us_Expect(20);
+  gpio_left_right_trigger_set_Expect(low);
   send_can_msg_Expect(&sensor_module);
   send_can_msg_IgnoreArg_sensor_module();
-  c_period_100Hz(6);
+  c_period_100Hz(5);
 
   c_period_100Hz(11);
 
-
-  read_left_right_ultrasonic_sensors_Expect();
-  read_left_right_bumper_sensors_Expect();
-  send_can_msg_Expect(&sensor_module);
-  send_can_msg_IgnoreArg_sensor_module();
-  c_period_100Hz(12); 
   }
 
 void test_c_period_1000Hz(void) { c_period_1000Hz(0); }

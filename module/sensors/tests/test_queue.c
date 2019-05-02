@@ -66,67 +66,6 @@ void test_queue__get_count(void){
     TEST_ASSERT_EQUAL(0, queue__get_count(&testQueue));
 }
 
-/* Simulate a circular queue operations
- * Test Step:
- * Step 0: Initialize the queue ()
- * Step 1: Push 100 elements into the queue(Size = 100)
- * Step 2: Pop 50
- *  
- */ 
-
-/*
-void test_queue__circular_queue(void){
-
-    queue__init(&testQueue);
-
-    //Push a 100 elements; Size = 100
-    uint8_t char_in_queue = 'a';
-    for (int i = 0; i < 100; i++)
-    {
-        TEST_ASSERT_TRUE(queue__push(&testQueue, char_in_queue));
-        TEST_ASSERT_EQUAL(char_in_queue, testQueue.queue_memory[testQueue.rear]);
-        TEST_ASSERT_EQUAL(i + 1, queue__get_count(&testQueue));
-        TEST_ASSERT_EQUAL(i, testQueue.rear);
-        TEST_ASSERT_EQUAL(0, testQueue.front);
-    }
-    Return false when trying to push an element when the queue is full
-    TEST_ASSERT_FALSE(queue__push(&testQueue, char_in_queue));
-
-    //Pop 50 elements; Size = 50
-    uint8_t char_from_queue = ' ';
-    for (int i = 0; i < 50; i++) {
-        TEST_ASSERT_TRUE(queue__pop(&testQueue, &char_from_queue));
-        TEST_ASSERT_EQUAL(i+1, testQueue.front);
-        TEST_ASSERT_EQUAL(99, testQueue.rear);
-        TEST_ASSERT_EQUAL(100-i-1, queue__get_count(&testQueue));
-    }
-    
-    Current Queue Information:
-     * Size = 50;
-     * Queue.front = 51;
-     * Queue.rear = 99;
-     * If I push '@' into the queue, the element should be stored in testQueue.queue_memory[0] == '@' 
-     
-    char_in_queue = '@';
-    TEST_ASSERT_TRUE(queue__push(&testQueue, char_in_queue));
-    TEST_ASSERT_EQUAL('@', testQueue.queue_memory[0]);
-
-    //Push another 30 elements; Size is now 81
-    for (int i = 0; i < 30; i++)
-    {
-        TEST_ASSERT_TRUE(queue__push(&testQueue, char_in_queue));
-        TEST_ASSERT_EQUAL(char_in_queue, testQueue.queue_memory[testQueue.rear]);
-    }
-    
-    //Pop 80 elements out from the queue; Size is now 0
-    for (int i = 0; i < 81; i++) {
-        TEST_ASSERT_TRUE(queue__pop(&testQueue, &char_from_queue));
-    }
-
-    Return false when popping an element when the size = 0
-    TEST_ASSERT_FALSE(queue__pop(&testQueue, &char_from_queue));
-}
-*/
 void test_queue__update_and_get_average(void) {
     int num_in_queue = 0;
     
@@ -137,10 +76,10 @@ void test_queue__update_and_get_average(void) {
         queue__update_and_get_average(&testQueue_new, num_in_queue);
     }
 
-    TEST_ASSERT_EQUAL(2, queue__update_and_get_average(&testQueue_new, 3));
-
+    TEST_ASSERT_EQUAL(3, queue__update_and_get_average(&testQueue_new, 5));
+    TEST_ASSERT_EQUAL(6, queue__update_and_get_average(&testQueue_new, 10));
+    TEST_ASSERT_EQUAL(10, queue__update_and_get_average(&testQueue_new, 15));
 }
-
 
 void test_queue__update_and_get_median(void) {
     int num_in_queue = 0;
@@ -153,5 +92,6 @@ void test_queue__update_and_get_median(void) {
     }
 
     TEST_ASSERT_EQUAL(3, queue__update_and_get_median(&testQueue_new, 10));
-
+    TEST_ASSERT_EQUAL(10, queue__update_and_get_median(&testQueue_new, 50));
+    TEST_ASSERT_EQUAL(10, queue__update_and_get_median(&testQueue_new, 3));
 }

@@ -86,7 +86,7 @@ void calibrate_sensors(sensor_position whichSensor)
         int median = queue__update_and_get_median(&left_ultrasonic, left_value);
         // put the median value into can message.
         sensor_data.SENSOR_DATA_LeftUltrasonic = median;
-        printf("left: %dcm ", median);
+        //printf("left: %dcm ", median);
     }
     else if (whichSensor == right) {
 
@@ -96,7 +96,7 @@ void calibrate_sensors(sensor_position whichSensor)
         }
         int median = queue__update_and_get_median(&right_ultrasonic, right_value);
         sensor_data.SENSOR_DATA_RightUltrasonic = median;
-        printf("right: %dcm ", median);
+        //printf("right: %dcm ", median);
     }
     else if (whichSensor == rear) {
 
@@ -106,7 +106,7 @@ void calibrate_sensors(sensor_position whichSensor)
            sensor_data.SENSOR_DATA_RearIr = average;
 
         }
-           printf("rear: %d \n", ir_value);
+           //printf("rear: %d \n", ir_value);
     }
 
     else if (whichSensor == middle) {
@@ -115,7 +115,7 @@ void calibrate_sensors(sensor_position whichSensor)
        // uint8_t middle_value = get_distance_cm_middle_ultrasonic();
         int median = queue__update_and_get_median(&middle_ultrasonic, middle_value);
         sensor_data.SENSOR_DATA_MiddleUltrasonic = median;
-        printf("middle: %dcm ", median);
+        //printf("middle: %dcm ", median);
     }
 }
 
