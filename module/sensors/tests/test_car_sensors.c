@@ -45,6 +45,8 @@ void test_init_sensors(void)
 	init_right_an_pin_Expect();
 	init_left_bumper_Expect();
 	init_right_bumper_Expect();
+	init_gpio_middle_trigger_pin_Expect();
+	init_gpio_left_right_trigger_pin_Expect();
 
 	queue__init_ExpectAnyArgs();
 	queue__init_ExpectAnyArgs();
