@@ -1,20 +1,44 @@
 // Functions for geographic sensors
 
-/*#ifndef PATH_FINDING_H__
+#ifndef PATH_FINDING_H__
 #define PATH_FINDING_H__
 
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "compass.h"
 #include "generated_can.h"
-#include "math.h"
 #include "queue.h"
+#include<math.h>
 
+#define PI 3.141592653
+#define INF 9999
+#define MAX_SIZE 62
+
+BRIDGE_CHECKPOINT_t bridge_checkpoint;
+
+//This function adds 2 more points (destination and source) to the coordinate array
+//and make path with the nearst checkpoint
 void init_path_finding(void);
-void path_calculation(void);
+//void path_calculation(void);
 
-coordinate path_finding(void);
+//function taken from geo module
+float gps_get_distance(coordinate gps_data, coordinate dest_data);
+
+//function that fills up the nxn matrix filled with distance values. uses the possible_path[] array
+void calculate_distance(float dist[][MAX_SIZE], coordinate coor[MAX_SIZE]);
+
+//path finding algorithm
+void dijkstra(float G[MAX_SIZE][MAX_SIZE], int n, int startnode, int endnode);
+
+//the initialization main code for path finding, for bridge module
+void bridge_path_finding(void);
+
+//main function for path finding, called in periodic task
+void path_finding_main(void);
+
+//functions that mark path between two points as valid path
+void make_all_paths(void);
+void make_path(int i, int j, float arr[MAX_SIZE][MAX_SIZE]);
 
 void can_receive_data(void);
-#endif */  // PATH_FINDING_H__
+#endif   // PATH_FINDING_H__

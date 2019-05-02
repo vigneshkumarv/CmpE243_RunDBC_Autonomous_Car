@@ -16,6 +16,10 @@ MSG_ID: 512 	MSG_TYPE: S 	MSG_NAME: MOTOR_HEARTBEAT
 MSG_ID: 0 	MSG_TYPE: S 	MSG_NAME: MASTER_HEARTBEAT
 	SIG_NAME: MASTER_HEARTBEAT_cmd, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 
+MSG_ID: 2 	MSG_TYPE: S 	MSG_NAME: MASTER_DEBUG
+	SIG_NAME: MASTER_DEBUG_navigation_state_enum, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MASTER_DEBUG_navigation_go, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
 MSG_ID: 770 	MSG_TYPE: S 	MSG_NAME: GEO_COORDINATE_DATA
 	SIG_NAME: GEO_DATA_Latitude, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 	SIG_NAME: GEO_DATA_Longitude, STATUS: Invalid Max or Min value., ACTION: Value Set to default
@@ -44,6 +48,18 @@ MSG_ID: 513 	MSG_TYPE: S 	MSG_NAME: MOTOR_DATA
 	SIG_NAME: MOTOR_DATA_steer, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 	SIG_NAME: MOTOR_DATA_speed, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 	SIG_NAME: MOTOR_DATA_direction, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+
+MSG_ID: 514 	MSG_TYPE: S 	MSG_NAME: MOTOR_DEBUG
+	SIG_NAME: MOTOR_DEBUG_mux, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_rpm_partial, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_rpm_actual, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_pi_error, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_large_error_cnt, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_prop_cmd, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_int_cmd, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_int_cmd_old, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_output, STATUS: Invalid Max or Min value., ACTION: Value Set to default
+	SIG_NAME: MOTOR_DEBUG_pwm_act, STATUS: Invalid Max or Min value., ACTION: Value Set to default
 
 MSG_ID: 1 	MSG_TYPE: S 	MSG_NAME: MASTER_DRIVE_CMD
 	SIG_NAME: MASTER_DRIVE_CMD_steer, STATUS: Invalid Max or Min value., ACTION: Value Set to default
