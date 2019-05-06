@@ -10,8 +10,17 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "can.h"
-#include "generated_can/generated_can.h"
-#include "string.h"
+#include "Z:\CMPE243\SJSU_Dev\projects\bridge_project\generated_can\generated_can.h"
+#include <string.h>
+
+typedef struct {
+  float latitude;
+  float longitude;
+} coordinate;
+
+GEO_COORDINATE_DATA_t geo_source_data;
+coordinate current_location;
+coordinate destination;
 
 bool bridge_uart2_init(void);
 bool bridge_CAN_init(void);
