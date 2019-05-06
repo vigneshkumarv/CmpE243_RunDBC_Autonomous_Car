@@ -44,4 +44,9 @@ void make_path(int i, int j);
 void can_receive_data(void);
 
 bool is_checkpoint_arrived(void);
+
+void current_location_set (float _longitude, float _latitude);
+
+void destination_set (float _longitude, float _latitude);
+
 #endif  // PATH_FINDING_H__

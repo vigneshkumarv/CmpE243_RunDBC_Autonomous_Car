@@ -15,6 +15,24 @@ static int path_current_index = 0;
 
 //extern GEO_COORDINATE_DATA_t geo_source_data;
 
+void current_location_set (float _longitude, float _latitude){
+    current_location.longitude = _longitude;
+    current_location.latitude = _latitude;
+}
+
+void destination_set (float _longitude, float _latitude){
+    destination.longitude = _longitude;
+    destination.latitude = _latitude;
+}
+
+void coordinate_distance_clear(void){
+    for (int i = 0; i < MAX_SIZE; i++){
+        for (int j = 0; j < MAX_SIZE; j++){
+            coordinate_distance_clear[i][j] = 0;
+        }
+    }
+}
+
 coordinate coordinate_array[MAX_SIZE] = {
     {37.336714, -121.881036},   // 0
     {37.336512, -121.881447},   // 1
@@ -127,16 +145,8 @@ void init_path_finding(void) {
       min_index_dest = i;
     }
   }
-  //printf("min_index_start: %d\n", min_index_start);
-  //printf("min_index_dest: %d\n", min_index_dest);
-
   make_path(MAX_SIZE - 2, min_index_start);
   make_path(MAX_SIZE - 1, min_index_dest);
-  /*
-  make_path(MAX_SIZE - 2, min_index_start);
-  make_path(MAX_SIZE - 1, min_index_dest);
-  */
-
 }
 
 void path_finding_main(void) {
