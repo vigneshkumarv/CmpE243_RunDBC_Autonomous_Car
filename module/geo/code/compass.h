@@ -11,6 +11,8 @@
 #include "geo_can.h"
 #include "i2c_wrapper.h"
 #include "utilities.h"
+#include "switches_wrapper.h"
+#include <math.h>
 
 #define COMPASS_ADDRESS 0xC0
 #define COMPASS_COMMAND_REG 0x0
@@ -26,7 +28,7 @@ bool read_compass_heading(float* result);
 // returns true if check is successful
 // bits 0 and 1 of result reflect the calibration status (0 un-calibrated, 3 fully calibrated)
 bool check_calibration_level(uint8_t* result);
-
+void starting_calibration(void);
 void send_debug_msg(can_t* geo_module);
 
 // functions used for storing and erasing calibration profile
@@ -34,5 +36,9 @@ void send_debug_msg(can_t* geo_module);
 // after erasing profile, compass reverts back to default state
 void storing_compass_calibration_profile(void);
 void erasing_compass_calibration_profile(void);
+
+//lsm303 code
+void init_lsm303(void);
+bool read_compass_heading_lsm303(float* result);
 
 #endif  // COMPASS_H__

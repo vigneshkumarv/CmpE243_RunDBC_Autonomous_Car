@@ -6,11 +6,14 @@
 
 // static float gps_data_longitude = 0;
 // static float gps_data_latitude = 0;
-coordinate gps_data = {0};
-coordinate dest_data = {-121.880715, 37.339327};
+coordinate gps_data = { 0 };
 static bool is_data_invalid = false;
-// static float checkpoint_latitude = 37.339327;
-// static float checkpoint_longitude = -121.880715;
+//37.339311, -121.880707 - north garage
+//37.334840, -121.880952 - in front of event center
+// static float checkpoint_latitude = 37.339311;
+// static float checkpoint_longitude = -121.880707;
+//large road end near eng: 37.336322, -121.882006
+// in between the alleyway between SU and engineering: 37.336373, -121.881744
 static char delim[] = ",";
 
 void gps_module_init(void) {
@@ -20,6 +23,7 @@ void gps_module_init(void) {
     uart2_putLine(PMTK_SET_NMEA_OUTPUT_RMCONLY, 20);
     uart2_putLine(PMTK_SET_NMEA_UPDATE_10HZ, 20);
     uart2_putLine(PMTK_API_SET_FIX_CTL_5HZ, 20);
+
 }
 
 void gps_module_get_data(char* pBuff) {
@@ -106,10 +110,10 @@ coordinate gps_obtain_data(void) {
             } else if (parse_counter == 4) {
                 gps_data.longitude = atof(ptr);
             } else if (parse_counter == 5) {
+
                 if (*ptr != 'W') {
                     is_data_invalid = true;
                     return coordinates;
-
                 } else {
                     coordinates.latitude = gps_data.latitude;
                     coordinates.longitude = gps_data.longitude;

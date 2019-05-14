@@ -68,11 +68,11 @@ BO_ 769 GEO_DATA: 8 GEO
  SG_ GEO_DATA_Angle : 32|32@1+ (0.1,-180) [0|0] "" MASTER,BRIDGE
 
 BO_ 257 SENSOR_DATA: 8 SENSOR
- SG_ SENSOR_DATA_LeftBumper : 0|1@1+ (1,0) [0|0] "" MASTER
- SG_ SENSOR_DATA_RightBumper : 1|1@1+ (1,0) [0|0] "" MASTER
- SG_ SENSOR_DATA_LeftUltrasonic : 8|8@1+ (1,0) [0|0] "" MASTER
- SG_ SENSOR_DATA_RightUltrasonic : 16|8@1+ (1,0) [0|0] "" MASTER
- SG_ SENSOR_DATA_MiddleUltrasonic : 24|16@1+ (1,0) [0|0] "" MASTER
+ SG_ SENSOR_DATA_LeftBumper : 0|1@1+ (1,0) [0|0] "" MASTER,BRIDGE
+ SG_ SENSOR_DATA_RightBumper : 1|1@1+ (1,0) [0|0] "" MASTER,BRIDGE
+ SG_ SENSOR_DATA_LeftUltrasonic : 8|8@1+ (1,0) [0|0] "" MASTER,BRIDGE
+ SG_ SENSOR_DATA_RightUltrasonic : 16|8@1+ (1,0) [0|0] "" MASTER,BRIDGE
+ SG_ SENSOR_DATA_MiddleUltrasonic : 24|16@1+ (1,0) [0|0] "" MASTER,BRIDGE
  SG_ SENSOR_DATA_RearIr : 40|16@1+ (1,0) [0|0] "" MASTER
  
 BO_ 1025 BRIDGE_DATA_CMD: 1 BRIDGE

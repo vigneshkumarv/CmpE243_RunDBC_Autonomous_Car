@@ -30,16 +30,11 @@
 queue_S longitude_data_queue;
 queue_S latitude_data_queue;
 
-typedef struct {
-  float longitude;
-  float latitude;
-} coordinate;
-
 void gps_module_init(void);
 void gps_module_get_data(char* pBuff);
 
-float gps_get_bearing(coordinate gps_data, coordinate dest_data);
-float gps_get_distance(coordinate gps_data, coordinate dest_data);
+float gps_get_bearing(coordinate GPS_data, coordinate DEST_data);
+float gps_get_distance(coordinate GPS_data, coordinate DEST_data);
 float gps_get_deflection_angle(float gps_bearing, float compass_heading);
 void gps_obtain_and_process_data(int count);
 coordinate gps_obtain_data(void);
