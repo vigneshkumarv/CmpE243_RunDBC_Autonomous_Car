@@ -6,13 +6,13 @@
 
 // static float gps_data_longitude = 0;
 // static float gps_data_latitude = 0;
-coordinate gps_data = { 0 };
+coordinate gps_data = {0};
 static bool is_data_invalid = false;
-//37.339311, -121.880707 - north garage
-//37.334840, -121.880952 - in front of event center
+// 37.339311, -121.880707 - north garage
+// 37.334840, -121.880952 - in front of event center
 // static float checkpoint_latitude = 37.339311;
 // static float checkpoint_longitude = -121.880707;
-//large road end near eng: 37.336322, -121.882006
+// large road end near eng: 37.336322, -121.882006
 // in between the alleyway between SU and engineering: 37.336373, -121.881744
 static char delim[] = ",";
 
@@ -23,7 +23,6 @@ void gps_module_init(void) {
     uart2_putLine(PMTK_SET_NMEA_OUTPUT_RMCONLY, 20);
     uart2_putLine(PMTK_SET_NMEA_UPDATE_10HZ, 20);
     uart2_putLine(PMTK_API_SET_FIX_CTL_5HZ, 20);
-
 }
 
 void gps_module_get_data(char* pBuff) {
@@ -49,7 +48,6 @@ float gps_get_bearing(coordinate gps_data, coordinate dest_data) {
     dest_data.latitude = (dest_data.latitude * PI) / 180;
     dest_data.longitude = (-dest_data.longitude * PI) / 180;
     lon_difference = dest_data.longitude - dest_data.longitude;
-
     bearing = atan2((sin(lon_difference) * cos(dest_data.latitude)),
             ((cos(gps_data.latitude) * sin(dest_data.latitude)) -
                     (sin(gps_data.latitude) * cos(dest_data.latitude) * cos(lon_difference))));
@@ -146,6 +144,15 @@ void gps_process_data(void) {
             gps_longitude_avg = -1 * (queue__update_and_get_average(&longitude_data_queue, longitude_data));
             printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
         }
+      }
+      parse_counter++;
+    }  // while
+
+  }  //$
+  else {
+    is_data_invalid = true;
+  }
+}
 
         coordinate gps_avg = {gps_longitude_avg, gps_latitude_avg};
         geo_coordinate_data.GEO_DATA_Latitude = gps_latitude_avg;
@@ -163,9 +170,25 @@ void gps_process_data(void) {
     } else {
         is_data_invalid = false;
     }
+
+    coordinate gps_avg = {gps_longitude_avg, gps_latitude_avg};
+    geo_coordinate_data.GEO_DATA_Latitude = gps_latitude_avg;
+    geo_coordinate_data.GEO_DATA_Longitude = gps_longitude_avg;
+
+    float gps_bearing = gps_get_bearing(gps_avg, dest_data);
+    float compass_heading;
+    read_compass_heading(&compass_heading);
+    float gps_deflection = gps_get_deflection_angle(gps_bearing, compass_heading);
+    float gps_distance = gps_get_distance(gps_avg, dest_data);
+    geo_data.GEO_DATA_Distance = gps_distance;
+    geo_data.GEO_DATA_Angle = gps_deflection;
+    // printf("distance: %f, angle: %f \n", gps_distance, gps_deflection);
+    // printf("distance: %f, angle: %f \n", gps_distance, compass_heading);
+  } else {
+    is_data_invalid = false;
+  }
 }
 
-void gps_get_checkpoint_coordinate(void) {
     // receive_can_msg(&GEO_module, &BRIDGE_data);
     dest_data.latitude = BRIDGE_data.BRIDGE_DATA_Latitude;
     dest_data.longitude = BRIDGE_data.BRIDGE_DATA_Longitude;

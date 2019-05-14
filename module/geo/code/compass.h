@@ -3,6 +3,7 @@
 #ifndef COMPASS_H__
 #define COMPASS_H__
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -10,9 +11,8 @@
 #include "generated_can.h"
 #include "geo_can.h"
 #include "i2c_wrapper.h"
-#include "utilities.h"
 #include "switches_wrapper.h"
-#include <math.h>
+#include "utilities.h"
 
 #define COMPASS_ADDRESS 0xC0
 #define COMPASS_COMMAND_REG 0x0
@@ -37,7 +37,7 @@ void send_debug_msg(can_t* geo_module);
 void storing_compass_calibration_profile(void);
 void erasing_compass_calibration_profile(void);
 
-//lsm303 code
+// lsm303 code
 void init_lsm303(void);
 bool read_compass_heading_lsm303(float* result);
 

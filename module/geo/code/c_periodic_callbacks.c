@@ -31,7 +31,7 @@ void c_period_1Hz(uint32_t count) {
 
 void c_period_10Hz(uint32_t count) {
   (void)count;
-  //receive_checkpoint_from_bridge(&GEO_module, BRIDGE_data);
+  // receive_checkpoint_from_bridge(&GEO_module, BRIDGE_data);
   gps_obtain_and_process_data(count);
   send_can_msg(&GEO_module, &geo_data);
   send_can_msg_to_bridge(&GEO_module, &geo_coordinate_data);
