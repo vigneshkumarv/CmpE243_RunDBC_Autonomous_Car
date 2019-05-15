@@ -9,41 +9,54 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-
-#include "pwm_wrapper.h"
-//#include "motor_controls_switch.h"
+#include "BIST.h"
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
+#include "Serial_LCD.h"
+#include "can_helpers.h"
 #include "encoder.h"
-#include "heartbeats.h"
 #include "motor_controls_master.h"
+#include "motor_helpers.h"
+#include "pwm_wrapper.h"
+#include "uart_wrapper.h"
+#include "utilities.h"
 
-// LED1=on when CAN1 is off the bus
-// LED2=on when MIA from master heartbeat
-// LED3=on when MIA from master drive command
-// LED4=on when either:
-//  - encoder sees no movement
+// LED1=on when:
+//  - CAN1 is off the bus
+//  - [MIA from master drive command]
+// LED2=on when:
+//  - MIA from master heartbeat
+//  - [encoder disconnected: too many large errors]
+// LED3=on when:
+//  - MIA from master drive command
+//  - [encoder's output reached saturation limit]
+// LED4=on when:
+//  - output-->pwm is outside the boundary of 0-100
 //    or
-//  - [steering full left or full right]
-// LCD displays either:
-//  - actual RPM value
+//  - steering full left or full right
+//  - [encoder detected incorrect speed act, from isEncoderConnected()]
+// LCD displays:
+//  - [encoder's raw RPM value: not including gear ratio]
 //    or
-//  - [actual MPH]
+//  - actual MPS
+//
+//
+//
 
-// for encoder
-int motor_speed_RPM = 0;
-// extern int encoder_count;
-
-static float speed;
-
-// define interrupts for encoder
-// keep global counter for encoder_count
+MASTER_DRIVE_CMD_t rx_master_drive_msg;
+MASTER_HEARTBEAT_t rx_master_heartbeat_msg;
 
 bool c_period_init(void) {
   init_can1_bus();
   enable_encoder_interrupts();
   PWMs_init();
-  speed = 15.0;
+  Set_PWM_for_DC(15.0);
+  Set_PWM_for_Servo(15.0);
+
+  // XXX: Don't have magic code, why is this here?
+  // Atleast comment it
+  // delay_ms(500);
+  init_speed_state();
 
   return true;
 }
@@ -53,13 +66,26 @@ bool c_period_reg_tlm(void) { return true; }
 void c_period_1Hz(uint32_t count) {
   (void)count;
   check_and_handle_canbus_state();
-  handle_heartbeats();
 }
 void c_period_10Hz(uint32_t count) {
   (void)count;
 
-  control_car_with_master();
-  // control_car_with_switches();
+  // XXX: Since the sensor loop and other things will be 20Hz
+  // we should move this to 20Hz which we can do by
+  // calling it in 100Hz and then doing 'if (0 == (count % 5)) { ...'
+
+  sendHeartbeat();
+
+  // this also does MIAs
+  read_All_CAN_Messages(&rx_master_drive_msg, &rx_master_heartbeat_msg);
+
+  if (!isBISTactive()) {
+    control_car_with_master(&rx_master_drive_msg);
+  }
+
+  send_Motor_Data(getSpeedAct(), rx_master_drive_msg.MASTER_DRIVE_CMD_steer);  // direction
+
+  send_Motor_Debug();
 }
 
 void c_period_100Hz(uint32_t count) {  // 1/100 = 0.01 sec = 10ms

@@ -2,10 +2,12 @@ compiler:
   path: x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
-    - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/autonomous-car/infrastructure/ut_framework/test_code/L2_Drivers/'
-    - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/lpc1758_freertos/'
-    - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/autonomous-car/shared_code/wrappers/'
-    - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/autonomous-car/infrastructure/ut_framework/test_code/L0_LowLevel/'
+    - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
+    - '../../shared_code/wrappers/'
+    - '../../infrastructure/ut_framework/test_code/L0_LowLevel/'
+    - '../../infrastructure/ut_framework/test_code/L3_Utils/'
+    - '../../shared_code/drivers/'
+    - '../../../SJSU_Dev/projects/lpc1758_freertos/generated-can/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -28,10 +30,13 @@ compiler:
       - './code_permanent_mocks/'
       # Source code under test
       - './code/'
-      - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/autonomous-car/infrastructure/ut_framework/test_code/L2_Drivers/'
-      - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/lpc1758_freertos/'
-      - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/autonomous-car/shared_code/wrappers/'
-      - 'C:/Users/rzelek/Documents/SJSU/CMPE_243/SJSU_Dev/projects/autonomous-car/infrastructure/ut_framework/test_code/L0_LowLevel/'
+      - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
+      - '../../shared_code/wrappers/'
+      - '../../infrastructure/ut_framework/test_code/L0_LowLevel/'
+      - '../../infrastructure/ut_framework/test_code/L3_Utils/'
+      - '../../shared_code/drivers/'
+      - '../../../SJSU_Dev/projects/lpc1758_freertos/generated-can/'
+      - '../../../SJSU_Dev/projects/lpc1758_freertos/'
       - *unit_tests_path
   defines:
     prefix: '-D'
@@ -62,3 +67,4 @@ linker:
   :verbosity: 3
 
 colour: true
+
