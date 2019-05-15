@@ -6,12 +6,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
+#include "string.h"
 #include "compass.h"
 #include "generated_can.h"
 #include "geo_can.h"
 #include "math.h"
 #include "queue.h"
 #include "uart_wrapper.h"
+#include "can.h"
 
 #define PI 3.141592653
 
