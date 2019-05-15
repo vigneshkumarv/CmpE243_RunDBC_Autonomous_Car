@@ -1,146 +1,131 @@
 // motor_helpers.c
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "LED_wrapper.h"
+
 #include "LCD_wrapper.h"
-#include "motor_helpers.h"
+#include "LED_wrapper.h"
 #include "encoder.h"
+#include "generated_can.h"
 #include "motor_controls_master.h"
+#include "motor_helpers.h"
 #include "pwm_wrapper.h"
+#include "speed_control.h"
 
-// keep these as static? but unit test wont like it..
-int reverse_cnt = 0; //
-int state = 0;
-static float stop_pwm = 15.0;
-static float reverse_pwm = 14.1;
+const float STOP_PWM = 15.0;
+const float REVERSE_SM_PWM = 14.0;  // 13.5 still too fast
+                                    // 13.0 works but too fast
 
-/*
-float calc_pwm_target(int RPM_target) // for DC motor
-{   // will eventually need to incorporate encoder (RPM_actual)
+// xxx
+// Since 'speed_state_ptr' alawys points to 'speed_state'
+// you do not need this pointer at all.
+// just use 'speed_state.'(whatever) all the time
+static speed_control_t speed_state;                      // pointer makes the board crash
+static speed_control_t *speed_state_ptr = &speed_state;  //
+static rev_state_E rev_state = rev_state_1_of_4;
 
-    if (RPM_target )
+speed_control_t get_speed_state(void) { return *speed_state_ptr; }
+
+void init_speed_state(void) {
+  speed_state_ptr->meters_per_sec_cmd = 0.0;
+  speed_state_ptr->int_cmd_old = 0.0;
+  speed_state_ptr->isBackward = false;
 }
-*/
 
-void reverse_statemachine(void)  // every 100ms gets called
-{
-  switch (state)
-  {
-      case (0) :
-            Set_PWM_for_DC(stop_pwm);  // stop
-            ++state;
-            break;
-      case (1) :
-            Set_PWM_for_DC(reverse_pwm);  // reverse
-            ++state;
-            break;
-      case (2) :
-            Set_PWM_for_DC(stop_pwm);  // stop
-            ++state;
-            break;
-      case (3) :
-            Set_PWM_for_DC(reverse_pwm);  // reverse
-            state = 0;
-            break;
-      default :
-            printf("ERROR in reverse state machine!\n");
-            state = 0; // should never happen
+bool reverse_statemachine(void)  // every 100ms this would be called
+{                                // returns true if state machine is finished
+  bool ret = false;
+  switch (rev_state) {
+    case (rev_state_1_of_4):
+      Set_PWM_for_DC(STOP_PWM);  // stop
+      if (getSpeedAct() > 0.5) {
+        rev_state = rev_state_1_of_4;
+      } else {
+        rev_state = rev_state_2_of_4;
+      }
+      ret = false;
+      break;
+    case (rev_state_2_of_4):
+      Set_PWM_for_DC(REVERSE_SM_PWM);  // reverse
+      // Set_PWM_for_DC(STOP_PWM);
+      rev_state = rev_state_3_of_4;
+      ret = false;
+      break;
+    case (rev_state_3_of_4):
+      Set_PWM_for_DC(STOP_PWM);  // stop
+      rev_state = rev_state_4_of_4;
+      ret = false;
+      break;
+    case (rev_state_4_of_4):
+      Set_PWM_for_DC(REVERSE_SM_PWM);  // reverse
+      rev_state = rev_state_normal;
+      ret = false;
+      break;
+    default:  // already in reverse, dont follow state machine
+      rev_state = rev_state_normal;
+      ret = true;
+  }
+  return ret;
+}
+
+void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps) {
+  float pwm_val = 15.0;
+
+  readSpeedAct();  // only be called from 1 place
+  switch (direction_cmd) {
+    case (forward_cmd):
+      speed_state_ptr->isBackward = false;
+      speed_state_ptr->meters_per_sec_cmd = mps;
+      rev_state = rev_state_1_of_4;
+      pwm_val = get_pwm_for_speed_control(speed_state_ptr);
+      if (isEncoderConnected(pwm_val)) {
+        Set_PWM_for_DC(pwm_val);
+      } else {
+        Set_PWM_for_DC(STOP_PWM);
+      }
+      break;
+    case (backward_cmd):
+      if (reverse_statemachine())  // when SM is done
+      {
+        pwm_val = get_pwm_for_speed_control(speed_state_ptr);
+        if (isEncoderConnected(pwm_val)) {
+          Set_PWM_for_DC(pwm_val);
+        } else {
+          Set_PWM_for_DC(STOP_PWM);
+        }
+      }
+      speed_state_ptr->isBackward = true;
+      break;
+    default:  // stop
+      rev_state = rev_state_1_of_4;
+      Set_PWM_for_DC(STOP_PWM);
   }
 }
 
-direction_E get_direction(uint8_t direction_raw)
-{
-    direction_E ret;
-    switch (direction_raw)
-    {
-        case (1) :
-                ret = forward;
-                break;
-        case (2) :
-                ret = backward;
-                break;
-        default :
-                ret = stop;
-    }
-    return ret;
-}
+void steer_car(int steer_angle) {
+  // -45 implies full left
+  // 0 implies straight
+  // 45 implies full right
 
-void move_car(direction_E direction, float mph)
-{
-    float pwm_val = 15.0;
+  float pwm_val;
+  const int max_angle = 45;
 
-    // for encoder
-    /*
-    //int RPM_actual = get_RPM_10Hz();
-    int RPM_target = get_RPM_from_MPH(mph);
-    printf("RPM actual = %d\n", RPM_actual);
-    printf("RPM target = %d\n\n", RPM_target);
-    */
-    pwm_val = 15.0 + (mph / 20.0);
-    switch (direction)
-    {
-        case (forward) :
-              reverse_cnt = 0;
-              state = 0;
-              break;
-        case (backward) :
-              if ((reverse_cnt < 4)) // need to do state machine
-              {
-                  reverse_statemachine();
-                  reverse_cnt++;
-              }
-              break;
-        default : // stop
-              pwm_val = 15.0;
-    }
-    lcd_set_num((int) mph); // not for UT, only debug
-    printf("pwm_val = %f\n", pwm_val);
-    Set_PWM_for_DC(pwm_val);
-
-}
-
-void steer_car(int steer_angle)
-{
-    // -45 implies full left
-    // 0 implies straight
-    // 45 implies full right
-
-    float pwm_val;
-    int max_angle = 45;
-    //printf("steer_angle = %d\n", steer_angle);
-
-    if (steer_angle >= max_angle) // steer full right
-    {
-        pwm_val = 20.0;
-        LED_4_on();
-    }
-    else if (steer_angle <= (-1 * max_angle)) // steer full left
-    {
-        pwm_val = 10.0;
-        LED_4_on();
-    }
-    else // steer normally
-    {
-        pwm_val = 15.0 + (5.0 * steer_angle / max_angle);
-        LED_4_off();
-    }
-    Set_PWM_for_Servo(pwm_val);
-}
-
-float get_pwm_from_mph(float mph) // should also consider direction
-{ // should consider encoder (motor_speed_RPM)
-    float pwm_speed = (mph / 20.0) + 15.0; // only works in forward
-
-    /* //
-    error = speed_cmd - speed_act
-    prop_cmd = error * proportional_gain
-    int_cmd_new = error * integral_gain
-    int_cmd += int_cmd_new;
-    output = int_cmd + prop_cmd
-    if (output > 100) {output = 100}
-    else if (output < 0) {output = 0}
-    */
-
-    return pwm_speed;
+  // XXX This is great for now, but later if you realize you can benefit from
+  // a 5-state steering, then prove to yourself that you need it, then
+  // implement 'slight left' and 'left' and 'center' etc.
+  if (steer_angle >= max_angle)  // steer full right
+  {
+    pwm_val = 20.0;
+    // LED_4_on();
+  } else if (steer_angle <= (-1 * max_angle))  // steer full left
+  {
+    pwm_val = 10.0;
+    // LED_4_on();
+  } else  // steer normally
+  {
+    pwm_val = 15.0 + (5.0 * steer_angle / max_angle);
+    // LED_4_off();
+  }
+  Set_PWM_for_Servo(pwm_val);
 }
