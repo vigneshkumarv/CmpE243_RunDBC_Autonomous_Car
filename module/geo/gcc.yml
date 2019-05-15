@@ -2,6 +2,11 @@ compiler:
   path: x86_64-w64-mingw32-gcc
   source_path: 
     - './code/'
+    - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
+    - '../../infrastructure/ut_framework/test_code/L3_Utils/'
+    - '../../../SJSU_Dev/projects/my_project/generated_can/'
+    - '../../infrastructure/ut_framework/test_code/L0_LowLevel/'
+    - '../../shared_code/wrappers/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
   options:
@@ -24,6 +29,11 @@ compiler:
       - './code_permanent_mocks/'
       # Source code under test
       - './code/'
+      - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
+      - '../../infrastructure/ut_framework/test_code/L3_Utils/'
+      - '../../../SJSU_Dev/projects/my_project/generated_can/'
+      - '../../infrastructure/ut_framework/test_code/L0_LowLevel/'
+      - '../../shared_code/wrappers/'
       - *unit_tests_path
   defines:
     prefix: '-D'
