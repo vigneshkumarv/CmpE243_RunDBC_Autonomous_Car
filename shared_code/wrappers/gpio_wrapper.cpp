@@ -19,6 +19,20 @@ void setAsInput_P2_4(void)
 }
 */
 
+void set_P0_29_Low()
+{
+    GPIO pin31(P0_29);
+    pin31.setAsOutput();
+    pin31.setLow();
+}
+
+void set_P0_29_High()
+{
+    GPIO pin31(P0_29);
+    pin31.setAsOutput();
+    pin31.setHigh();
+}
+
 bool read_P2_5(void)
 {
     GPIO pin25(P2_5);

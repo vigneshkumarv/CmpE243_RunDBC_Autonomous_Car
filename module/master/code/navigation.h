@@ -15,6 +15,7 @@ typedef enum {
   OBSTACLE_LEFT,
   OBSTACLE_MIDDLE_FAR,
   OBSTACLE_MIDDLE_CLOSE,
+  REVERSE_PAUSE,
 } navigation_states_E;
 
 typedef struct {
@@ -39,8 +40,8 @@ typedef struct {
 
 void init_navigation(navigation_state_machine_S* state_variables, navigation_sensors_S* sensor_data,
                      GEO_DATA_t* geo_data, navigation_motor_cmd_S* motor_command);
-void navigation_state_machine(navigation_state_machine_S* state, navigation_sensors_S sensor_data, GEO_DATA_t geo_data,
-                              navigation_motor_cmd_S* motor_command);
+void navigation_state_machine(uint32_t count, navigation_state_machine_S* state, navigation_sensors_S sensor_data,
+                              GEO_DATA_t geo_data, navigation_motor_cmd_S* motor_command);
 
 /******************************************************************************
  *

@@ -52,13 +52,17 @@ BO_ 0 MASTER_HEARTBEAT: 1 MASTER
  SG_ MASTER_HEARTBEAT_cmd : 0|8@1+ (1,0) [0|0] "" MOTOR
  
 BO_ 770 GEO_COORDINATE_DATA: 8 GEO
- SG_ GEO_DATA_Latitude : 0|32@1+ (0.00000001,0) [0|0] "" BRIDGE
- SG_ GEO_DATA_Longitude : 32|32@1+ (0.0000001,-150) [0|0] "" BRIDGE
+ SG_ GEO_DATA_Latitude : 0|32@1+ (0.00000001,0) [0|0] "" MASTER, BRIDGE
+ SG_ GEO_DATA_Longitude : 32|32@1+ (0.0000001,-150) [0|0] "" MASTER, BRIDGE
 
 BO_ 769 GEO_DATA: 8 GEO
  SG_ GEO_DATA_Distance : 0|32@1+ (0.01,0) [0|0] "" MASTER,BRIDGE
  SG_ GEO_DATA_Angle : 32|32@1+ (0.1,-180) [0|0] "" MASTER,BRIDGE
  
+BO_ 771 GEO_DEBUG_DATA: 8 GEO
+ SG_ GEO_COMPASS_Calibration : 0|8@1+ (1,0) [0|0] "" MASTER,BRIDGE
+ SG_ GEO_COMPASS_Heading : 8|32@1+ (0.1,0) [0|0] "" MASTER,BRIDGE
+
 BO_ 257 SENSOR_DATA: 8 SENSOR
  SG_ SENSOR_DATA_LeftBumper : 0|1@1+ (1,0) [0|0] "" MASTER
  SG_ SENSOR_DATA_RightBumper : 1|1@1+ (1,0) [0|0] "" MASTER
@@ -111,12 +115,20 @@ BO_ 1 MASTER_DRIVE_CMD: 4 MASTER
  SG_ MASTER_DRIVE_CMD_steer : 0|8@1- (1,0) [0|0] "" MOTOR
  SG_ MASTER_DRIVE_CMD_speed : 8|16@1+ (0.1,0) [0|0] "MPS" MOTOR
  SG_ MASTER_DRIVE_CMD_direction : 24|2@1+ (1,0) [0|0] "" MOTOR
+ 
+BO_ 2 MASTER_DEBUG: 4 MASTER
+ SG_ MASTER_DEBUG_navigation_state_enum : 0|8@1+ (1,0) [0|0] "" MOTOR
+ SG_ MASTER_DEBUG_navigation_go : 8|1@1+ (1,0) [0|0] "" MOTOR
+
+BA_ "FieldType" SG_ 2 MASTER_DEBUG_navigation_state_enum "MASTER_DEBUG_navigation_state_enum";
 
 BA_ "FieldType" SG_ 1 MASTER_DRIVE_CMD_direction "MASTER_DRIVE_CMD_direction_E";
 BA_ "FieldType" SG_ 513 MOTOR_DATA_direction "MOTOR_DATA_direction_E";
 
 VAL_ 1 MASTER_DRIVE_CMD_direction 0 "stop_cmd" 1 "forward_cmd" 2 "backward_cmd" ;
+VAL_ 2 MASTER_DEBUG_navigation_state_enum 0 "NAV_INIT" 1 "NAV_WAIT" 2 "NAV_NAVIGATE" 3 "NAV_OBSTACLE_RIGHT" 4 "NAV_OBSTACLE_LEFT" 5 "NAV_OBSTACLE_MIDDLE_FAR" 6 "NAV_OBSTACLE_MIDDLE_CLOSE" ;
 VAL_ 513 MOTOR_DATA_direction 0 "stop_act" 1 "forward_act" 2 "backward_act" ;
+
 
 BA_DEF_ "BusType" STRING ;
 BA_DEF_ BO_ "GenMsgCycleTime" INT 0 0;

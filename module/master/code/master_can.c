@@ -51,7 +51,6 @@ static SENSOR_HEARTBEAT_t sensor_heartbeat_msg = {0};
 static BRIDGE_HEARTBEAT_t bridge_heartbeat_msg = {0};
 static MOTOR_HEARTBEAT_t motor_heartbeat_msg = {0};
 static SENSOR_DATA_t sensor_data_msg = {0};
-static GEO_DATA_t geo_data_msg = {0};
 static BRIDGE_DATA_CMD_t bridge_data_cmd_msg = {0};
 
 /******************************************************************************
@@ -74,8 +73,9 @@ void check_and_restart_can() {
   }
 }
 
-bool read_can_50Hz(navigation_sensors_S* sensor_values, GEO_DATA_t* geo_data,
-                   navigation_state_machine_S* state_variables) {
+bool read_can_50Hz(navigation_sensors_S* sensor_values, GEO_DATA_t* geo_data, GEO_COORDINATE_DATA_t* geo_coordinates,
+                   GEO_DEBUG_DATA_t* geo_debug, navigation_state_machine_S* state_variables,
+                   MOTOR_DATA_t* motor_actual) {
   bool all_heartbeats_good = true;
   can_msg_t rx_msg = {0};
   while (CAN_rx(can1, &rx_msg, 0)) {
@@ -95,10 +95,18 @@ bool read_can_50Hz(navigation_sensors_S* sensor_values, GEO_DATA_t* geo_data,
       sensor_values->middle_ultrasonic_cm = sensor_data_msg.SENSOR_DATA_MiddleUltrasonic;
       sensor_values->rear_ir_cm = sensor_data_msg.SENSOR_DATA_RearIr;
     }
-    if (dbc_decode_GEO_DATA(&geo_data_msg, rx_msg.data.bytes, &rx_msg_hdr)) {
-      geo_data->GEO_DATA_Angle = geo_data_msg.GEO_DATA_Angle;
-      geo_data->GEO_DATA_Distance = geo_data_msg.GEO_DATA_Distance;
-    }
+    dbc_decode_GEO_DATA(geo_data, rx_msg.data.bytes, &rx_msg_hdr);
+    //    if (dbc_decode_GEO_DATA(&geo_data_msg, rx_msg.data.bytes, &rx_msg_hdr)) {
+    //      geo_data->GEO_DATA_Angle = geo_data_msg.GEO_DATA_Angle;
+    //      geo_data->GEO_DATA_Distance = geo_data_msg.GEO_DATA_Distance;
+    //    }
+    dbc_decode_GEO_COORDINATE_DATA(geo_coordinates, rx_msg.data.bytes, &rx_msg_hdr);
+    //    if (dbc_decode_GEO_COORDINATE_DATA(&geo_coordinate_msg, rx_msg.data.bytes, &rx_msg_hdr)) {
+    //      geo_coordinates->GEO_DATA_Latitude = geo_coordinate_msg.GEO_DATA_Latitude;
+    //      geo_coordinates->GEO_DATA_Longitude = geo_coordinate_msg.GEO_DATA_Longitude;
+    //    }
+    dbc_decode_GEO_DEBUG_DATA(geo_debug, rx_msg.data.bytes, &rx_msg_hdr);
+    dbc_decode_MOTOR_DATA(motor_actual, rx_msg.data.bytes, &rx_msg_hdr);
     if (dbc_decode_BRIDGE_DATA_CMD(&bridge_data_cmd_msg, rx_msg.data.bytes, &rx_msg_hdr)) {
       if (bridge_data_cmd_msg.BRIDGE_DATA_CMD_start_stop) {
         state_variables->go = true;
@@ -172,6 +180,22 @@ void send_heartbeat_msg() {
 
   // Encode the CAN message's data bytes, get its header and set the CAN message's DLC and length
   dbc_msg_hdr_t msg_hdr = dbc_encode_MASTER_HEARTBEAT(can_msg.data.bytes, &heartbeat);
+  can_msg.msg_id = msg_hdr.mid;
+  can_msg.frame_fields.data_len = msg_hdr.dlc;
+
+  // Queue the CAN message to be sent out
+  CAN_tx(can1, &can_msg, 0);
+}
+
+void send_debug_msg(navigation_state_machine_S nav_state_machine) {
+  MASTER_DEBUG_t debug_msg = {0};
+  debug_msg.MASTER_DEBUG_navigation_state_enum = nav_state_machine.state;
+  debug_msg.MASTER_DEBUG_navigation_go = nav_state_machine.go;
+
+  can_msg_t can_msg = {0};
+
+  // Encode the CAN message's data bytes, get its header and set the CAN message's DLC and length
+  dbc_msg_hdr_t msg_hdr = dbc_encode_MASTER_DEBUG(can_msg.data.bytes, &debug_msg);
   can_msg.msg_id = msg_hdr.mid;
   can_msg.frame_fields.data_len = msg_hdr.dlc;
 

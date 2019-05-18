@@ -9,6 +9,9 @@ extern "C" {
 
 #include <stdbool.h>
 
+void set_P0_29_Low(void);
+void set_P0_29_High(void);
+
 bool read_P2_4(void);
 
 bool read_P2_5(void);

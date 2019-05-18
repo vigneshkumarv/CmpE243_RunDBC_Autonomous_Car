@@ -3,6 +3,10 @@
 #ifndef _SERIAL_LCD_H
 #define _SERIAL_LCD_H
 
+
+#include <stdint.h>
+#include <stdbool.h>
+
 void init_serial_lcd(void);
 void clear_screen(void);
 void clear_line(uint8_t line_num);
