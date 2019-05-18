@@ -6,8 +6,8 @@
 //#include "Mockcan.h"
 //#include "Mockpwm_wrapper.h"
 #include "MockLCD_wrapper.h"
-#include "Mockgpio_wrapper.h"
 #include "Mockeint.h"
+#include "Mockgpio_wrapper.h"
 #include "Mockpwm_wrapper.h"
 #include "encoder.h"
 #include "speed_control.h"
@@ -55,63 +55,54 @@ void test_steer_car(void) {
   steer_car(-180);
 }
 
+void test_move_car(void) {
+  // stop
+  lcd_set_num_Expect(0);
+  Set_PWM_for_DC_ExpectAndReturn(15.0, true);
+  move_car(stop_cmd, 0.0);
 
-void test_move_car(void)
-{
-    // stop
-    lcd_set_num_Expect(0);
-    Set_PWM_for_DC_ExpectAndReturn(15.0, true);
-    move_car(stop_cmd, 0.0);
+  // forward n1
+  lcd_set_num_Expect(0.0);
+  LED_4_off_Expect();
+  LED_3_off_Expect();
+  LED_2_off_Expect();
+  Set_PWM_for_DC_ExpectAndReturn(15.4, true);
+  move_car(forward_cmd, 1.0);
 
-    // forward n1
-    lcd_set_num_Expect(0.0);
-    LED_4_off_Expect();
-    LED_3_off_Expect();
-    LED_2_off_Expect();
-    Set_PWM_for_DC_ExpectAndReturn(15.4, true);
-    move_car(forward_cmd, 1.0);
+  // forward n2
+  lcd_set_num_Expect(0.0);
+  LED_4_off_Expect();
+  // LED_4_on_Expect();
+  LED_3_off_Expect();
+  LED_2_off_Expect();
+  Set_PWM_for_DC_ExpectAndReturn(15.95, true);
+  move_car(forward_cmd, 2.0);
 
-    // forward n2
-    lcd_set_num_Expect(0.0);
-    LED_4_off_Expect();
-    //LED_4_on_Expect();
-    LED_3_off_Expect();
-    LED_2_off_Expect();
-    Set_PWM_for_DC_ExpectAndReturn(15.95, true);
-    move_car(forward_cmd, 2.0);
+  // backward n1
+  lcd_set_num_Expect(0.0);
+  Set_PWM_for_DC_ExpectAndReturn(15, true);
+  move_car(backward_cmd, 1.0);
 
-    // backward n1
-    lcd_set_num_Expect(0.0);
-    Set_PWM_for_DC_ExpectAndReturn(15, true);
-    move_car(backward_cmd, 1.0);
-
-    // stop
-    lcd_set_num_Expect(0.0);
-    Set_PWM_for_DC_ExpectAndReturn(15.0, true);
-    move_car(stop_cmd, 0.0);
+  // stop
+  lcd_set_num_Expect(0.0);
+  Set_PWM_for_DC_ExpectAndReturn(15.0, true);
+  move_car(stop_cmd, 0.0);
 }
 
-void test_reverse_statemachine(void)
-{
-    Set_PWM_for_DC_ExpectAndReturn(15.0, true);
-    reverse_statemachine();
+void test_reverse_statemachine(void) {
+  Set_PWM_for_DC_ExpectAndReturn(15.0, true);
+  reverse_statemachine();
 
-    Set_PWM_for_DC_ExpectAndReturn(14.0, true);
-    reverse_statemachine();
+  Set_PWM_for_DC_ExpectAndReturn(14.0, true);
+  reverse_statemachine();
 
-    Set_PWM_for_DC_ExpectAndReturn(15.0, true);
-    reverse_statemachine();
+  Set_PWM_for_DC_ExpectAndReturn(15.0, true);
+  reverse_statemachine();
 
-    Set_PWM_for_DC_ExpectAndReturn(14.0, true);
-    reverse_statemachine();
+  Set_PWM_for_DC_ExpectAndReturn(14.0, true);
+  reverse_statemachine();
 
-    reverse_statemachine();
-
+  reverse_statemachine();
 }
 
-void test_init_speed_state(void)
-{
-    init_speed_state();
-
-}
-
+void test_init_speed_state(void) { init_speed_state(); }

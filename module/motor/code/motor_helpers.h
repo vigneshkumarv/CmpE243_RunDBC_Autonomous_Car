@@ -22,4 +22,3 @@ void move_car(MASTER_DRIVE_CMD_direction_E direction, float mps);
 void init_speed_state(void);
 
 #endif
-

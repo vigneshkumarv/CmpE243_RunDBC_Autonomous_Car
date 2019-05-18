@@ -22,4 +22,3 @@ void PWMs_init(void);
 }
 #endif
 #endif /* PWM_WRAPPER_H_ */
-

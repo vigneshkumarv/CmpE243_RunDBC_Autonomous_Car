@@ -82,14 +82,14 @@ void print_seg(uint8_t line_num, uint8_t pos, char* char_msg, int len) {
 
   char pos_char[3];
   sprintf(pos_char, "%d", pos);
-  //itoa(pos, pos_char, 10);
+  // itoa(pos, pos_char, 10);
   strcat(buf, pos_char);
 
   strcat(buf, ":");
 
   char line_char[3];
   sprintf(line_char, "%d", line_num);
-  //itoa(line_num, line_char, 10);
+  // itoa(line_num, line_char, 10);
   strcat(buf, line_char);
 
   uart2_putLine(buf, 0);

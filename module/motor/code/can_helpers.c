@@ -76,18 +76,13 @@ void send_Motor_Debug(void) {
 void send_Motor_Data(float speed_act, int steer_angle) {
   MOTOR_DATA_t motor_data = {0};
 
-  if (speed_act < 0)
-  {
-      motor_data.MOTOR_DATA_direction = backward_act;
-      speed_act *= -1;
-  }
-  else if (speed_act > 0)
-  {
-      motor_data.MOTOR_DATA_direction = forward_act;
-  }
-  else
-  {
-      motor_data.MOTOR_DATA_direction = stop_act;
+  if (speed_act < 0) {
+    motor_data.MOTOR_DATA_direction = backward_act;
+    speed_act *= -1;
+  } else if (speed_act > 0) {
+    motor_data.MOTOR_DATA_direction = forward_act;
+  } else {
+    motor_data.MOTOR_DATA_direction = stop_act;
   }
   motor_data.MOTOR_DATA_steer = steer_angle;
   motor_data.MOTOR_DATA_speed = speed_act;
@@ -95,9 +90,7 @@ void send_Motor_Data(float speed_act, int steer_angle) {
   dbc_encode_and_send_MOTOR_DATA(&motor_data);
 }
 
-void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg,
-                           MASTER_HEARTBEAT_t* rx_master_heartbeat_msg)
-{
+void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg, MASTER_HEARTBEAT_t* rx_master_heartbeat_msg) {
   can_msg_t can_msg;
 
   while (CAN_rx(can1, &can_msg, 0)) {
@@ -114,26 +107,26 @@ void read_All_CAN_Messages(MASTER_DRIVE_CMD_t* rx_master_drive_msg,
   // handle MIAs
   // XXX: Increment MIA counters for all messages you handle above
   if (dbc_handle_mia_MASTER_DRIVE_CMD(rx_master_drive_msg, 100)) {
-    //LED_3_on();
+    // LED_3_on();
     LED_1_on();
   } else {
-    //LED_3_off();
+    // LED_3_off();
     LED_1_off();
   }
 
   if (dbc_handle_mia_MASTER_HEARTBEAT(rx_master_heartbeat_msg, 100)) {
-    //LED_2_on();
+    // LED_2_on();
   } else {
-    //LED_2_off();
+    // LED_2_off();
   }
 }
 
 void check_and_handle_canbus_state(void) {
   if (CAN_is_bus_off(can1)) {
-    //LED_1_on();
+    // LED_1_on();
     CAN_reset_bus(can1);
   } else {
-    //LED_1_off();
+    // LED_1_off();
   }
 }
 
@@ -150,4 +143,3 @@ void init_can1_bus(void) {
   CAN_bypass_filter_accept_all_msgs();
   CAN_reset_bus(can1);
 }
-

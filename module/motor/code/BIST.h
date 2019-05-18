@@ -9,4 +9,3 @@ bool isDoneWithInnerBIST(void);
 bool isBISTactive(void);
 
 #endif
-
