@@ -37,22 +37,26 @@ bool isDoneWithInnerBIST(void)  // may be called every 100ms
   {                      // Stage 1 - Forward for 1.5 seconds
     Set_PWM_for_Servo(15.0);
     Set_PWM_for_DC(slow_forward);
-  } else if (curr_time < 3000)   // 1500-2900
+  }
+  else if (curr_time < 3000)   // 1500-2900
   {                              // Stage 2 - Reverse for 1.5 seconds
     if (reverse_statemachine())  // when SM is done
     {
       Set_PWM_for_DC(slow_reverse);
     }
     // otherwise follow the SM
-  } else if (curr_time < 5500)  // 3000-5400
+  }
+  else if (curr_time < 5500)  // 3000-5400
   {                             // Stage 3 - Hold right for 2.5 seconds
     Set_PWM_for_Servo(20.0);
     Set_PWM_for_DC(15.0);
-  } else if (curr_time < 8000)  // 5500-7900
-  {                             // Stage 4 - Hold left for 2.5 seconds
+  }
+  else if (curr_time < 8000)  // 5500-7900
+  {                              // Stage 4 - Hold left for 2.5 seconds
     Set_PWM_for_Servo(10.0);
     Set_PWM_for_DC(15.0);
-  } else  // 8,000 is end of BIST
+  }
+  else  // 8,000 is end of BIST
   {
     LED_1_off();
     LED_2_off();
@@ -71,19 +75,27 @@ bool isDoneWithInnerBIST(void)  // may be called every 100ms
 
 bool isBISTactive(void)  // every 100ms
 {                        // returns true if the BIST is active
-  if (inProgress) {      // ignore switch, and handle BIST
-    if (isDoneWithInnerBIST()) {
+  if (inProgress)
+  {                     // ignore switch, and handle BIST
+    if (isDoneWithInnerBIST())
+    {
       return false;  // stop doing the BIST
-    } else {
-      return true;  // keep going with the BIST
     }
-  } else if (getSwitch(1))  // switch is pressed
+    else
+    {
+      return true;          // keep going with the BIST
+    }
+  }
+  else if (getSwitch(1))  // switch is pressed
   {
     inProgress = true;
     Set_PWM_for_DC(15.0);
     Set_PWM_for_Servo(15.0);
     return true;
-  } else {
+  }
+  else
+  {
     return false;
   }
 }
+

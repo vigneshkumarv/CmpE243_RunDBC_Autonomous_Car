@@ -97,3 +97,4 @@ void c_period_1000Hz(uint32_t count) {
    * const bool run_1Khz = true;*/
   (void)count;
 }
+

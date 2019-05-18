@@ -23,3 +23,4 @@ void control_car_with_master(MASTER_DRIVE_CMD_t* rx_master_drive_msg) {
   // from 0-100 m/s
   move_car(rx_master_drive_msg->MASTER_DRIVE_CMD_direction, rx_master_drive_msg->MASTER_DRIVE_CMD_speed);
 }
+

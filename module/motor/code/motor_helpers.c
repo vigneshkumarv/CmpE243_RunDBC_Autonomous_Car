@@ -6,12 +6,12 @@
 
 #include "LCD_wrapper.h"
 #include "LED_wrapper.h"
-#include "encoder.h"
 #include "generated_can.h"
 #include "motor_controls_master.h"
 #include "motor_helpers.h"
 #include "pwm_wrapper.h"
 #include "speed_control.h"
+#include "encoder.h"
 
 const float STOP_PWM = 15.0;
 const float REVERSE_SM_PWM = 14.0;  // 13.5 still too fast
@@ -27,7 +27,8 @@ static rev_state_E rev_state = rev_state_1_of_4;
 
 speed_control_t get_speed_state(void) { return *speed_state_ptr; }
 
-void init_speed_state(void) {
+void init_speed_state(void)
+{
   speed_state_ptr->meters_per_sec_cmd = 0.0;
   speed_state_ptr->int_cmd_old = 0.0;
   speed_state_ptr->isBackward = false;
@@ -36,19 +37,23 @@ void init_speed_state(void) {
 bool reverse_statemachine(void)  // every 100ms this would be called
 {                                // returns true if state machine is finished
   bool ret = false;
-  switch (rev_state) {
+  switch (rev_state)
+  {
     case (rev_state_1_of_4):
       Set_PWM_for_DC(STOP_PWM);  // stop
-      if (getSpeedAct() > 0.5) {
-        rev_state = rev_state_1_of_4;
-      } else {
-        rev_state = rev_state_2_of_4;
+      if (getSpeedAct() > 0.5)
+      {
+          rev_state = rev_state_1_of_4;
+      }
+      else
+      {
+          rev_state = rev_state_2_of_4;
       }
       ret = false;
       break;
     case (rev_state_2_of_4):
       Set_PWM_for_DC(REVERSE_SM_PWM);  // reverse
-      // Set_PWM_for_DC(STOP_PWM);
+      //Set_PWM_for_DC(STOP_PWM);
       rev_state = rev_state_3_of_4;
       ret = false;
       break;
@@ -69,30 +74,38 @@ bool reverse_statemachine(void)  // every 100ms this would be called
   return ret;
 }
 
-void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps) {
+void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps)
+{
   float pwm_val = 15.0;
 
-  readSpeedAct();  // only be called from 1 place
-  switch (direction_cmd) {
+  readSpeedAct(); // only be called from 1 place
+  switch (direction_cmd)
+  {
     case (forward_cmd):
       speed_state_ptr->isBackward = false;
       speed_state_ptr->meters_per_sec_cmd = mps;
       rev_state = rev_state_1_of_4;
       pwm_val = get_pwm_for_speed_control(speed_state_ptr);
-      if (isEncoderConnected(pwm_val)) {
-        Set_PWM_for_DC(pwm_val);
-      } else {
-        Set_PWM_for_DC(STOP_PWM);
+      if (isEncoderConnected(pwm_val))
+      {
+          Set_PWM_for_DC(pwm_val);
+      }
+      else
+      {
+          Set_PWM_for_DC(STOP_PWM);
       }
       break;
     case (backward_cmd):
       if (reverse_statemachine())  // when SM is done
       {
         pwm_val = get_pwm_for_speed_control(speed_state_ptr);
-        if (isEncoderConnected(pwm_val)) {
-          Set_PWM_for_DC(pwm_val);
-        } else {
-          Set_PWM_for_DC(STOP_PWM);
+        if (isEncoderConnected(pwm_val))
+        {
+            Set_PWM_for_DC(pwm_val);
+        }
+        else
+        {
+            Set_PWM_for_DC(STOP_PWM);
         }
       }
       speed_state_ptr->isBackward = true;
@@ -101,6 +114,7 @@ void move_car(MASTER_DRIVE_CMD_direction_E direction_cmd, float mps) {
       rev_state = rev_state_1_of_4;
       Set_PWM_for_DC(STOP_PWM);
   }
+
 }
 
 void steer_car(int steer_angle) {
@@ -129,3 +143,4 @@ void steer_car(int steer_angle) {
   }
   Set_PWM_for_Servo(pwm_val);
 }
+
