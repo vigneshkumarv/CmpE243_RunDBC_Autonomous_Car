@@ -29,6 +29,8 @@ bool read_compass_heading(float* result);
 // bits 0 and 1 of result reflect the calibration status (0 un-calibrated, 3 fully calibrated)
 bool check_calibration_level(uint8_t* result);
 void starting_calibration(void);
+void enable_auto_calibration(void);
+void disable_auto_calibration(void);
 void send_debug_msg(can_t* geo_module);
 
 // functions used for storing and erasing calibration profile

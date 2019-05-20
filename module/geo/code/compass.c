@@ -8,8 +8,7 @@ bool read_compass_heading(float* result) {
 
   if (read_byte_from_i2c_device(COMPASS_ADDRESS, first_reg_address, 2, temp)) {
     temp_result = temp[0] << 8 | temp[1];
-    float temp_float = temp_result / 10.0;  // from 3599 to 359.9 for example
-    temp_float -= 5.556;                    // calibration offset
+    float temp_float = temp_result / 10.0;  // from 3599 to 359.9 for example                    // calibration offset
     temp_float += 13.244;                   // correct for magnetic declination
     if (temp_float < 0) {
       temp_float += 360;
@@ -17,7 +16,7 @@ bool read_compass_heading(float* result) {
       temp_float -= 360;
     }
     *result = temp_float;
-    printf("heading: %f\n", *result);
+    //printf("heading: %f\n", *result);
     return true;
   }
   return false;
@@ -151,4 +150,26 @@ void starting_calibration(void) {
     // erase calibration profile
     erasing_compass_calibration_profile();
   }
+}
+
+void enable_auto_calibration(void)
+{
+    unsigned char calibration_values[3] = {0x98, 0x95, 0x99};
+
+      for (int reg_index = 0; reg_index < 3; reg_index++) {
+        send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, calibration_values[reg_index]);
+        delay_ms(20);
+      }
+      send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, 0x97); //0b10010111 auto-cal register sequence
+}
+
+void disable_auto_calibration(void)
+{
+    unsigned char calibration_values[3] = {0x98, 0x95, 0x99};
+
+         for (int reg_index = 0; reg_index < 3; reg_index++) {
+           send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, calibration_values[reg_index]);
+           delay_ms(20);
+         }
+         send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, 0x97); //0b10000000 auto-cal register sequence
 }

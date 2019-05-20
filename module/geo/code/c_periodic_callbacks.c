@@ -7,15 +7,16 @@
 #include "can.h"
 #include "geo_can.h"
 #include "gps.h"
-#include "queue.h"
+//#include "queue.h"
 
 bool c_period_init(void) {
   can_initialization(&GEO_module);
   gps_module_init();
   init_switches();
-  queue__init(&longitude_data_queue);
-  queue__init(&latitude_data_queue);
-  init_lsm303();
+  disable_auto_calibration();
+  //queue__init(&longitude_data_queue);
+  //queue__init(&latitude_data_queue);
+  //init_lsm303();
 
   return true;
 }
@@ -26,12 +27,12 @@ void c_period_1Hz(uint32_t count) {
   (void)count;
   send_heartbeat_msg(&GEO_module);
   send_debug_msg(&GEO_module);
-  starting_calibration();
+  //starting_calibration();
 }
 
 void c_period_10Hz(uint32_t count) {
   (void)count;
-  // receive_checkpoint_from_bridge(&GEO_module, BRIDGE_data);
+  gps_get_checkpoint_coordinate();
   gps_obtain_and_process_data(count);
   send_can_msg(&GEO_module, &geo_data);
   send_can_msg_to_bridge(&GEO_module, &geo_coordinate_data);

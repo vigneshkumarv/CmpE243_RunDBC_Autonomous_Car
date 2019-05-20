@@ -13,7 +13,7 @@
 #include "math.h"
 #include "queue.h"
 #include "uart_wrapper.h"
-#include "can.h"
+#include "led_wrapper.h"
 
 #define PI 3.141592653
 
@@ -25,6 +25,8 @@
 #define PMTK_SET_BAUDRATE_9600 "$PMTK251,9600*17"
 #define PMTK_SET_BAUDRATE_38400 "$PMTK251,38400*27"
 #define PMTK_API_SET_FIX_CTL_5HZ "$PMTK300,200,0,0,0,0*2F"  //< 5 Hz, max fix rate
+#define PMTK_API_SET_SBAS_ENABLED "$PMTK313,1*2E" //enable differential GPS
+#define PMTK_API_SET_DGPS_MODE "$PMTK301,2*2E" //set differential gps mode (WAAS for north america)
 #define MAX_DATA_BUFF_LENGTH 100
 
 queue_S longitude_data_queue;
