@@ -14,7 +14,7 @@ static bool is_data_invalid = false;
 // static float checkpoint_longitude = -121.880707;
 // large road end near eng: 37.336322, -121.882006
 // in between the alleyway between SU and engineering: 37.336373, -121.881744
-//behind clark hall: 37.336218, -121.883073
+// behind clark hall: 37.336218, -121.883073
 static char delim[] = ",";
 
 void gps_module_init(void) {
@@ -24,12 +24,12 @@ void gps_module_init(void) {
   uart2_putLine(PMTK_SET_NMEA_OUTPUT_RMCONLY, 20);
   uart2_putLine(PMTK_SET_NMEA_UPDATE_10HZ, 20);
   uart2_putLine(PMTK_API_SET_FIX_CTL_5HZ, 20);
-  //uart2_putLine(PMTK_API_SET_SBAS_ENABLED, 20); //enable differential GPS
- //uart2_putLine(PMTK_API_SET_DGPS_MODE, 20); //set differential gps mode (WAAS for north america)
+  // uart2_putLine(PMTK_API_SET_SBAS_ENABLED, 20); //enable differential GPS
+  // uart2_putLine(PMTK_API_SET_DGPS_MODE, 20); //set differential gps mode (WAAS for north america)
 
   // FOR DEBUG PURPOSE ONLY
-  //dest_data.latitude = 37.336218;
-  //dest_data.longitude = -121.883073;
+  // dest_data.latitude = 37.336218;
+  // dest_data.longitude = -121.883073;
 }
 
 void gps_module_get_data(char* pBuff) {
@@ -48,39 +48,37 @@ void gps_obtain_and_process_data(int count) {
     }
 }
 
+float gps_get_bearing(coordinate GPS_data, coordinate DEST_data) {
+  float bearing = 0, lon_difference = 0;
+  GPS_data.latitude = (GPS_data.latitude * PI) / 180;
+  GPS_data.longitude = (GPS_data.longitude * PI) / 180;
+  DEST_data.latitude = (DEST_data.latitude * PI) / 180;
+  DEST_data.longitude = (DEST_data.longitude * PI) / 180;
+  lon_difference = DEST_data.longitude - GPS_data.longitude;
 
-float gps_get_bearing(coordinate GPS_data, coordinate DEST_data)
-{
-    float bearing = 0, lon_difference = 0;
-    GPS_data.latitude = (GPS_data.latitude * PI) / 180;
-    GPS_data.longitude = (GPS_data.longitude * PI) / 180;
-    DEST_data.latitude = (DEST_data.latitude * PI) / 180;
-    DEST_data.longitude = (DEST_data.longitude * PI) / 180;
-    lon_difference = DEST_data.longitude - GPS_data.longitude;
+  bearing = atan2((sin(lon_difference) * cos(DEST_data.latitude)),
+                  ((cos(GPS_data.latitude) * sin(DEST_data.latitude)) -
+                   (sin(GPS_data.latitude) * cos(DEST_data.latitude) * cos(lon_difference))));
 
-    bearing = atan2((sin(lon_difference) * cos(DEST_data.latitude)),
-            ((cos(GPS_data.latitude) * sin(DEST_data.latitude)) - (sin(GPS_data.latitude) * cos(DEST_data.latitude) *
-cos(lon_difference))));
+  bearing = (bearing * 180) / PI;
 
-    bearing = (bearing * 180) / PI;
+  if (bearing <= 0) bearing += 360;
 
-    if (bearing <= 0) bearing += 360;
-
-    return bearing;
+  return bearing;
 }
 
-float gps_get_distance(coordinate GPS_data, coordinate DEST_data)
-{
-    GPS_data.latitude = (GPS_data.latitude * PI) / 180;
-    GPS_data.longitude = (GPS_data.longitude * PI) / 180;
-    DEST_data.latitude = (DEST_data.latitude * PI) / 180;
-    DEST_data.longitude = (DEST_data.longitude * PI) / 180;
-    float a = pow(sin((DEST_data.latitude - GPS_data.latitude) / 2), 2)
-            + cos(GPS_data.latitude) * cos(DEST_data.latitude) * pow(sin((DEST_data.longitude - GPS_data.longitude) /
-2), 2); float c = 2 * atan2(sqrt(a), sqrt(1 - a)); float distance = 6371 * 1000 * c;
-    if(distance > 1000)
-        distance = 1000;
-    return distance;
+float gps_get_distance(coordinate GPS_data, coordinate DEST_data) {
+  GPS_data.latitude = (GPS_data.latitude * PI) / 180;
+  GPS_data.longitude = (GPS_data.longitude * PI) / 180;
+  DEST_data.latitude = (DEST_data.latitude * PI) / 180;
+  DEST_data.longitude = (DEST_data.longitude * PI) / 180;
+  float a =
+      pow(sin((DEST_data.latitude - GPS_data.latitude) / 2), 2) +
+      cos(GPS_data.latitude) * cos(DEST_data.latitude) * pow(sin((DEST_data.longitude - GPS_data.longitude) / 2), 2);
+  float c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  float distance = 6371 * 1000 * c;
+  if (distance > 1000) distance = 1000;
+  return distance;
 }
 
 /*float gps_get_distance(coordinate GPS_data, coordinate DEST_data) {
@@ -195,27 +193,29 @@ void gps_process_data(void) {
     if (gps_data.latitude > 0) {
       float latitude_data = ((int)(gps_data.latitude / 100)) +
                             (((int)gps_data.latitude % 100) + (gps_data.latitude - (int)(gps_data.latitude))) / 60;
-     // gps_latitude_avg = queue__update_and_get_average(&latitude_data_queue, latitude_data);
+      // gps_latitude_avg = queue__update_and_get_average(&latitude_data_queue, latitude_data);
       gps_latitude_avg = latitude_data;
     }
     if (gps_data.longitude > 0) {
       float longitude_data = ((int)(gps_data.longitude / 100)) +
                              (((int)gps_data.longitude % 100) + (gps_data.longitude - (int)(gps_data.longitude))) / 60;
-      //gps_longitude_avg = -1 * (queue__update_and_get_average(&longitude_data_queue, longitude_data));
-      gps_longitude_avg = -1*longitude_data;
+      // gps_longitude_avg = -1 * (queue__update_and_get_average(&longitude_data_queue, longitude_data));
+      gps_longitude_avg = -1 * longitude_data;
       // printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
     }
-    //light up led if both lat and long decimal digits are correct
-    if((int)gps_latitude_avg == 37 && (int)gps_longitude_avg == -121) LED_1_on();
-    else LED_1_off();
+    // light up led if both lat and long decimal digits are correct
+    if ((int)gps_latitude_avg == 37 && (int)gps_longitude_avg == -121)
+      LED_1_on();
+    else
+      LED_1_off();
 
     coordinate gps_avg = {gps_longitude_avg, gps_latitude_avg};
     geo_coordinate_data.GEO_DATA_Latitude = gps_latitude_avg;
     geo_coordinate_data.GEO_DATA_Longitude = gps_longitude_avg;
 
-     //if destination is received
-    //printf("dest_data.latitude: %f ", dest_data.latitude);
-    //printf("dest_data.longitude: %f ", dest_data.longitude);
+    // if destination is received
+    // printf("dest_data.latitude: %f ", dest_data.latitude);
+    // printf("dest_data.longitude: %f ", dest_data.longitude);
     float gps_bearing = gps_get_bearing(gps_avg, dest_data);
     float compass_heading;
     read_compass_heading(&compass_heading);
@@ -225,18 +225,16 @@ void gps_process_data(void) {
     geo_data.GEO_DATA_Angle = gps_deflection;
     // printf("distance: %f, angle: %f \n", gps_distance, gps_deflection);
     // printf("distance: %f, angle: %f \n", gps_distance, compass_heading);
-  }
-  else {
+  } else {
     is_data_invalid = false;
   }
 }
 
 void gps_get_checkpoint_coordinate(void) {
   receive_checkpoint_from_bridge(&GEO_module, &BRIDGE_data);
-  if(BRIDGE_data.BRIDGE_DATA_Latitude > 0 && BRIDGE_data.BRIDGE_DATA_Longitude < 0)
-  {
-      dest_data.latitude = BRIDGE_data.BRIDGE_DATA_Latitude;
-      dest_data.longitude = BRIDGE_data.BRIDGE_DATA_Longitude;
-      //printf("dest_data lat: %f dest_data lon: %f \n",dest_data.latitude,  dest_data.longitude );
+  if (BRIDGE_data.BRIDGE_DATA_Latitude > 0 && BRIDGE_data.BRIDGE_DATA_Longitude < 0) {
+    dest_data.latitude = BRIDGE_data.BRIDGE_DATA_Latitude;
+    dest_data.longitude = BRIDGE_data.BRIDGE_DATA_Longitude;
+    // printf("dest_data lat: %f dest_data lon: %f \n",dest_data.latitude,  dest_data.longitude );
   }
 }

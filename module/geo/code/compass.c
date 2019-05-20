@@ -16,7 +16,7 @@ bool read_compass_heading(float* result) {
       temp_float -= 360;
     }
     *result = temp_float;
-    //printf("heading: %f\n", *result);
+    // printf("heading: %f\n", *result);
     return true;
   }
   return false;
@@ -152,24 +152,22 @@ void starting_calibration(void) {
   }
 }
 
-void enable_auto_calibration(void)
-{
-    unsigned char calibration_values[3] = {0x98, 0x95, 0x99};
+void enable_auto_calibration(void) {
+  unsigned char calibration_values[3] = {0x98, 0x95, 0x99};
 
-      for (int reg_index = 0; reg_index < 3; reg_index++) {
-        send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, calibration_values[reg_index]);
-        delay_ms(20);
-      }
-      send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, 0x97); //0b10010111 auto-cal register sequence
+  for (int reg_index = 0; reg_index < 3; reg_index++) {
+    send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, calibration_values[reg_index]);
+    delay_ms(20);
+  }
+  send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, 0x97);  // 0b10010111 auto-cal register sequence
 }
 
-void disable_auto_calibration(void)
-{
-    unsigned char calibration_values[3] = {0x98, 0x95, 0x99};
+void disable_auto_calibration(void) {
+  unsigned char calibration_values[3] = {0x98, 0x95, 0x99};
 
-         for (int reg_index = 0; reg_index < 3; reg_index++) {
-           send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, calibration_values[reg_index]);
-           delay_ms(20);
-         }
-         send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, 0x97); //0b10000000 auto-cal register sequence
+  for (int reg_index = 0; reg_index < 3; reg_index++) {
+    send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, calibration_values[reg_index]);
+    delay_ms(20);
+  }
+  send_byte_to_i2c_device(COMPASS_ADDRESS, COMPASS_COMMAND_REG, 0x97);  // 0b10000000 auto-cal register sequence
 }

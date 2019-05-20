@@ -57,7 +57,7 @@ void send_can_msg_debug(can_t* geo_module, GEO_DEBUG_DATA_t* debug_data) {
   CAN_tx(*geo_module, &can_msg, 0);
 }
 
-void receive_checkpoint_from_bridge(can_t* geo_module, BRIDGE_CHECKPOINT_t * bridge_checkpoint) {
+void receive_checkpoint_from_bridge(can_t* geo_module, BRIDGE_CHECKPOINT_t* bridge_checkpoint) {
   can_msg_t can_msg;
 
   // Empty all of the queued, and received messages within the last 10ms (100Hz callback frequency)

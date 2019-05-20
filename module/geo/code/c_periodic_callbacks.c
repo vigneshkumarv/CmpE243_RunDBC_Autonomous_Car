@@ -14,9 +14,9 @@ bool c_period_init(void) {
   gps_module_init();
   init_switches();
   disable_auto_calibration();
-  //queue__init(&longitude_data_queue);
-  //queue__init(&latitude_data_queue);
-  //init_lsm303();
+  // queue__init(&longitude_data_queue);
+  // queue__init(&latitude_data_queue);
+  // init_lsm303();
 
   return true;
 }
@@ -27,7 +27,7 @@ void c_period_1Hz(uint32_t count) {
   (void)count;
   send_heartbeat_msg(&GEO_module);
   send_debug_msg(&GEO_module);
-  //starting_calibration();
+  // starting_calibration();
 }
 
 void c_period_10Hz(uint32_t count) {
