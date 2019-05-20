@@ -33,19 +33,19 @@ void gps_module_init(void) {
 }
 
 void gps_module_get_data(char* pBuff) {
-    // char Char;
-    // uart2_getChar(&Char, 0);
-    // while (Char != '\n'){uart2_getChar(&Char, 0);}
-    uart2_gets(pBuff, MAX_DATA_BUFF_LENGTH, 20);
+  // char Char;
+  // uart2_getChar(&Char, 0);
+  // while (Char != '\n'){uart2_getChar(&Char, 0);}
+  uart2_gets(pBuff, MAX_DATA_BUFF_LENGTH, 20);
 }
 
 void gps_obtain_and_process_data(int count) {
-    if (count % 2 == 1) {
-        gps_obtain_data();
-    }  // count % 2
-    else if (count % 2 == 0) {
-        gps_process_data();
-    }
+  if (count % 2 == 1) {
+    gps_obtain_data();
+  }  // count % 2
+  else if (count % 2 == 0) {
+    gps_process_data();
+  }
 }
 
 float gps_get_bearing(coordinate GPS_data, coordinate DEST_data) {
@@ -105,60 +105,59 @@ float gps_get_bearing(coordinate GPS_data, coordinate DEST_data) {
 }*/
 
 float gps_get_deflection_angle(float gps_bearing, float compass_heading) {
-    float deflection;
-    deflection = gps_bearing - compass_heading;
-    if (deflection > 180)
-        deflection -= 360;
-    else if (deflection < -180)
-        deflection += 360;
+  float deflection;
+  deflection = gps_bearing - compass_heading;
+  if (deflection > 180)
+    deflection -= 360;
+  else if (deflection < -180)
+    deflection += 360;
 
-    return deflection;
+  return deflection;
 }
 
 coordinate gps_obtain_data(void) {
-    coordinate coordinates = {0};
-    char data_array[MAX_DATA_BUFF_LENGTH];
-    int parse_counter = 0;
-    // uart2_flush();
-    gps_module_get_data(data_array);
-    /*for (int i = 0; i < MAX_DATA_BUFF_LENGTH; i++) {
-   printf("%c", data_array[i]);
-   if (data_array[i] == '\0') break;
-   }
-  printf("\n");*/
-    char* ptr = strtok(data_array, delim);
-    if (*ptr == '$') {
-        while (parse_counter < 6) {
-            ptr = strtok(NULL, delim);
-            if (parse_counter == 2) {
-                gps_data.latitude = atof(ptr);
-            } else if (parse_counter == 3) {
-                if (*ptr != 'N') {
-                    is_data_invalid = true;
-                    break;
-                }
-            } else if (parse_counter == 4) {
-                gps_data.longitude = atof(ptr);
-            } else if (parse_counter == 5) {
+  coordinate coordinates = {0};
+  char data_array[MAX_DATA_BUFF_LENGTH];
+  int parse_counter = 0;
+  // uart2_flush();
+  gps_module_get_data(data_array);
+  /*for (int i = 0; i < MAX_DATA_BUFF_LENGTH; i++) {
+ printf("%c", data_array[i]);
+ if (data_array[i] == '\0') break;
+ }
+printf("\n");*/
+  char* ptr = strtok(data_array, delim);
+  if (*ptr == '$') {
+    while (parse_counter < 6) {
+      ptr = strtok(NULL, delim);
+      if (parse_counter == 2) {
+        gps_data.latitude = atof(ptr);
+      } else if (parse_counter == 3) {
+        if (*ptr != 'N') {
+          is_data_invalid = true;
+          break;
+        }
+      } else if (parse_counter == 4) {
+        gps_data.longitude = atof(ptr);
+      } else if (parse_counter == 5) {
+        if (*ptr != 'W') {
+          is_data_invalid = true;
+          return coordinates;
+        } else {
+          coordinates.latitude = gps_data.latitude;
+          coordinates.longitude = gps_data.longitude;
+          return coordinates;
+        }
+      }
+      parse_counter++;
+    }  // while
 
-                if (*ptr != 'W') {
-                    is_data_invalid = true;
-                    return coordinates;
-                } else {
-                    coordinates.latitude = gps_data.latitude;
-                    coordinates.longitude = gps_data.longitude;
-                    return coordinates;
-                }
-            }
-            parse_counter++;
-        }  // while
-
-    }  //$
-    else {
-        is_data_invalid = true;
-    }
-    coordinate temp = { 0 , 0};
-    return temp;
+  }  //$
+  else {
+    is_data_invalid = true;
+  }
+  coordinate temp = {0, 0};
+  return temp;
 }
 
 void gps_process_data(void) {

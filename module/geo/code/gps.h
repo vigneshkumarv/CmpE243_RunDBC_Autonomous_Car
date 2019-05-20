@@ -6,13 +6,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "string.h"
 #include "compass.h"
 #include "generated_can.h"
 #include "geo_can.h"
 #include "led_wrapper.h"
 #include "math.h"
 #include "queue.h"
+#include "string.h"
 #include "uart_wrapper.h"
 
 #define PMTK_SET_NMEA_OUTPUT_RMCONLY "$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29"

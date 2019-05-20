@@ -40,7 +40,7 @@ void storing_compass_calibration_profile(void);
 void erasing_compass_calibration_profile(void);
 
 // lsm303 code
-//void init_lsm303(void);
-//bool read_compass_heading_lsm303(float* result);
+// void init_lsm303(void);
+// bool read_compass_heading_lsm303(float* result);
 
 #endif  // COMPASS_H__
