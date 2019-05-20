@@ -27,10 +27,10 @@ void gps_module_init(void) {
   uart2_putLine(PMTK_SET_NMEA_UPDATE_10HZ, 20);
   delay_us(1000);
   uart2_putLine(PMTK_API_SET_FIX_CTL_5HZ, 20);
- // delay_us(1000);
-  //uart2_putLine(PMTK_API_SET_SBAS_ENABLED, 20); //enable differential GPS
-  //delay_us(1000);
-  //uart2_putLine(PMTK_API_SET_DGPS_MODE, 20); //set differential gps mode (WAAS for north america)
+  // delay_us(1000);
+  // uart2_putLine(PMTK_API_SET_SBAS_ENABLED, 20); //enable differential GPS
+  // delay_us(1000);
+  // uart2_putLine(PMTK_API_SET_DGPS_MODE, 20); //set differential gps mode (WAAS for north america)
 
   // FOR DEBUG PURPOSE ONLY
   // dest_data.latitude = 37.336218;
@@ -127,10 +127,10 @@ coordinate gps_obtain_data(void) {
   // uart2_flush();
   gps_module_get_data(data_array);
   for (int i = 0; i < MAX_DATA_BUFF_LENGTH; i++) {
- printf("%c", data_array[i]);
- if (data_array[i] == '\0') break;
- }
-printf("\n");
+    printf("%c", data_array[i]);
+    if (data_array[i] == '\0') break;
+  }
+  printf("\n");
   char* ptr = strtok(data_array, delim);
   if (*ptr == '$') {
     while (parse_counter < 6) {
