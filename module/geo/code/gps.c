@@ -162,31 +162,6 @@ coordinate gps_obtain_data(void) {
 }
 
 void gps_process_data(void) {
-    float gps_longitude_avg = 0;
-    float gps_latitude_avg = 0;
-    if (is_data_invalid == false) {
-        if (gps_data.latitude > 0) {
-            float latitude_data = ((int)(gps_data.latitude / 100)) +
-                    (((int)gps_data.latitude % 100) + (gps_data.latitude - (int)(gps_data.latitude))) / 60;
-            gps_latitude_avg = queue__update_and_get_average(&latitude_data_queue, latitude_data);
-        }
-        if (gps_data.longitude > 0) {
-            float longitude_data = ((int)(gps_data.longitude / 100)) +
-                    (((int)gps_data.longitude % 100) + (gps_data.longitude - (int)(gps_data.longitude))) / 60;
-            gps_longitude_avg = -1 * (queue__update_and_get_average(&longitude_data_queue, longitude_data));
-            printf("latitude: %f, longitude: %f \n", gps_latitude_avg, gps_longitude_avg);
-        }
-      }
-      parse_counter++;
-    }  // while
-
-  }  //$
-  else {
-    is_data_invalid = true;
-  }
-}
-
-void gps_process_data(void) {
   float gps_longitude_avg = 0;
   float gps_latitude_avg = 0;
   if (is_data_invalid == false) {

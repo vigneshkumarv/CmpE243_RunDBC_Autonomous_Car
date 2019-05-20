@@ -15,8 +15,6 @@
 #include "queue.h"
 #include "uart_wrapper.h"
 
-#define PI 3.141592653
-
 #define PMTK_SET_NMEA_OUTPUT_RMCONLY "$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29"
 #define PMTK_SET_NMEA_UPDATE_10HZ "$PMTK220,100*2F"
 #define PMTK_SET_NMEA_UPDATE_5HZ "$PMTK220,200*2C"
@@ -28,6 +26,7 @@
 #define PMTK_API_SET_SBAS_ENABLED "$PMTK313,1*2E"           // enable differential GPS
 #define PMTK_API_SET_DGPS_MODE "$PMTK301,2*2E"              // set differential gps mode (WAAS for north america)
 #define MAX_DATA_BUFF_LENGTH 100
+#define PI 3.141592653
 
 queue_S longitude_data_queue;
 queue_S latitude_data_queue;

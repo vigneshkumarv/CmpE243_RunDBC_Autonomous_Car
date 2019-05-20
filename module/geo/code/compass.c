@@ -22,7 +22,7 @@ bool read_compass_heading(float* result) {
   return false;
 }
 
-bool read_compass_heading_lsm303(float* result) {
+/*bool read_compass_heading_lsm303(float* result) {
   uint8_t lsm303_mag_address = 0x3c;
   const double PI = 3.141592653;
   uint8_t starting_address_x = 0x3;
@@ -69,9 +69,9 @@ bool read_compass_heading_lsm303(float* result) {
     return true;
   }
   return false;
-}
+}*/
 
-void init_lsm303(void) {
+/*void init_lsm303(void) {
   uint8_t lsm303_mag_address = 0x3c;
   uint8_t MR_reg_address = 0x02;
   uint8_t CRA_reg_address = 0x00;
@@ -96,7 +96,7 @@ void init_lsm303(void) {
   send_byte_to_i2c_device(lsm303_mag_address, CRB_reg_address, config[0]);
   config[1] = 0x80;
   send_byte_to_i2c_device(lsm303_mag_address, CRB_reg_address, config[1]);
-}
+}*/
 
 bool check_calibration_level(uint8_t* result) {
   char calibration_state_address = 0x1E;  // register 30

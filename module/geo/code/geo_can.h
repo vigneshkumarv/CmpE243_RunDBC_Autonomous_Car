@@ -7,7 +7,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "can.h"
-#include "gps.h"
+//#include "gps.h"
 #include "generated_can.h"
 
 typedef struct {
