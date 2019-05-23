@@ -41,7 +41,7 @@ static const dbc_msg_hdr_t MOTOR_DEBUG_PROPORTIONAL_CMD_HDR = {518, 4};
 static const dbc_msg_hdr_t MOTOR_DEBUG_INTEGRAL_CMD_HDR = {519, 4};
 static const dbc_msg_hdr_t MOTOR_DEBUG_INTEGRAL_CMD_OLD_HDR = {520, 4};
 static const dbc_msg_hdr_t MOTOR_DEBUG_OUTPUT_HDR = {521, 4};
-// static const dbc_msg_hdr_t MOTOR_DEBUG_PWM_ACTUAL_HDR =           {  522, 4 };
+static const dbc_msg_hdr_t MOTOR_DEBUG_PWM_ACTUAL_HDR = {522, 4};
 static const dbc_msg_hdr_t MASTER_DRIVE_CMD_HDR = {1, 4};
 static const dbc_msg_hdr_t MASTER_DEBUG_HDR = {2, 4};
 
@@ -221,6 +221,13 @@ typedef struct {
   dbc_mia_info_t mia_info;
 } MOTOR_DEBUG_OUTPUT_t;
 
+/// Message: MOTOR_DEBUG_PWM_ACTUAL from 'MOTOR', DLC: 4 byte(s), MID: 522
+typedef struct {
+  float MOTOR_DEBUG_pwm_act;  ///< B31:0   Destination: MASTER,BRIDGE,DEBUG
+
+  dbc_mia_info_t mia_info;
+} MOTOR_DEBUG_PWM_ACTUAL_t;
+
 /// Message: MASTER_DRIVE_CMD from 'MASTER', DLC: 4 byte(s), MID: 1
 typedef struct {
   int16_t MASTER_DRIVE_CMD_steer;                               ///< B7:0   Destination: MOTOR
@@ -277,6 +284,8 @@ extern const uint32_t MOTOR_DEBUG_INTEGRAL_CMD_OLD__MIA_MS;
 extern const MOTOR_DEBUG_INTEGRAL_CMD_OLD_t MOTOR_DEBUG_INTEGRAL_CMD_OLD__MIA_MSG;
 extern const uint32_t MOTOR_DEBUG_OUTPUT__MIA_MS;
 extern const MOTOR_DEBUG_OUTPUT_t MOTOR_DEBUG_OUTPUT__MIA_MSG;
+extern const uint32_t MOTOR_DEBUG_PWM_ACTUAL__MIA_MS;
+extern const MOTOR_DEBUG_PWM_ACTUAL_t MOTOR_DEBUG_PWM_ACTUAL__MIA_MSG;
 /// @}
 
 /// Not generating code for dbc_encode_GEO_HEARTBEAT() since the sender is GEO and we are MASTER
@@ -848,8 +857,31 @@ static inline bool dbc_decode_MOTOR_DEBUG_OUTPUT(MOTOR_DEBUG_OUTPUT_t *to, const
   return success;
 }
 
-/// Not generating code for dbc_decode_MOTOR_DEBUG_PWM_ACTUAL() since 'MASTER' is not the recipient of any of the
-/// signals
+/// Decode MOTOR's 'MOTOR_DEBUG_PWM_ACTUAL' message
+/// @param hdr  The header of the message to validate its DLC and MID; this can be NULL to skip this check
+static inline bool dbc_decode_MOTOR_DEBUG_PWM_ACTUAL(MOTOR_DEBUG_PWM_ACTUAL_t *to, const uint8_t bytes[8],
+                                                     const dbc_msg_hdr_t *hdr) {
+  const bool success = true;
+  // If msg header is provided, check if the DLC and the MID match
+  if (NULL != hdr && (hdr->dlc != MOTOR_DEBUG_PWM_ACTUAL_HDR.dlc || hdr->mid != MOTOR_DEBUG_PWM_ACTUAL_HDR.mid)) {
+    return !success;
+  }
+
+  uint32_t raw;
+  raw = ((uint32_t)((bytes[0])));         ///< 8 bit(s) from B0
+  raw |= ((uint32_t)((bytes[1]))) << 8;   ///< 8 bit(s) from B8
+  raw |= ((uint32_t)((bytes[2]))) << 16;  ///< 8 bit(s) from B16
+  raw |= ((uint32_t)((bytes[3]))) << 24;  ///< 8 bit(s) from B24
+  if (raw & (1 << 31)) {                  // Check signed bit
+    to->MOTOR_DEBUG_pwm_act = ((((0xFFFFFFFF << 31) | raw) * 0.01));
+  } else {
+    to->MOTOR_DEBUG_pwm_act = ((raw * 0.01));
+  }
+
+  to->mia_info.mia_counter_ms = 0;  ///< Reset the MIA counter
+
+  return success;
+}
 
 /// Not generating code for dbc_decode_MASTER_DRIVE_CMD() since 'MASTER' is not the recipient of any of the signals
 
@@ -1269,6 +1301,28 @@ static inline bool dbc_handle_mia_MOTOR_DEBUG_OUTPUT(MOTOR_DEBUG_OUTPUT_t *msg, 
     // Copy MIA struct, then re-write the MIA counter and is_mia that is overwriten
     *msg = MOTOR_DEBUG_OUTPUT__MIA_MSG;
     msg->mia_info.mia_counter_ms = MOTOR_DEBUG_OUTPUT__MIA_MS;
+    msg->mia_info.is_mia = true;
+    mia_occurred = true;
+  }
+
+  return mia_occurred;
+}
+
+/// Handle the MIA for MOTOR's MOTOR_DEBUG_PWM_ACTUAL message
+/// @param   time_incr_ms  The time to increment the MIA counter with
+/// @returns true if the MIA just occurred
+/// @post    If the MIA counter reaches the MIA threshold, MIA struct will be copied to *msg
+static inline bool dbc_handle_mia_MOTOR_DEBUG_PWM_ACTUAL(MOTOR_DEBUG_PWM_ACTUAL_t *msg, uint32_t time_incr_ms) {
+  bool mia_occurred = false;
+  const dbc_mia_info_t old_mia = msg->mia_info;
+  msg->mia_info.is_mia = (msg->mia_info.mia_counter_ms >= MOTOR_DEBUG_PWM_ACTUAL__MIA_MS);
+
+  if (!msg->mia_info.is_mia) {  // Not MIA yet, so keep incrementing the MIA counter
+    msg->mia_info.mia_counter_ms += time_incr_ms;
+  } else if (!old_mia.is_mia) {  // Previously not MIA, but it is MIA now
+    // Copy MIA struct, then re-write the MIA counter and is_mia that is overwriten
+    *msg = MOTOR_DEBUG_PWM_ACTUAL__MIA_MSG;
+    msg->mia_info.mia_counter_ms = MOTOR_DEBUG_PWM_ACTUAL__MIA_MS;
     msg->mia_info.is_mia = true;
     mia_occurred = true;
   }

@@ -5,6 +5,7 @@ compiler:
     - './generated_can/'
     - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
     - '../../shared_code/'
+    - '../../shared_code/drivers/'
     - '../../shared_code/wrappers/'
   unit_tests_path: &unit_tests_path 'tests/'
   build_path:      &build_path 'ut_build/'
@@ -31,6 +32,7 @@ compiler:
       - './generated_can/'
       - '../../infrastructure/ut_framework/test_code/L2_Drivers/'
       - '../../shared_code/'
+      - '../../shared_code/drivers/'
       - '../../shared_code/wrappers/'
       - *unit_tests_path
   defines:

@@ -14,7 +14,7 @@ void display_screens(uint32_t count, navigation_state_machine_S state_variables,
                      GEO_COORDINATE_DATA_t geo_coordinates, GEO_DEBUG_DATA_t geo_debug,
                      navigation_motor_cmd_S motor_command, MOTOR_DATA_t motor_actual, navigation_sensors_S sensor_data);
 void display_operation_data(uint32_t count, navigation_state_machine_S state_variables, GEO_DATA_t geo_data,
-                            GEO_COORDINATE_DATA_t geo_coordinates, navigation_motor_cmd_S motor_command,
+                            GEO_DEBUG_DATA_t geo_debug, navigation_motor_cmd_S motor_command,
                             MOTOR_DATA_t motor_actual);
 void display_sensor_data(uint32_t count, navigation_sensors_S sensor_data);
 void display_motor_debug(void);
