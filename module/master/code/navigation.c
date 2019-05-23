@@ -24,17 +24,17 @@ static float nav_speed = 0;
  * CONSTANTS
  *
  ******************************************************************************/
-const uint8_t STEER_THRESHOLD_CM = 100;
-const uint8_t MIDDLE_THRESHOLD_FAR = 75;
-const uint8_t MIDDLE_THRESHOLD_CLOSE = 35;
-const uint8_t REVERSE_THRESHOLD = 35;
+const uint8_t STEER_THRESHOLD_CM = 160;
+const uint8_t MIDDLE_THRESHOLD_FAR = 90;
+const uint8_t MIDDLE_THRESHOLD_CLOSE = 40;
+const uint8_t REVERSE_THRESHOLD = 40;
 
 const uint8_t MOTOR_STOP = 0;
 const uint8_t MOTOR_FORWARD = 1;
 const uint8_t MOTOR_REVERSE = 2;
 
-const float NAVIGATION_SPEED = 2.5;
-const float OBSTACLE_SPEED = 1;
+const float NAVIGATION_SPEED = 5.0;
+const float OBSTACLE_SPEED = 1.25;
 const float REVERSE_SPEED = .5;
 
 const int16_t STEER_STRAIGHT = 0;
@@ -102,10 +102,13 @@ void navigation_state_machine(uint32_t count, navigation_state_machine_S* state_
         state_variables->state = OBSTACLE_MIDDLE_CLOSE;
       }
       set_motor_command(motor_command, MOTOR_FORWARD, OBSTACLE_SPEED, (-1 * STEER_OBSTACLE));
+
+      // code re-use (refactor to a function) onthis branch statment
       if (!state_variables->go | (geo_data.GEO_DATA_Distance < 10)) {
         state_variables->state = WAIT;
       }
       break;
+
     case OBSTACLE_LEFT:
       steer_processing(state_variables, sensor_data);
       if ((sensor_data.middle_ultrasonic_cm < MIDDLE_THRESHOLD_CLOSE) | !sensor_data.left_bumper_triggered |
@@ -117,6 +120,7 @@ void navigation_state_machine(uint32_t count, navigation_state_machine_S* state_
         state_variables->state = WAIT;
       }
       break;
+
     case OBSTACLE_MIDDLE_FAR:
       steer_processing(state_variables, sensor_data);
       front_obstacle_processing(state_variables, sensor_data);
@@ -132,8 +136,8 @@ void navigation_state_machine(uint32_t count, navigation_state_machine_S* state_
       if (sensor_data.rear_ir_cm < REVERSE_THRESHOLD) {
         set_motor_command(motor_command, MOTOR_STOP, 0, STEER_STRAIGHT);
       } else {
-        set_motor_command(motor_command, MOTOR_STOP, 0, STEER_STRAIGHT);
-        //        set_motor_command(motor_command, MOTOR_REVERSE, REVERSE_SPEED, STEER_STRAIGHT);
+        //        set_motor_command(motor_command, MOTOR_STOP, 0, STEER_STRAIGHT);
+        set_motor_command(motor_command, MOTOR_REVERSE, REVERSE_SPEED, STEER_STRAIGHT);
       }
       if (state_variables->state != OBSTACLE_MIDDLE_CLOSE) {
         state_variables->state = REVERSE_PAUSE;

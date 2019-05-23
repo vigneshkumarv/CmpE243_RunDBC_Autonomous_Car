@@ -6,7 +6,7 @@
 #include "switches_wrapper.h"
 
 static uint8_t switch_count = 0;
-static uint8_t switch_select = 4;
+static uint8_t switch_select = 1;
 
 static const uint8_t SWITCH_DEBOUNCE = 2;
 
@@ -24,7 +24,7 @@ void display_screens(uint32_t count, navigation_state_machine_S state_variables,
                      navigation_sensors_S sensor_data) {
   bool switch_state = getSwitch(1);
   if (switch_state && (switch_count == SWITCH_DEBOUNCE)) {
-    if (4 == switch_select) {
+    if (3 == switch_select) {
       switch_select = 1;
     } else {
       switch_select++;
@@ -38,25 +38,25 @@ void display_screens(uint32_t count, navigation_state_machine_S state_variables,
 
   switch (switch_select) {
     case 1:
-      display_operation_data(count, state_variables, geo_data, geo_coordinates, motor_command, motor_actual);
+      display_operation_data(count, state_variables, geo_data, geo_debug, motor_command, motor_actual);
       break;
     case 2:
       display_sensor_data(count, sensor_data);
       break;
     case 3:
-      display_motor_debug();
-      break;
-    case 4:
       display_geo_debug(count, geo_data, geo_coordinates, geo_debug);
       break;
+    case 4:
+      display_motor_debug();
+      break;
     default:
-      display_operation_data(count, state_variables, geo_data, geo_coordinates, motor_command, motor_actual);
+      display_operation_data(count, state_variables, geo_data, geo_debug, motor_command, motor_actual);
       break;
   }
 }
 
 void display_operation_data(uint32_t count, navigation_state_machine_S state_variables, GEO_DATA_t geo_data,
-                            GEO_COORDINATE_DATA_t geo_coordinates, navigation_motor_cmd_S motor_command,
+                            GEO_DEBUG_DATA_t geo_debug, navigation_motor_cmd_S motor_command,
                             MOTOR_DATA_t motor_actual) {
   if (0 == count % 5) {
     //      clear_screen();
@@ -90,25 +90,43 @@ void display_operation_data(uint32_t count, navigation_state_machine_S state_var
     }
 
     sprintf(line_buff, "%s  act:%c%f mps", nav_go, dir_act, motor_actual.MOTOR_DATA_speed);
-    //  sprintf(line_buff, "test line 1");
     print_seg(1, 0, line_buff, 20);
-    //  print_line(1, line_buff);
     printf("%s\n", line_buff);
   }
 
   if (2 == count % 5) {
     sprintf(line_buff, "STEER: %0i* D%fm", motor_actual.MOTOR_DATA_steer, geo_data.GEO_DATA_Distance);
-    //      sprintf(line_buff, "test line 2");
     print_seg(2, 0, line_buff, 20);
-    //      print_line(2, line_buff);
   }
 
   if (3 == count % 5) {
     // PLACEHOLDER: this needs actual data from geo debug message
-    sprintf(line_buff, "XX  STATE:%i A%f*", state_variables.state, geo_data.GEO_DATA_Angle);
-    //  sprintf(line_buff, "test line 3");
+    char compass_heading[2] = "  ";
+    if ((geo_debug.GEO_COMPASS_Heading > 337.5) || (geo_debug.GEO_COMPASS_Heading <= 22.5)) {
+      compass_heading[0] = 'N';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 22.5) && (geo_debug.GEO_COMPASS_Heading <= 67.5)) {
+      compass_heading[0] = 'N';
+      compass_heading[1] = 'E';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 67.5) && (geo_debug.GEO_COMPASS_Heading <= 112.5)) {
+      compass_heading[0] = 'E';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 112.5) && (geo_debug.GEO_COMPASS_Heading <= 157.5)) {
+      compass_heading[0] = 'S';
+      compass_heading[1] = 'E';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 157.5) && (geo_debug.GEO_COMPASS_Heading <= 202.5)) {
+      compass_heading[0] = 'S';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 202.5) && (geo_debug.GEO_COMPASS_Heading <= 247.5)) {
+      compass_heading[0] = 'S';
+      compass_heading[1] = 'W';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 247.5) && (geo_debug.GEO_COMPASS_Heading <= 292.5)) {
+      compass_heading[0] = 'W';
+    } else if ((geo_debug.GEO_COMPASS_Heading > 292.5) && (geo_debug.GEO_COMPASS_Heading <= 337.5)) {
+      compass_heading[0] = 'N';
+      compass_heading[1] = 'W';
+    }
+
+    sprintf(line_buff, "%c%c  STATE:%i A%f*", compass_heading[0], compass_heading[1], state_variables.state,
+            geo_data.GEO_DATA_Angle);
     print_seg(3, 0, line_buff, 20);
-    //  print_line(3, line_buff);
     printf("%s\n\n", line_buff);
   }
 }

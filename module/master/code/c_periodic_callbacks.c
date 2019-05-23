@@ -10,6 +10,7 @@
 #include "navigation.h"
 #include "pwm_wrapper.h"
 
+// xxx statics
 navigation_state_machine_S state_variables;
 navigation_sensors_S sensor_data;
 navigation_motor_cmd_S motor_command;
@@ -57,14 +58,6 @@ void c_period_10Hz(uint32_t count) {
 
   display_screens(count, state_variables, geo_data, geo_coordinates, geo_debug, motor_command, motor_actual,
                   sensor_data);
-
-  //  display_geo_debug(count, geo_data, geo_coordinates, geo_debug);
-
-  //  if (10 > count % 20){
-  //  display_operation_data(count, state_variables, geo_data, geo_coordinates, motor_command, motor_actual);
-  //  } else {
-  //  display_geo_debug(count, geo_data, geo_coordinates, geo_debug);
-  //  }
 
   (void)count;
 }
