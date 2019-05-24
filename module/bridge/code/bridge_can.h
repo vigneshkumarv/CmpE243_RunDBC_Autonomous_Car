@@ -10,7 +10,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "can.h"
-#include "generated_can/generated_can.h"
+#include "generated_can\generated_can.h"
 #include "string.h"
 
 bool bridge_uart2_init(void);
@@ -26,13 +26,21 @@ typedef struct {
   float distance_from_destination;
 } Geo_Data_S;
 
-void geo_distance_and_angle(Geo_Data_S* geo_distance_and_angle);
-void geo_latitude_and_longitude(Geo_Data_S* geo_latitude_and_longitude);
+typedef struct {
+  uint8_t LeftUltrasonic;
+  uint8_t RightUltrasonic;
+  uint16_t MiddleUltrasonic;
+  uint16_t RearIr;
+} Sensor_Data_S;
 
-void bridge_send_start_stop_CAN_100Hz(void);
+GEO_COORDINATE_DATA_t geo_source_data;
+void receive_parameters(Geo_Data_S* geo_data, Sensor_Data_S* sensor_data_to_android);
 
+void bridge_send_start_stop_CAN_10Hz(void);
+void compile_and_send_data(void);
 bool turn_on_car(void);
 bool turn_off_car(void);
-void turn_car_on_or_off(void);
+void get_data_from_app(void);
+void parse_received_data(char* TX, size_t size_of_tx);
 
 #endif /* BRIDGE_CAN_H_ */
