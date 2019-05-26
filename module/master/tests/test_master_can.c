@@ -11,6 +11,9 @@ navigation_state_machine_S state_variables = {0};
 navigation_sensors_S sensor_data = {0};
 navigation_motor_cmd_S motor_command = {0};
 GEO_DATA_t geo_data = {0};
+GEO_COORDINATE_DATA_t geo_coordinates = {0};
+GEO_DEBUG_DATA_t geo_debug = {0};
+MOTOR_DATA_t motor_actual = {0};
 
 void setUp(void) {}
 
@@ -20,7 +23,7 @@ void test_init_can(void) {
   CAN_init_ExpectAndReturn(can1, 100, 64, 64, NULL, NULL, true);
   CAN_reset_bus_Expect(can1);
   CAN_bypass_filter_accept_all_msgs_Expect();
-  init_can();
+  TEST_ASSERT_TRUE(init_can());
 }
 
 void test_check_and_restart_can(void) {
@@ -47,7 +50,8 @@ void test_read_can_50Hz(void) {
     LED_3_off_Expect();
     LED_4_off_Expect();
     //    }
-    TEST_ASSERT_TRUE(read_can_50Hz(&sensor_data, &geo_data, &state_variables));
+    TEST_ASSERT_TRUE(
+        read_can_50Hz(&sensor_data, &geo_data, &geo_coordinates, &geo_debug, &state_variables, &motor_actual));
   }
   CAN_rx_ExpectAndReturn(can1, NULL, 0, false);
   CAN_rx_IgnoreArg_msg();
@@ -55,7 +59,8 @@ void test_read_can_50Hz(void) {
   LED_2_on_Expect();
   LED_3_on_Expect();
   LED_4_on_Expect();
-  TEST_ASSERT_FALSE(read_can_50Hz(&sensor_data, &geo_data, &state_variables));
+  TEST_ASSERT_FALSE(
+      read_can_50Hz(&sensor_data, &geo_data, &geo_coordinates, &geo_debug, &state_variables, &motor_actual));
 
   bridge_heartbeat_rx_msg.msg_id = BRIDGE_HEARTBEAT_HDR.mid;
   bridge_heartbeat_rx_msg.frame_fields.data_len = BRIDGE_HEARTBEAT_HDR.dlc;
@@ -107,5 +112,6 @@ void test_read_can_50Hz(void) {
   LED_3_off_Expect();
   LED_4_off_Expect();
 
-  TEST_ASSERT_TRUE(read_can_50Hz(&sensor_data, &geo_data, &state_variables));
+  TEST_ASSERT_TRUE(
+      read_can_50Hz(&sensor_data, &geo_data, &geo_coordinates, &geo_debug, &state_variables, &motor_actual));
 }

@@ -24,16 +24,16 @@ static float nav_speed = 0;
  * CONSTANTS
  *
  ******************************************************************************/
-const uint8_t STEER_THRESHOLD_CM = 160;
-const uint8_t MIDDLE_THRESHOLD_FAR = 90;
-const uint8_t MIDDLE_THRESHOLD_CLOSE = 40;
-const uint8_t REVERSE_THRESHOLD = 40;
+const uint8_t STEER_THRESHOLD_CM = 100;
+const uint8_t MIDDLE_THRESHOLD_FAR = 75;
+const uint8_t MIDDLE_THRESHOLD_CLOSE = 35;
+const uint8_t REVERSE_THRESHOLD = 35;
 
 const uint8_t MOTOR_STOP = 0;
 const uint8_t MOTOR_FORWARD = 1;
 const uint8_t MOTOR_REVERSE = 2;
 
-const float NAVIGATION_SPEED = 5.0;
+const float NAVIGATION_SPEED = 2.0;
 const float OBSTACLE_SPEED = 1.25;
 const float REVERSE_SPEED = .5;
 
