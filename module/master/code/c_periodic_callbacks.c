@@ -19,19 +19,9 @@ GEO_COORDINATE_DATA_t geo_coordinates;
 GEO_DEBUG_DATA_t geo_debug;
 MOTOR_DATA_t motor_actual;
 
-navigation_motor_cmd_S test_motor_command;
-
 bool c_period_init(void) {
   init_navigation(&state_variables, &sensor_data, &geo_data, &motor_command);
   initialize_display_lcd();
-  //  PWMs_init();
-
-  // For testing, auto start navigation
-  //  state_variables.go = true;
-
-  test_motor_command.motor_direction = 1;
-  test_motor_command.motor_speed = 1;
-  test_motor_command.steer_direction = 25;
 
   bool can_is_initialized = init_can();
 
@@ -41,14 +31,6 @@ bool c_period_init(void) {
 bool c_period_reg_tlm(void) { return true; }
 
 void c_period_1Hz(uint32_t count) {
-  //  if (count < 2){
-  //      Set_PWM_for_Servo(50);
-  //      set_P0_29_High();
-  //  }
-  //  else {
-  //      Set_PWM_for_Servo(0);
-  //      set_P0_29_Low();
-  //  }
   check_and_restart_can();
   send_heartbeat_msg();
   (void)count;
@@ -66,9 +48,6 @@ void c_period_100Hz(uint32_t count) {
     read_can_50Hz(&sensor_data, &geo_data, &geo_coordinates, &geo_debug, &state_variables, &motor_actual);
     navigation_state_machine(count, &state_variables, sensor_data, geo_data, &motor_command);
     send_drive_cmd(motor_command);
-
-    // test drive
-    //    send_drive_cmd(test_motor_command);
   }
 }
 void c_period_1000Hz(uint32_t count) {

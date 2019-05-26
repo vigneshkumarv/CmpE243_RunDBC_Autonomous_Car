@@ -146,7 +146,7 @@ bool read_can_50Hz(navigation_sensors_S* sensor_values, GEO_DATA_t* geo_data, GE
   if (0 == geo_heartbeat_msg.mia_info.is_mia) {
     LED_2_off();
   }
-  if (motor_heartbeat_msg.mia_info.is_mia) {
+  if (0 == motor_heartbeat_msg.mia_info.is_mia) {
     LED_3_off();
   }
   if (0 == sensor_heartbeat_msg.mia_info.is_mia) {
